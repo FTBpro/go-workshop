@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -29,6 +30,18 @@ type MF struct {
 	ImageCredit   string   `json:"imageCredit"`
 }
 
+var newsTemplate = `<html>
+                    <h1>News</h1>
+                    <div>
+                        {{range .}}
+                            <div>
+                                <h3>{{.Fact}}</h3>
+                                <img src="{{.PrimaryImage}}" width="25%" height="25%"></img>
+                            </div>
+                        {{end}}
+                    <div>
+                    </html>`
+
 func main() {
 	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
@@ -53,14 +66,27 @@ func main() {
 }
 
 func PingHandler  (w http.ResponseWriter, r *http.Request) {
+	//r.URL.Query().Get("key")
 	b, _ := json.Marshal("PONG")
 	w.Write(b)
 }
 
 func PollFactHandler(w http.ResponseWriter, r *http.Request) {
-	b := getFact()
-	w.Write(b)
+	if len(Cache.Data) > 0 {
+		tmpl, err := template.New("facts").Parse(newsTemplate)
+		if err != nil {
+			WriteError(w)
+			return
+		}
+		tmpl.Execute(w, Cache.Data)
+		return
+	}
+	WriteError(w)
+}
 
+func WriteError(w http.ResponseWriter) {
+	b, _ := json.Marshal("ERROR")
+	w.Write(b)
 }
 
 func getFact() []byte {
