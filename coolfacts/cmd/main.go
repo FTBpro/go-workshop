@@ -14,7 +14,7 @@ import (
 var Cache = Store{}
 
 type Store struct {
-	Data []MF
+	Data []Fact
 }
 
 type MF struct {
@@ -40,8 +40,8 @@ var newsTemplate = `<html>
                     <h1>News</h1>
                     <div>
                             <div>
-                                <h3>{{.FactText}}</h3>
-                                <img src="{{.PrimaryImage}}" width="25%" height="25%"></img>
+                                <h3>{{.Description}}</h3>
+                                <img src="{{.Image}}" width="25%" height="25%"></img>
                             </div>
                     <div>
                     </html>`
@@ -97,7 +97,8 @@ func PostFactHadnler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		WriteError(w)
 	}
-	Cache.Data = append(Cache.Data, fact)
+	parsedFact := ParseFact(fact)
+	Cache.Data = append(Cache.Data, parsedFact)
 }
 
 func PollFactHandler(w http.ResponseWriter, r *http.Request) {
@@ -119,11 +120,11 @@ func WriteError(w http.ResponseWriter) {
 	w.Write(b)
 }
 
-func getFact() (MF, error) {
+func getFact() (Fact, error) {
 	if len(Cache.Data) > 0 {
 		return Cache.Data[0], nil
 	}
-	return MF{}, fmt.Errorf("cache empty")
+	return Fact{}, fmt.Errorf("cache empty")
 }
 
 func RetrieveFact() error {
@@ -142,12 +143,16 @@ func RetrieveFact() error {
 	if err != nil {
 		return fmt.Errorf("error parsing data = %v", err)
 	}
-	Cache.Data = data
+	Cache.Data = make([]Fact, 0)
+	for _, fact := range data {
+		parsedFact := ParseFact(fact)
+		Cache.Data = append(Cache.Data, parsedFact)
+	}
 	return nil
 }
 
-func ParseFact(mf MF) *Fact {
-	return &Fact{
+func ParseFact(mf MF) Fact {
+	return Fact{
 		Description: mf.FactText,
 		Url:         mf.Url,
 		Image:       mf.PrimaryImage,
