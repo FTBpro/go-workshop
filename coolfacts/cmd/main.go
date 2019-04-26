@@ -49,7 +49,7 @@ var newsTemplate = `<html>
                     </html>`
 
 func main() {
-	tk := time.NewTicker(time.Second * 60)
+	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
 	go func(c context.Context) {
@@ -103,16 +103,17 @@ func PostFactHadnler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PollFactHandler(w http.ResponseWriter, r *http.Request) {
-	if len(Cache.Data) > 0 {
-		tmpl, err := template.New("facts").Parse(newsTemplate)
-		if err != nil {
-			WriteError(w)
-			return
-		}
-		tmpl.Execute(w, Cache.Data)
+	facts, err := getFact()
+	if err != nil {
+		WriteError(w)
 		return
 	}
-	WriteError(w)
+	tmpl, err := template.New("facts").Parse(newsTemplate)
+	if err != nil {
+		WriteError(w)
+		return
+	}
+	tmpl.Execute(w, facts)
 }
 
 func WriteError(w http.ResponseWriter) {
@@ -120,14 +121,11 @@ func WriteError(w http.ResponseWriter) {
 	w.Write(b)
 }
 
-func getFact() []byte {
-	b := make([]byte, 0)
+func getFact() ([]MF, error) {
 	if len(Cache.Data) > 0 {
-		b, _ = json.Marshal(Cache.Data[0])
-	} else {
-		b, _ = json.Marshal("ERROR")
+		return Cache.Data, nil
 	}
-	return b
+	return nil, fmt.Errorf("cache empty")
 }
 
 func RetrieveFact() error {
