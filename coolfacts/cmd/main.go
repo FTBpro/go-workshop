@@ -39,12 +39,10 @@ type Fact struct {
 var newsTemplate = `<html>
                     <h1>News</h1>
                     <div>
-                        {{range .}}
                             <div>
                                 <h3>{{.FactText}}</h3>
                                 <img src="{{.PrimaryImage}}" width="25%" height="25%"></img>
                             </div>
-                        {{end}}
                     <div>
                     </html>`
 
@@ -103,7 +101,7 @@ func PostFactHadnler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PollFactHandler(w http.ResponseWriter, r *http.Request) {
-	facts, err := getFact()
+	fact, err := getFact()
 	if err != nil {
 		WriteError(w)
 		return
@@ -113,7 +111,7 @@ func PollFactHandler(w http.ResponseWriter, r *http.Request) {
 		WriteError(w)
 		return
 	}
-	tmpl.Execute(w, facts)
+	tmpl.Execute(w, fact)
 }
 
 func WriteError(w http.ResponseWriter) {
@@ -121,11 +119,11 @@ func WriteError(w http.ResponseWriter) {
 	w.Write(b)
 }
 
-func getFact() ([]MF, error) {
+func getFact() (MF, error) {
 	if len(Cache.Data) > 0 {
-		return Cache.Data, nil
+		return Cache.Data[0], nil
 	}
-	return nil, fmt.Errorf("cache empty")
+	return MF{}, fmt.Errorf("cache empty")
 }
 
 func RetrieveFact() error {
