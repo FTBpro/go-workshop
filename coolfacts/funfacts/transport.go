@@ -1,4 +1,0 @@
-package funfacts
-
-func MakeFactRout() {
-}
