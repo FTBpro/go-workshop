@@ -10,9 +10,7 @@ import (
 	"net/http"
 	"time"
 )
-
-var Cache = Store{}
-
+//*******************************  Structs start *******************************
 type Store struct {
 	Data []Fact
 }
@@ -37,14 +35,17 @@ type Fact struct {
 }
 
 var newsTemplate = `<html>
-                    <h1>News</h1>
-                    <div>
-                            <div>
-                                <h3>{{.Description}}</h3>
-                                <img src="{{.Image}}" width="25%" height="25%"></img>
-                            </div>
-                    <div>
-                    </html>`
+                   <h1>News</h1>
+                   <div>
+                           <div>
+                               <h3>{{.Description}}</h3>
+                               <img src="{{.Image}}" width="25%" height="25%"></img>
+                           </div>
+                   <div>
+                   </html>`
+//*******************************  Structs ends ********************************
+
+var Cache = Store{}
 
 func main() {
 	tk := time.NewTicker(time.Second * 5)
@@ -85,7 +86,7 @@ func PingHandler(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal("PONG")
 	w.Write(b)
 }
-
+//
 func PostFactHadnler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
