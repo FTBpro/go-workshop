@@ -17,17 +17,17 @@ type Store interface {
 
 type WriteError func (w http.ResponseWriter)
 
-type factCreator struct {
+type FactCreator struct {
 	writeError WriteError
 	parser Parser
 	store Store
 }
 
-func NewFactCreator(we WriteError, p Parser, s Store) *factCreator {
-	return &factCreator{we, p, s}
+func NewFactCreator(we WriteError, p Parser, s Store) *FactCreator {
+	return &FactCreator{we, p, s}
 }
 
-func (f *factCreator) PostFactHandler(w http.ResponseWriter, r *http.Request) {
+func (f *FactCreator) PostFactHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -42,7 +42,7 @@ func (f *factCreator) PostFactHandler(w http.ResponseWriter, r *http.Request) {
 	f.WriteToCache(fact)
 }
 
-func (f *factCreator) WriteToCache(fact Fact) {
+func (f *FactCreator) WriteToCache(fact Fact) {
 	data := f.store.Get()
 	data = append([]Fact{fact}, data...)
 	f.store.Set(data)

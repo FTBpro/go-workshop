@@ -16,16 +16,16 @@ var newsTemplate = `<html>
                     <div>
                     </html>`
 
-type listFacts struct {
+type ListFacts struct {
 	writeError WriteError
 	store Store
 }
 
-func NewListrFacts(we WriteError, s Store) *listFacts {
-	return &listFacts{we, s}
+func NewListrFacts(we WriteError, s Store) *ListFacts {
+	return &ListFacts{we, s}
 }
 
-func (l listFacts) PollFactHandler(w http.ResponseWriter, r *http.Request) {
+func (l ListFacts) PollFactHandler(w http.ResponseWriter, r *http.Request) {
 	fact, err := l.getFact()
 	if err != nil {
 		l.writeError(w)
@@ -41,7 +41,7 @@ func (l listFacts) PollFactHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, fact)
 }
 
-func (l *listFacts) getFact() (Fact, error) {
+func (l *ListFacts) getFact() (Fact, error) {
 	if len(l.store.Get()) > 0 {
 		return l.store.Get()[0], nil
 	}

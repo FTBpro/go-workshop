@@ -47,7 +47,7 @@ var newsTemplate = `<html>
 
 var Cache = Store{}
 
-func main() {
+func main2() {
 	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
