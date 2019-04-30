@@ -14,9 +14,9 @@ var formTemplate = `<html>
 			<h1>Fact created!</h1>
 		{{else}}
         	<form action="/facts/new" method="post">
-        	    FactUrl:<input type="text" name="url">
-        	    Description:<input type="text" name="fact">
-				Image:<input type="text" name="primaryImage">
+        	    Fact Url:<br/><input type="text" name="url" display="block"><br/>
+				Image:<br/><input type="text" name="primaryImage" display="block"><br/>
+        	    Description:<br/><input type="textarea" name="fact" display="block"><br/>
         	    <input type="submit" value="Create">
         	</form>
 		{{end}}
