@@ -1,6 +1,6 @@
 package facts
 
-type MF struct {
+type MentalFlossItem struct {
 	Id            string   `json:"id"`
 	Url           string   `json:"url"`
 	FactId        string   `json:"factId"`

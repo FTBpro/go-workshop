@@ -10,7 +10,7 @@ func NewParser() *parser {
 }
 
 func (p *parser) ParseFromPolling(b []byte) ([]Fact, error) {
-	data := make([]MF, 0)
+	data := make([]MentalFlossItem, 0)
 	if err := json.Unmarshal(b, &data); err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func (p *parser) ParseFromPolling(b []byte) ([]Fact, error) {
 }
 
 func (p *parser) ParseFromCreate(b []byte) (Fact, error) {
-	data := MF{}
+	data := MentalFlossItem{}
 	if err := json.Unmarshal(b, &data); err != nil {
 		return Fact{}, nil
 	}
@@ -31,10 +31,10 @@ func (p *parser) ParseFromCreate(b []byte) (Fact, error) {
 }
 
 
-func (p *parser) parse(mf MF) Fact {
+func (p *parser) parse(mfi MentalFlossItem) Fact {
 	return Fact{
-		Image:       mf.PrimaryImage,
-		Url:         mf.Url,
-		Description: mf.FactText,
+		Image:       mfi.PrimaryImage,
+		Url:         mfi.Url,
+		Description: mfi.FactText,
 	}
 }

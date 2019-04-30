@@ -11,8 +11,8 @@ import (
 )
 
 type Handlerer struct {
-	lf *facts.ListFacts
-	fc *facts.FactCreator
+	listFacts   *facts.ListFacts
+	factCreator *facts.FactCreator
 }
 
 func main() {
@@ -21,12 +21,12 @@ func main() {
 		w.Write(b)
 	}
 
-	s := facts.NewStore()
-	p := facts.NewParser()
-	r := facts.NewRetriever(s, p)
-	lf := facts.NewListrFacts(writeError, s)
-	fc := facts.NewFactCreator(writeError, p, s)
-	handlerer := Handlerer{lf, fc}
+	store := facts.NewStore()
+	parser := facts.NewParser()
+	retriever := facts.NewRetriever(store, parser)
+	listFacts := facts.NewListrFacts(writeError, store)
+	factCreator := facts.NewFactCreator(writeError, parser, store)
+	handlerer := Handlerer{listFacts, factCreator}
 
 	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
@@ -35,7 +35,7 @@ func main() {
 		for {
 			select {
 			case <-tk.C:
-				if err := r.RetrieveFacts(); err != nil {
+				if err := retriever.RetrieveFacts(); err != nil {
 					fmt.Printf("Error = %v", err)
 				}
 			case <-c.Done():
@@ -53,16 +53,15 @@ func main() {
 func (h *Handlerer) FactHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		h.fc.PostFactHandler(w, r)
+		h.factCreator.PostFactHandler(w, r)
 	case "GET":
-		h.lf.PollFactHandler(w, r)
+		h.listFacts.PollFactHandler(w, r)
 	default:
 		w.WriteHeader(http.StatusNotFound)
 	}
 }
 
 func (h *Handlerer) PingHandler(w http.ResponseWriter, r *http.Request) {
-	//r.URL.Query().Get("key")
 	b, _ := json.Marshal("PONG")
 	w.Write(b)
 }
