@@ -81,12 +81,6 @@ func FactHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func PingHandler(w http.ResponseWriter, r *http.Request) {
-	//r.URL.Query().Get("key")
-	b, _ := json.Marshal("PONG")
-	w.Write(b)
-}
-//
 func PostFactHadnler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	b, err := ioutil.ReadAll(r.Body)

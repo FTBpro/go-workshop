@@ -10,11 +10,6 @@ import (
 	"time"
 )
 
-type Handlerer struct {
-	listFacts   *facts.ListFacts
-	factCreator *facts.FactCreator
-}
-
 func main() {
 	writeError := func(w http.ResponseWriter) {
 		b, _ := json.Marshal("ERROR")
@@ -25,8 +20,7 @@ func main() {
 	parser := facts.NewParser()
 	retriever := facts.NewRetriever(store, parser)
 	listFacts := facts.NewListrFacts(writeError, store)
-	factCreator := facts.NewFactCreator(writeError, parser, store)
-	handlerer := Handlerer{listFacts, factCreator}
+	factForm := facts.NewFactForm(writeError, store)
 
 	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
@@ -45,23 +39,13 @@ func main() {
 		}
 	}(ctx)
 
-	http.HandleFunc("/", handlerer.PingHandler)
-	http.HandleFunc("/fact", handlerer.FactHandler)
+	http.HandleFunc("/", PingHandler)
+	http.HandleFunc("/facts", listFacts.PollFactHandler)
+	http.HandleFunc("/facts/new", factForm.FormFactHandler)
 	log.Fatal(http.ListenAndServe(":9002", nil))
 }
 
-func (h *Handlerer) FactHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "POST":
-		h.factCreator.PostFactHandler(w, r)
-	case "GET":
-		h.listFacts.PollFactHandler(w, r)
-	default:
-		w.WriteHeader(http.StatusNotFound)
-	}
-}
-
-func (h *Handlerer) PingHandler(w http.ResponseWriter, r *http.Request) {
+func PingHandler(w http.ResponseWriter, r *http.Request) {
 	b, _ := json.Marshal("PONG")
 	w.Write(b)
 }

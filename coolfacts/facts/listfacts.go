@@ -6,6 +6,18 @@ import (
 	"net/http"
 )
 
+type WriteError func (w http.ResponseWriter)
+
+type Parser interface {
+	ParseFromPolling(b []byte) ([]Fact, error)
+	ParseFromCreate(b []byte) (Fact, error)
+}
+
+type Store interface {
+	Get() []Fact
+	Set(data []Fact)
+}
+
 var newsTemplate = `<html>
                     <h1>News</h1>
                     <div>
