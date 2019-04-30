@@ -10,7 +10,6 @@ type WriteError func (w http.ResponseWriter)
 
 type Parser interface {
 	ParseFromPolling(b []byte) ([]Fact, error)
-	ParseFromCreate(b []byte) (Fact, error)
 }
 
 type Store interface {

@@ -41,15 +41,6 @@ func (p *parser) ParseFromPolling(b []byte) ([]Fact, error) {
 	return facts, nil
 }
 
-func (p *parser) ParseFromCreate(b []byte) (Fact, error) {
-	data := MentalFlossItem{}
-	if err := json.Unmarshal(b, &data); err != nil {
-		return Fact{}, nil
-	}
-	return p.parse(data), nil
-}
-
-
 func (p *parser) parse(mfi MentalFlossItem) Fact {
 	return Fact{
 		Image:       mfi.PrimaryImage,
