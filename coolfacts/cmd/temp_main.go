@@ -22,6 +22,7 @@ func main() {
 	listFacts := facts.NewListrFacts(writeError, store)
 	factForm := facts.NewFactForm(writeError, store)
 
+	retriever.RetrieveFacts()
 	tk := time.NewTicker(time.Second * 5)
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
