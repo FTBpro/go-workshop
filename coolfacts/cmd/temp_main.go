@@ -23,7 +23,7 @@ func main() {
 	factForm := facts.NewFactForm(writeError, store)
 
 	retriever.RetrieveFacts()
-	tk := time.NewTicker(time.Second * 5)
+	tk := time.NewTicker(time.Minute * 5)
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
 	go func(c context.Context) {
@@ -40,7 +40,7 @@ func main() {
 		}
 	}(ctx)
 
-	http.HandleFunc("/", PingHandler)
+	http.HandleFunc("/ping", PingHandler)
 	http.HandleFunc("/facts", listFacts.PollFactHandler)
 	http.HandleFunc("/facts/new", factForm.FormFactHandler)
 	log.Fatal(http.ListenAndServe(":9002", nil))

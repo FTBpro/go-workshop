@@ -41,10 +41,8 @@ func (r *retriever) parseFacts(b []byte) ([]Fact, error) {
 }
 
 func (r *retriever) cacheData(facts []Fact) {
-	cache := r.store.Get()
 	for _, fact := range facts {
-		cache = append(cache, fact)
+		r.store.AppendFact(fact)
 	}
-	r.store.Set(facts)
 }
 

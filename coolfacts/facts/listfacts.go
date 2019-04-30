@@ -1,9 +1,9 @@
 package facts
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 )
 
 type WriteError func (w http.ResponseWriter)
@@ -13,8 +13,9 @@ type Parser interface {
 }
 
 type Store interface {
-	Get() []Fact
-	Set(data []Fact)
+	Get(i int) Fact
+	GetNext() Fact
+	AppendFact(fact Fact)
 }
 
 var newsTemplate = `<html>
@@ -37,24 +38,21 @@ func NewListrFacts(we WriteError, s Store) *ListFacts {
 }
 
 func (l ListFacts) PollFactHandler(w http.ResponseWriter, r *http.Request) {
-	fact, err := l.getFact()
-	if err != nil {
-		l.writeError(w)
-		return
-	}
-
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {
 		l.writeError(w)
 		return
 	}
 
-	tmpl.Execute(w, fact)
+	tmpl.Execute(w, l.fact(r))
 }
 
-func (l *ListFacts) getFact() (Fact, error) {
-	if len(l.store.Get()) > 0 {
-		return l.store.Get()[0], nil
+func (l *ListFacts) fact(r *http.Request) Fact{
+	indexStr := r.URL.Query().Get("index")
+	if indexStr != "" {
+		if index, err := strconv.Atoi(indexStr); err == nil {
+			return l.store.Get(index)
+		}
 	}
-	return Fact{}, fmt.Errorf("cache empty")
+	return l.store.GetNext()
 }

@@ -52,7 +52,5 @@ func (f *FactForm) FormFactHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *FactForm) WriteToCache(fact Fact) {
-	data := f.store.Get()
-	data = append([]Fact{fact}, data...)
-	f.store.Set(data)
+	f.store.AppendFact(fact)
 }
