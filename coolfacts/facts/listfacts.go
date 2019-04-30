@@ -15,7 +15,7 @@ type Parser interface {
 type Store interface {
 	Get(i int) Fact
 	GetNext() Fact
-	AppendFact(fact Fact)
+	AppendFact(fact Fact) int
 }
 
 var newsTemplate = `<html>

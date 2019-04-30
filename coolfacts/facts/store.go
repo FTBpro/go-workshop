@@ -19,7 +19,7 @@ func NewStore() *store {
 }
 
 func (s store) Get(i int) Fact {
-	if i >= len(s.data){
+	if i >= len(s.data) {
 		return Fact{}
 	}
 	return s.data[i]
@@ -34,12 +34,13 @@ func (s *store) GetNext() Fact {
 	return value
 }
 
-func (s *store) AppendFact(fact Fact) {
+func (s *store) AppendFact(fact Fact) int {
 	key := s.generateKey(fact)
 	if !s.hashes[key] {
 		s.data = append(s.data, fact)
 		s.hashes[key] = true
 	}
+	return len(s.data) - 1
 }
 
 func (s *store) generateKey(fact Fact) string {

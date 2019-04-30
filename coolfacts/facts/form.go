@@ -11,7 +11,7 @@ var formTemplate = `<html>
     </head>
     <body>
 		{{if .Success}}
-			<h1>Fact created!</h1>
+			<h1>Fact created! index = {{.Index}}</h1>
 		{{else}}
         	<form action="/facts/new" method="post">
         	    Fact Url:<br/><input type="text" name="url" display="block"><br/>
@@ -46,11 +46,14 @@ func (f *FactForm) FormFactHandler(w http.ResponseWriter, r *http.Request) {
 	description := r.FormValue("fact")
 	image := r.FormValue("primaryImage")
 
-	f.WriteToCache(Fact{image, url, description})
+	index := f.WriteToCache(Fact{image, url, description})
 
-	templ.Execute(w, struct{ Success bool }{true})
+	templ.Execute(w, struct{
+		Success bool
+		Index int
+	}{true, index})
 }
 
-func (f *FactForm) WriteToCache(fact Fact) {
-	f.store.AppendFact(fact)
+func (f *FactForm) WriteToCache(fact Fact) int{
+	return f.store.AppendFact(fact)
 }
