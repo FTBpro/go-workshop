@@ -10,13 +10,13 @@ import (
 
 const getFactsAPI = "http://mentalfloss.com/api/facts"
 
-type retriever struct{}
+type provider struct{}
 
-func NewRetriever() *retriever {
-	return &retriever{}
+func NewProvider() *provider {
+	return &provider{}
 }
 
-func (r *retriever) Facts() ([]fact.Fact, error) {
+func (r *provider) Facts() ([]fact.Fact, error) {
 	resp, err := http.Get(getFactsAPI)
 	if err != nil {
 		return nil, fmt.Errorf("error get = %v", err)

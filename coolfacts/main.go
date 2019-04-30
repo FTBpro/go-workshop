@@ -14,8 +14,8 @@ import  (
 
 func main() {
 	store := inmem.NewFactStore()
-	retriever := mentalfloss.NewRetriever()
-	service := fact.NewService(store, retriever)
+	factProvider := mentalfloss.NewProvider()
+	service := fact.NewService(store, factProvider)
 
 	if err := service.UpdateFacts(); err != nil {
 		log.Fatal("couldn't update facts, try later", err.Error())

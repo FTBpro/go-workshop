@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type Retriever interface {
+type Provider interface {
 	Facts() ([]Fact, error)
 }
 
@@ -15,19 +15,19 @@ type Store interface {
 }
 
 type service struct {
-	store     Store
-	retriever Retriever
+	provider Provider
+	store    Store
 }
 
-func NewService(s Store, r Retriever) *service {
+func NewService(s Store, r Provider) *service {
 	return &service{
-		store:     s,
-		retriever: r,
+		store:    s,
+		provider: r,
 	}
 }
 
 func (s *service) UpdateFacts() error {
-	facts, err := s.retriever.Facts()
+	facts, err := s.provider.Facts()
 	if err != nil {
 		return fmt.Errorf("fact.service.UpdateFacts failed returiev facts %v", err)
 	}
