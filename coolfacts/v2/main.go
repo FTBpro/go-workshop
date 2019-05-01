@@ -26,7 +26,7 @@ func main() {
 			return
 		}
 		w.Header().Add("Content-Type", "text/plain")
-		_, err := fmt.Fprint(w, "blabla")
+		_, err := fmt.Fprint(w, "PONG")
 		if err != nil {
 			errMessage := fmt.Sprintf("error writing response: %v", err)
 			http.Error(w, errMessage, http.StatusInternalServerError)
