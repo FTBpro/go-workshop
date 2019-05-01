@@ -12,7 +12,7 @@ var formTemplate = `<html>
     </head>
     <body>
 		{{if .Success}}
-			<h1>Fact created! index = {{.Index}}</h1>
+			<h1>Fact created! to show fact <a href="http://localhost:9002/facts?index={{.Index}}">click here</a></h1>
 		{{else}}
         	<form action="/facts/new" method="post">
         	    Fact Url:<br/><input type="text" name="url" display="block"><br/>
