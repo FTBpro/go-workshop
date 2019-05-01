@@ -7,9 +7,11 @@ import (
 )
 
 func main() {
-	server := http.NewServeMux()
-
-	server.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "no http handler found", http.StatusNotFound)
+			return
+		}
 		w.Header().Add("Content-Type", "text/plain")
 		_, err := fmt.Fprint(w, "PONG")
 		if err != nil {
@@ -18,7 +20,7 @@ func main() {
 		}
 	})
 
-	err := http.ListenAndServe(":9002", server)
+	err := http.ListenAndServe(":9002", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
