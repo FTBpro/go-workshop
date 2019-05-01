@@ -16,4 +16,9 @@ func main() {
 			http.Error(w, errMessage, http.StatusInternalServerError)
 		}
 	})
+
+	err := http.ListenAndServe(":9002", server)
+	if err != nil {
+		panic(err)
+	}
 }
