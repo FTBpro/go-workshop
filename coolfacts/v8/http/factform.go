@@ -1,9 +1,10 @@
 package http
 
 import (
-	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 	"html/template"
 	"net/http"
+
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 )
 
 var formTemplate = `<html>
@@ -32,6 +33,10 @@ type factStore interface {
 
 func FactFormHandler(store factStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "no http handler found", http.StatusNotFound)
+			return
+		}
 		templ, err := template.New("formFact").Parse(formTemplate)
 		if err != nil {
 			writeError(w, err)
