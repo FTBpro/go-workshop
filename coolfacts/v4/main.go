@@ -3,10 +3,23 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 )
+
+var newsTemplate = `<html>
+                    <h1>Facts</h1>
+                    <div>
+                        {{range .}}
+                            <div>
+                                <h3>{{.Description}}</h3>
+                                <img src="{{.Image}}" width="25%" height="25%"> </img>
+                            </div>
+                        {{end}}
+                    <div>
+                    </html>`
 
 func main() {
 	factsStore := store{}
@@ -36,21 +49,16 @@ func main() {
 
 	http.HandleFunc("/facts", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
-			w.Header().Add("Content-Type", "application/json")
+			w.Header().Add("Content-Type", "text/html")
 
-			b, err := json.Marshal(factsStore.getAll())
+			tmpl, err := template.New("facts").Parse(newsTemplate)
 			if err != nil {
-				errMessage := fmt.Sprintf("error marshaling facts : %v", err)
+				errMessage := fmt.Sprintf("error ghttp template writing: %v", err)
 				http.Error(w, errMessage, http.StatusInternalServerError)
 				return
 			}
-
-			_, err = w.Write(b)
-			if err != nil {
-				errMessage := fmt.Sprintf("error writing response: %v", err)
-				http.Error(w, errMessage, http.StatusInternalServerError)
-				return
-			}
+			tmpl.Execute(w, factsStore.getAll())
+			return
 		}
 		if r.Method == http.MethodPost {
 			b, err := ioutil.ReadAll(r.Body)
