@@ -60,9 +60,3 @@ func FactFormHandler(store factStore) http.HandlerFunc {
 		}
 	}
 }
-
-// private
-
-func writeError(w http.ResponseWriter, err error) {
-	http.Error(w, err.Error(), http.StatusInternalServerError)
-}

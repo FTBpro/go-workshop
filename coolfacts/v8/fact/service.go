@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-
 type Provider interface {
 	Facts() ([]Fact, error)
 }
@@ -18,7 +17,6 @@ type Store interface {
 type service struct {
 	provider Provider
 	store    Store
-
 }
 
 func NewService(s Store, r Provider) *service {
