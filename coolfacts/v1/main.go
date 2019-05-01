@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -19,6 +20,6 @@ func main() {
 
 	err := http.ListenAndServe(":9002", server)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
