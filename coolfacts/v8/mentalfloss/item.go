@@ -1,6 +1,6 @@
 package mentalfloss
 
-import "github.com/FTBpro/go-workshop/coolfacts/fact"
+import "github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 
 type item struct {
 	Url          string `json:"url"`

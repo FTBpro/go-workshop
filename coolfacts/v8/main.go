@@ -1,15 +1,16 @@
-package main
+package v8
 
 import (
 	"context"
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
-	facthttp "github.com/FTBpro/go-workshop/coolfacts/http"
-	"github.com/FTBpro/go-workshop/coolfacts/inmem"
-	"github.com/FTBpro/go-workshop/coolfacts/mentalfloss"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/v8/http"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/inmem"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/mentalfloss"
 	"log"
 	"net/http"
 	"time"
 )
+
 const (
 	updateFactInterval = time.Minute * 5
 )

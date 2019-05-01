@@ -2,7 +2,7 @@ package inmem
 
 import (
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 )
 
 const keyFormat = "image=%v,url=%v,description=%v"

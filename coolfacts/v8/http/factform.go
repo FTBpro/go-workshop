@@ -1,7 +1,7 @@
 package http
 
 import (
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 	"html/template"
 	"net/http"
 )

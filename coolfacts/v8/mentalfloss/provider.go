@@ -3,7 +3,7 @@ package mentalfloss
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 	"io/ioutil"
 	"net/http"
 )
