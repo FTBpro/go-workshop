@@ -9,14 +9,14 @@ const keyFormat = "image=%v,url=%v,description=%v"
 
 type factStore struct {
 	data   []fact.Fact
-	hashes map[string]bool
+	hashes map[string]int
 	index  int
 }
 
 func NewFactStore() *factStore {
 	return &factStore{
 		data:   make([]fact.Fact, 0),
-		hashes: make(map[string]bool),
+		hashes: make(map[string]int),
 		index:  0,
 	}
 }
@@ -39,11 +39,13 @@ func (s *factStore) GetNext() fact.Fact {
 
 func (s *factStore) Append(fact fact.Fact) int {
 	key := s.generateKey(fact)
-	if !s.hashes[key] {
+	index, ok := s.hashes[key]
+	if !ok {
 		s.data = append(s.data, fact)
-		s.hashes[key] = true
+		index = len(s.data) - 1
+		s.hashes[key] = index
 	}
-	return len(s.data) - 1
+	return index
 }
 
 // private
