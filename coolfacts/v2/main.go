@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -25,7 +26,7 @@ func main() {
 			return
 		}
 		w.Header().Add("Content-Type", "text/plain")
-		_, err := fmt.Fprint(w, "PONG")
+		_, err := fmt.Fprint(w, "blabla")
 		if err != nil {
 			errMessage := fmt.Sprintf("error writing response: %v", err)
 			http.Error(w, errMessage, http.StatusInternalServerError)
@@ -37,14 +38,16 @@ func main() {
 			http.Error(w, "no http handler found", http.StatusNotFound)
 			return
 		}
-		w.Header().Add("Content-Type", "text/plain")
+		w.Header().Add("Content-Type", "application/json")
 
-		var serializedFacts string
-		for i, fct := range factsStore.getAll() {
-			serializedFacts += fmt.Sprintf("%d. %s\n", i, fct.Description)
+		b, err := json.Marshal(factsStore.getAll())
+		if err != nil {
+			errMessage := fmt.Sprintf("error marshaling facts : %v", err)
+			http.Error(w, errMessage, http.StatusInternalServerError)
+			return
 		}
 
-		_, err := fmt.Fprint(w, serializedFacts)
+		_, err = w.Write(b)
 		if err != nil {
 			errMessage := fmt.Sprintf("error writing response: %v", err)
 			http.Error(w, errMessage, http.StatusInternalServerError)
