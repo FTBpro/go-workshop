@@ -23,8 +23,9 @@ func main() {
 	if err := service.UpdateFacts(); err != nil {
 		log.Fatal("couldn't update facts, try later", err.Error())
 	}
-
-	startTickerFactsUpdate(service.UpdateFacts, updateFactInterval)
+	ctx, closer := context.WithCancel(context.Background())
+	defer closer()
+	startTickerFactsUpdate(ctx, service.UpdateFacts, updateFactInterval)
 
 	http.HandleFunc("/ping", facthttp.PingHandler)
 	http.HandleFunc("/facts", facthttp.FactShowHandler(store))
@@ -36,10 +37,8 @@ func main() {
 
 // private
 
-func startTickerFactsUpdate(updateFunc func() error, rate time.Duration) {
+func startTickerFactsUpdate(ctx context.Context, updateFunc func() error, rate time.Duration) {
 	tk := time.NewTicker(rate)
-	ctx, closer := context.WithCancel(context.Background())
-	defer closer()
 	go func(c context.Context) {
 		for {
 			select {
@@ -52,7 +51,6 @@ func startTickerFactsUpdate(updateFunc func() error, rate time.Duration) {
 			case <-c.Done():
 				return
 			}
-
 		}
 	}(ctx)
 }
