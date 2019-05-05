@@ -1,15 +1,21 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/v6/fact"
 	"github.com/FTBpro/go-workshop/coolfacts/v6/mentalfloss"
+)
+
+const (
+	updateFactInterval = time.Minute * 1
 )
 
 type Handlerer struct {
@@ -33,26 +39,45 @@ func main() {
 	mf := mentalfloss.Mentalfloss{}
 	handlerer := &Handlerer{&factsStore}
 
-	err := fillStoreWithNewData(mf, &factsStore)
+	ctx, closer := context.WithCancel(context.Background())
+	defer closer()
+	updateFactsWithTicker(ctx, fillStoreWithNewData(mf, &factsStore))
 
 	http.HandleFunc("/ping", handlerer.Ping)
 	http.HandleFunc("/facts", handlerer.Facts)
 
-	err = http.ListenAndServe(":9002", nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Fatal(http.ListenAndServe(":9002", nil))
 }
 
-func fillStoreWithNewData(mf mentalfloss.Mentalfloss, factsStore *fact.Store) error {
-	facts, err := mf.Facts()
-	if err != nil {
-		log.Fatal("can't reach mentalfloss: ", err)
+func updateFactsWithTicker(ctx context.Context, updateFunc func() error) {
+	tk := time.NewTicker(updateFactInterval)
+	go func(c context.Context) {
+		for {
+			select {
+			case <-tk.C:
+				log.Println("updating...")
+				if err := updateFunc(); err != nil {
+					log.Printf("error updating = %v", err)
+				}
+				log.Println("updated Successfully")
+			case <-c.Done():
+				return
+			}
+		}
+	}(ctx)
+}
+
+func fillStoreWithNewData(mf mentalfloss.Mentalfloss, factsStore *fact.Store) func() error {
+	return func() error {
+		facts, err := mf.Facts()
+		if err != nil {
+			log.Fatal("can't reach mentalfloss: ", err)
+		}
+		for _, f := range facts {
+			factsStore.Add(f)
+		}
+		return err
 	}
-	for _, f := range facts {
-		factsStore.Add(f)
-	}
-	return err
 }
 
 func (h *Handlerer) Ping(w http.ResponseWriter, r *http.Request) {
