@@ -25,7 +25,7 @@ func (c Client) Ping(t *testing.T) {
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		t.Fatalf("error reading response body: %s",body)
+		t.Fatalf("error reading response body: %s", body)
 	}
 	defer func() {
 		err := resp.Body.Close()
