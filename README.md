@@ -21,14 +21,21 @@ When navigating to `localhost:9002/ping` the browser should show `PONG`
 ***
 ### Exercise 2
 #### Goal
-Create an `/facts` endpoint for listing facts in JSON
+Create an `/facts` endpoint for listing facts in JSON format
 
 #### Description
     1. Create fact struct
+        1. The fact should have 3 string fields : Image, Url, Description.
     2. Create store struct
+        1. The store should be global - to init global var use the `var` keyword outside a function scope.
+        2. The store should be a struct with one field (e.i. Facts) of type []fact (a slice of facts).
+        3. Init store struct with some static.
     3. Add method - func (s store) getAll() []fact {…}
+        1. the method should return all facts in the store.facts field.
     4. Add method - func (s store) add(f fact) {…}
+        1. The method should add the given fact f to store - use store.facts = append(store.facts, f) to add f.
     5. Register /facts to http HandleFunc with a function that writes to ResponseWriter all facts in json format
+        1. use the http.HendleFunc
 
 #### End result
 GET /facts will return json of all facts in store
