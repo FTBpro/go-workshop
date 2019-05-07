@@ -6,7 +6,7 @@ go workshop - steps
 #### Goal 
 Build and run
 #### Description
-Write a go progeam which prints "hello world"
+Write a go program which prints "hello world"
 ***
 ### Exercise 1
 #### Goal
