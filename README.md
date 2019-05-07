@@ -31,11 +31,12 @@ Create an `/facts` endpoint for listing facts in JSON format
         2. The store should be a struct with one field (e.i. Facts) of type []fact (a slice of facts).
         3. Init store struct with some static.
     3. Add method - func (s store) getAll() []fact {…}
-        1. the method should return all facts in the store.facts field.
+        1. The method should return all facts in the store.facts field.
     4. Add method - func (s store) add(f fact) {…}
         1. The method should add the given fact f to store - use store.facts = append(store.facts, f) to add f.
     5. Register /facts to http HandleFunc with a function that writes to ResponseWriter all facts in json format
-        1. use the http.HendleFunc
+        1. Use the http.HendleFunc to register the /facts pattern and a handler func
+        2. In the handler func use json.Marshal to format the struct as json (use the json.Marshal documentation)
 
 #### End result
 GET /facts will return json of all facts in store
@@ -46,8 +47,11 @@ GET /facts will return json of all facts in store
 Create POST request for creating a new fact
 
 #### Description
-1. Create a fact from req body
-2. Add fact to store
+    1. In the handler from Exercise 2.5. check for the request method (GET/POST) add the logic of this step under POST section
+    2. Create a json format equivalent in fields (types and names) to the fact struct
+        1. In the request handling of the POST request use json.Unmarshal to get the fact struct out of the request body
+    3. Add fact to store
+        1. Use the func (s store) add(f fact) {…} from Exercise 2.3.
 #### End result
 POST /facts will create a new fact and add it to store
 
