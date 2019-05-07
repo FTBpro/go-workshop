@@ -24,7 +24,7 @@ When navigating to `localhost:9002/ping` the browser should show `PONG`
 Create an `/facts` endpoint for listing facts in JSON
 
 #### Description
-1. Create fact struct
+    1. Create fact struct
     2. Create store struct
     3. Add method - func (s store) getAll() []fact {…}
     4. Add method - func (s store) add(f fact) {…}
