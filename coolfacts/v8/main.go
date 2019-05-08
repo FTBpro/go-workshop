@@ -17,7 +17,7 @@ const (
 
 func main() {
 	factsStore := inmem.FactStore{}
-	handlerer := facthttp.Handlerer{
+	handlerer := facthttp.FactsHandler{
 		FactStore: &factsStore,
 	}
 

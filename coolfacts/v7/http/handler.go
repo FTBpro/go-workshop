@@ -1,16 +1,21 @@
-package main
+package http
 
 import (
-	"html/template"
 	"encoding/json"
 	"fmt"
 	"github.com/FTBpro/go-workshop/coolfacts/v7/fact"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 )
 
-type Handlerer struct {
-	store *fact.Store
+type FactStore interface {
+	Add(f fact.Fact)
+	GetAll() []fact.Fact
+}
+
+type FactsHandler struct {
+	FactStore FactStore
 }
 
 var newsTemplate = `<html>
@@ -26,7 +31,7 @@ var newsTemplate = `<html>
                     </html>`
 
 
-func (h *Handlerer) Ping(w http.ResponseWriter, r *http.Request) {
+func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "no http handler found", http.StatusNotFound)
 		return
@@ -39,7 +44,11 @@ func (h *Handlerer) Ping(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handlerer) Facts(w http.ResponseWriter, r *http.Request) {
+func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
+	if h.FactStore == nil {
+		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
+	}
+
 	if r.Method == http.MethodGet {
 		h.getFacts(w)
 		return
@@ -51,7 +60,7 @@ func (h *Handlerer) Facts(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "no http handler found", http.StatusNotFound)
 }
 
-func (h *Handlerer) postFacts(r *http.Request, w http.ResponseWriter) {
+func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		errMessage := fmt.Sprintf("error read from body: %v", err)
@@ -73,11 +82,11 @@ func (h *Handlerer) postFacts(r *http.Request, w http.ResponseWriter) {
 		Url:         req.Url,
 		Description: req.Description,
 	}
-	h.store.Add(f)
+	h.FactStore.Add(f)
 	w.Write([]byte("SUCCESS"))
 }
 
-func (h *Handlerer) getFacts(w http.ResponseWriter) {
+func (h *FactsHandler) getFacts(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", "text/html")
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {
@@ -85,5 +94,5 @@ func (h *Handlerer) getFacts(w http.ResponseWriter) {
 		http.Error(w, errMessage, http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, h.store.GetAll())
+	tmpl.Execute(w, h.FactStore.GetAll())
 }

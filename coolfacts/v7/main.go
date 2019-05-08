@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/v7/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/v7/http"
 	"github.com/FTBpro/go-workshop/coolfacts/v7/mentalfloss"
 )
 
@@ -17,8 +18,8 @@ const (
 
 func main() {
 	factsStore := fact.Store{}
-	handlerer := &Handlerer{
-		store: &factsStore,
+	handlerer := &facthttp.FactsHandler{
+		FactStore: &factsStore,
 	}
 
 	mf := mentalfloss.Mentalfloss{}

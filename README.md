@@ -8,7 +8,7 @@ Build and run
 #### Description
 Write a go program which prints "hello world"
 ***
-### Exercise 1
+### Exercise 1 - Ping
 #### Goal
 First use of `http` package
 
@@ -21,7 +21,7 @@ First use of `http` package
 When navigating to `localhost:9002/ping` the browser should show `PONG`\
 
 ***
-### Exercise 2
+### Exercise 2 - list the facts as JSON
 #### Goal
 Create `/facts` endpoint for listing facts in a JSON format
 
@@ -53,7 +53,7 @@ Register "/facts" to http.HandleFunc with a function that:
 `GET /facts` will return json of all facts in store
 
 ***
-### Exercise 3
+### Exercise 3 - create new fact
 #### Goal
 Create POST request for creating a new fact
 
@@ -83,7 +83,7 @@ Use the `factsStore.add` method from Exercise 2.
 `POST /facts` will create a new fact and add it to store
 
 ***
-### Exercise 4
+### Exercise 4 - list the facts as HTML
 
 #### Goal
 List the index results you created in exercise 2, using HTML template
@@ -95,7 +95,7 @@ return the index results (GET /facts) with an HTML template
 
 ***
 
-### Exercise 5
+### Exercise 5 - use MentalFloss API
 
 #### Goal
 Replace the static data with data of external provider (mentalfloss)
@@ -131,7 +131,7 @@ In main, get facts from `mentalfloss`, and add these facts to the store.
 
 ***
 
-### Exercise 6
+### Exercise 6 - seperate to packages
 
 #### Goal
 Separate structs into separate packages
@@ -144,22 +144,47 @@ Make sure that the struct `Fact` is exported (public)
 ###### Create package `mentalfloss`
 Create a new folder `mentalfloss` - move mentalfloss struct and methods into that folder (change the package name to mentalfloss)
 
-You will encounter compile error since the `fact` is now in another package.\
-Use import `"github.com/FTBpro/go-workshop/coolfacts/v6/fact"` and replace `fact` with `fact.Fact` 
+> You will encounter compile error since the `fact` is now in another package.\
+You will need to import your fact package And replace `fact` with `fact.Fact`\
+(for example in v6 `import "github.com/FTBpro/go-workshop/coolfacts/v6/fact"`)
 
-###### Seperate handler logic outside of main
-Move the anonymous functions used to register the endpoints and put this logic outside of main. (`func(w http.ResponseWriter, r *http.Request)`)
 
-It can be done by these steps:
-* Create handler struct in another file (can be remain in `main package` for now)
-  * For accessing the facts it will have `store *fact.Store` field.
-* Move the anonymous `http.HandleFunc` and put as this struct methods
+###### Create package `http`
+The goal is to separate http.HandlerFunc logic outside of main\
 
-In main function, init this struct with the `factStore`, for example:
+Create a new folder `http` and `handler.go` file (can be other file name)\
+Create handler struct for handling the request.\
+Example 
 ```go
-handlerer := &Handlerer{&factsStore}
+type FactsHandler struct {
+	FactStore *fact.Store
+}
 ```
 
+> Optional: you can declare `type FactStore interface` and use it instead of directly use `*fact.Store`. (Will be used only in exercise 8)
+
+Create methods for handling the request
+* `func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request)`
+* `func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request)`
+
+> Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`) 
+
+
+In main, init `FactsHandler` struct with the `factStore`\
+for example:
+```go
+handlerer := facthttp.FactsHandler{
+	FactStore: &factsStore,
+}
+```
+
+Since we already importing `net/http` in main, we need to rename the name we will use for our own http 
+```go
+import (
+	"net/http"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/v8/http"
+)
+```
 Use this handlerer methods for registering to the entpoints, for example:
 ```go
 http.HandleFunc("/ping", handlerer.Ping)
@@ -167,7 +192,7 @@ http.HandleFunc("/ping", handlerer.Ping)
 
 ***
 
-### Exercise 7
+### Exercise 7 - add ticker for updating the facts
 
 #### Goal
 Use go channel and ticker for updating the fact inventory
@@ -185,10 +210,9 @@ Use go channel and ticker for updating the fact inventory
 every const time a ticker will send a signal to a `thread` (go built-in) that will fetch new fact from provider (mentalfloss)
 *** 
 
-### Exercise 8
+### Exercise 8 - refactor
 
 #### Goal
-Refactor
 * Enable switching between persistent layers easily
 * Enable replacing and adding new providers
 #### Description

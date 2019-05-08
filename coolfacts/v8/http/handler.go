@@ -1,10 +1,10 @@
 package http
 
 import (
-	"html/template"
 	"encoding/json"
 	"fmt"
 	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
+	"html/template"
 	"io/ioutil"
 	"net/http"
 )
@@ -14,7 +14,7 @@ type FactStore interface {
 	GetAll() []fact.Fact
 }
 
-type Handlerer struct {
+type FactsHandler struct {
 	FactStore FactStore
 }
 
@@ -31,7 +31,7 @@ var newsTemplate = `<html>
                     </html>`
 
 
-func (h *Handlerer) Ping(w http.ResponseWriter, r *http.Request) {
+func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "no http handler found", http.StatusNotFound)
 		return
@@ -44,7 +44,11 @@ func (h *Handlerer) Ping(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handlerer) Facts(w http.ResponseWriter, r *http.Request) {
+func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
+	if h.FactStore == nil {
+		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
+	}
+
 	if r.Method == http.MethodGet {
 		h.getFacts(w)
 		return
@@ -56,9 +60,7 @@ func (h *Handlerer) Facts(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "no http handler found", http.StatusNotFound)
 }
 
-// private
-
-func (h *Handlerer) postFacts(r *http.Request, w http.ResponseWriter) {
+func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		errMessage := fmt.Sprintf("error read from body: %v", err)
@@ -84,7 +86,7 @@ func (h *Handlerer) postFacts(r *http.Request, w http.ResponseWriter) {
 	w.Write([]byte("SUCCESS"))
 }
 
-func (h *Handlerer) getFacts(w http.ResponseWriter) {
+func (h *FactsHandler) getFacts(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", "text/html")
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {

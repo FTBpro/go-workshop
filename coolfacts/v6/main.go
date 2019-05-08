@@ -6,14 +6,17 @@ import (
 	"net/http"
 
 	"github.com/FTBpro/go-workshop/coolfacts/v6/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/v6/http"
 	"github.com/FTBpro/go-workshop/coolfacts/v6/mentalfloss"
 )
 
 func main() {
 	factsStore := fact.Store{}
-	mf := mentalfloss.Mentalfloss{}
-	handlerer := &Handlerer{&factsStore}
+	handlerer := &facthttp.FactsHandler{
+		FactStore: &factsStore,
+	}
 
+	mf := mentalfloss.Mentalfloss{}
 	err := updateFacts(mf, &factsStore)
 
 	http.HandleFunc("/ping", handlerer.Ping)
