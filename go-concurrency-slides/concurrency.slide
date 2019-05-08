@@ -1,0 +1,120 @@
+# This is a file
+
+Go Conccurency
+
+Omer Fox
+
+* Agenda
+- Goroutines
+- How to conccur?
+- Synchoronization
+- Communication
+- Ticker
+- Locks
+
+* Goroutines
+- What is a goroutine? It's an independently executing function, launched by a go statement.
+- It has its own call stack, which grows and shrinks as required.
+- It's very cheap. It's practical to have thousands, even hundreds of thousands of goroutines.
+- It's not a thread.
+- There might be only one thread in a program with thousands of goroutines.
+- Instead, goroutines are multiplexed dynamically onto threads as needed to keep all the goroutines running.
+- But if you think of it as a very cheap thread, you won't be far off.
+
+* Just go
+Creating a new goroutine is simple
+.play -edit code/simplegoroutine.go /^func main/,/^}/
+whats the problem here?
+
+* Wait with WaitGroup
+* A simple way to wait for goroutine completion
+- Declare a WaitGroup
+- Add 1 per goroutine or n for total number of goroutines
+- Call Done in the end of each goroutine 
+- Wait in the end
+.play -edit code/waitgroup.go /^func main/,/^}/
+
+* Channels
+* The main way for communicating between goroutines
+- Declared as send only, receive only or both
+    chan <type>  for send and receive 
+    <-chan <type> for receive only 
+    chan<- <type> for send only
+- Can pass primitive or complex structures but they are strictly typed
+- Initialized with a buffer or without 
+    make(chan <type>)
+- Sending and receiving are blocking operations
+- Channels need to be closed
+    close(chan)
+
+* Channels - Send a message
+.play -edit code/simplechannel.go /^func main/,/^}/
+
+* Select statement
+* Handling for channels that can help data flow in a func
+- Similar to Switch case but only for channels
+- If multiple messages are received - it chooses one at random
+    func listener(channel,otherChannel <-chan int, done <-chan bool){
+        for{
+            select{
+            case <-channel:
+                doSomething()
+            case <-otherChannel:
+                doSomethingElse()
+            case <-done:
+                return
+            }
+        }
+    }
+
+* Meet the Ticker
+- A Ticker holds a channel that delivers `ticks' of a clock at intervals.
+    
+    type Ticker struct {
+            C <-chan Time // The channel on which the ticks are delivered.
+    }
+- A ticker is initialized by calling NewTicker with duration
+    func NewTicker(d Duration) *Ticker
+- A ticker can be stopped with the Stop function
+    func (t *Ticker) Stop()
+
+* Using channels with select
+.play -edit code/simpleselectticker.go /^func main/,/^}/
+
+* Locks
+* Mutex
+- Shared data globals can be used with locks - provided by the sync package
+- Lock is a blocking operation
+- Dont forget to release the lock
+- The locking goroutine doesn't have to be the one that unlocks it
+
+* Mutex example
+    type printer struct {
+        sync.Mutex
+    }
+
+    func (p *printer) Print(msg string) {
+        p.Lock()
+        fmt.Printf("Locked and loaded: %v\n", msg)
+        time.Sleep(time.Second)
+        p.Unlock()
+    }
+.play -edit code/synclock.go /^func main/,/^}/
+
+* Conclusion
+- Goroutines
+- WaitGroup
+- Channels
+- Select
+- Ticker
+- Locks
+
+* Links
+
+Concurrency is not parallelism:
+
+.link http://golang.org/s/concurrency-is-not-parallelism
+
+Go Concurrency Patterns (by Rob Pike):
+
+.link https://talks.golang.org/2012/concurrency.slide
