@@ -1,0 +1,240 @@
+Go Workshop
+17 May 2019
+
+: NOTES - slide1
+
+
+
+* Workshop Agenda
+
+- Introduction to Go
+- Go do it yourself
+- Go concurrency
+- Go do it yourself
+- Idiomatic Go
+
+
+
+.image presentation/gopher.jpg
+
+: NOTES - slide2
+
+
+
+* Introduction to Go
+
+: NOTES - slide3
+
+
+
+* The Go programming language
+
+- Modern
+- Garbage-collected
+- Compiles to native code
+- Built-in concurrency
+- Go tools
+- Gophers community
+
+: NOTES - slide4
+
+
+* Go basics
+
+: NOTES - slide5
+
+
+
+* The "hello world"
+
+.play -edit slides/slide6/example1/main.go
+
+*Packages*
+- Go programs are made up of packages
+- Programs start running in package main
+- When importing a package only *exported* names (begins with a capital letter) can be referred
+
+: NOTES - slide6
+
+
+
+* Go Types
+
+: NOTES - slide7
+
+
+
+* Types
+
+- The var statement - declares a list of variables
+
+    var i int = 8
+    var i = 8
+    i := 8
+
+- Basic types - bool, string, int, float, int64, uint ...
+    
+    var i int = -1
+    var u uint = 2000
+    i = u // nope, incompatible types
+
+- Declaring your own types
+    
+.play -edit slides/slide8/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide8
+
+
+
+* More About types - Functions
+
+- A function can return any number of results
+
+    func swap(a int, b int) (int, int) {...}
+
+- Functions can be passed as arguments to other functions as all other Go types
+
+.play -edit slides/slide9/example1/main.go /start OMIT/,/end OMIT/   
+
+: NOTES - slide9
+
+
+
+* Go`s flow control statements - 
+
+- Go's if
+
+.play -edit slides/slide10/example1/main.go /start OMIT/,/end OMIT/   
+
+- Go's For loop
+
+.play -edit slides/slide10/example2/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide10
+
+
+
+* Go Types - Maps
+
+.play -edit slides/slide11/example1/main.go /start OMIT/,/end OMIT/
+
+- Insert, Retrieve, Delete and Test maps - 
+
+.play -edit slides/slide11/example2/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide11
+
+
+
+* Go Types - Slices
+
+- A slice does not store any data, it just describes a section of an underlying array
+
+.play -edit slides/slide12/example2/main.go /start OMIT/,/end OMIT/
+
+- Iterating over a Slice
+
+.play -edit slides/slide12/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide12
+
+
+
+* Types - Structs and Methods
+
+- Structs
+
+.code -edit slides/slide13/example1/main.go /start1 OMIT/,/end1 OMIT/
+
+- Methods
+
+.code -edit slides/slide13/example1/main.go /start2 OMIT/,/end2 OMIT/
+
+- The `fmt` package will use the `.String()` method of the passed type if it has one
+
+.play -edit slides/slide13/example1/main.go /start3 OMIT/,/end3 OMIT/
+
+: NOTES - slide13
+
+
+
+* Now that we know the basics
+
+: NOTES - slide14
+
+
+
+* Hello World - web version
+
+- Writing web servers in Go can be as simple as a few lines. Here is an example:
+
+.play -edit slides/slide15/example1/main.go /start OMIT/,/end OMIT/
+
+Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
+
+: NOTES - slide15
+
+
+
+* Go by example - The TVShows server 
+
+: NOTES - slide16
+
+
+
+* The TVShows server - Get to know the structs
+
+.play -edit slides/slide17/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide17
+
+
+
+* The TVShows server - Go struct to JSON
+
+.play -edit slides/slide18/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide18
+
+
+
+*  The TVShows server - JSON to Go struct
+
+.play -edit slides/slide19/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide19
+
+
+
+* The TVShows server - (recap) The GET and POST handlers
+
+.code -edit slides/slide20/example1/main.go /start1 OMIT/,/end1 OMIT/
+
+.code -edit slides/slide20/example1/main.go /start2 OMIT/,/end2 OMIT/
+
+: NOTES - slide20
+
+
+
+* The TVShows server - Putting it all together
+
+.play -edit slides/slide21/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide21
+
+
+
+* Next - Do it yourself...
+
+* Go tools
+
+* Tools
+
+- Compile your programs - `go build`
+    env GOOS=linux go build github.com/path/to/your/code
+- Run your tests (*_test.go) - `go test`
+    go test -coverprofile=cover.out
+- Display documentation for a package - `godoc`
+    godoc -http ":8080"
+- Automatically format Go source code - `gofmt`
+    gofmt
