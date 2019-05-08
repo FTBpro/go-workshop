@@ -9,9 +9,8 @@ type Provider interface {
 }
 
 type Store interface {
-	Get(i int) Fact
-	GetNext() Fact
-	Append(fact Fact) int
+	Add(f Fact)
+	GetAll() []Fact
 }
 
 type service struct {
@@ -33,7 +32,7 @@ func (s *service) UpdateFacts() error {
 	}
 
 	for _, fact := range facts {
-		s.store.Append(fact)
+		s.store.Add(fact)
 	}
 
 	return nil
