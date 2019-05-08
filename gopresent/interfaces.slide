@@ -1,0 +1,69 @@
+Go Interfaces
+17 May 2019
+
+: NOTES - slide1
+
+
+* Interfaces in go
+
+- Implicit rather than explicit
+- example:
+
+
+  type Action interface {
+    Do(int, int) int
+  }
+
+  func doSomething(x, y int, action Action) {
+    result := action.Do(x, y)
+    fmt.Printf("x = %d, y = %d, action.Do(x, y) = %d\n", x, y, result)
+  }
+
+
+(alternative to using func)
+
+  func doSomething(x int, y int, action func(int, int) int) {
+    fmt.Printf("x = %d, y = %d, action(x, y) = %d\n", x, y, action(x, y))
+  }
+
+
+
+: NOTES - slide2
+
+* 
+
+.play -edit interfaces/example1/main.go /start OMIT/,/end OMIT
+
+: NOTES - slide3
+
+
+
+* Example from package http
+
+ListenAndServe
+
+  func ListenAndServe(addr string, handler Handler) error {...}
+
+Interface Handler:
+
+  type Handler interface {
+    ServeHTTP(ResponseWriter, *Request)
+  }
+
+
+  
+
+: NOTES - slide4
+
+
+* Go basics
+
+: NOTES - slide5
+
+
+
+* The "hello world"
+
+
+
+*Packages*
