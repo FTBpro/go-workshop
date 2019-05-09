@@ -1,5 +1,8 @@
 # welcome
 
+* [Excercise 0 - build and run](#exercise-0---build-and-run)
+* [Excercise 1 - ping](#exercise-1---ping)
+
 go workshop - steps
 ***
 ## Exercise 0 - build and run
