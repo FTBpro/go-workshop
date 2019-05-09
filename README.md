@@ -98,7 +98,7 @@ var req struct {
 Reading the request body can be done by `ioutil.ReadAll`\
 Parsing the data into `req` can be done by `json.Unmarshal` 
 
-##### Finally add the fact to the store\
+##### Finally add the fact to the store
 Use the `factsStore.add` method from Exercise 2.
 
 ***
