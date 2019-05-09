@@ -2,35 +2,35 @@
 
 go workshop - steps
 ***
-### Exercise 0
-#### Goal 
+## Exercise 0 - build and run
+### Goal 
 Build and run
-#### Description
+### Steps
 Write a go program which prints "hello world"
 ***
-### Exercise 1 - Ping
-#### Goal
+## Exercise 1 - Ping
+### Goal
 First use of `http` package
 
-#### Description
+### Steps
 * Register `"/ping"` to an `http.HandleFunc` with a function that writes to ResponseWriter the ‘PONG’
 * For printing into `w http.ResponseWriter` you can use `fmt.Fprint`
 * In case of an error you can use `http.Error`
 
-#### End result
+### End result
 When navigating to `localhost:9002/ping` the browser should show `PONG`\
 
 ***
-### Exercise 2 - list the facts as JSON
-#### Goal
+## Exercise 2 - list the facts as JSON
+### Goal
 Create `/facts` endpoint for listing facts in a JSON format
 
-#### Description
+### Steps
 
-##### Create fact struct
-The fact should have 3 string fields : `Image`, `Url`, `Description`
+#### Create fact struct
+The `fact` struct should have 3 string fields : `Image`, `Url`, `Description`
 
-##### Create store struct
+#### Create store struct
 The store can use in memory cache for storing the facts.\
 It can be done by one field `facts` of type `[]fact` (a slice of facts).
 
@@ -43,23 +43,23 @@ Add store functionality:
   
 Init the store from `main` with some static data. 
 
-##### Register `/facts` to to `http.HandleFunc` 
+#### Register `/facts` to to `http.HandleFunc` 
 Register "/facts" to http.HandleFunc with a function that:
 * Gets all the facts from the store
 * Writes the facts to the `ResponseWriter` in JSON format
   * Use `json.Marshal` to format the struct as json and to write to the `ResponseWriter` 
 
-#### End result
+### End result
 `GET /facts` will return json of all facts in store
 
 ***
-### Exercise 3 - create new fact
-#### Goal
+## Exercise 3 - create new fact
+### Goal
 Create POST request for creating a new fact
 
-#### Description
+### Steps
 
-##### Add `POST` functionality to `/facts` handlerFunc
+#### Add `POST` functionality to `/facts` handlerFunc
 In the handler from the previous exercise check for the request method (GET/POST) add the logic of this step under POST section
 
 Create a json format equivalent in fields (types and names) to the fact struct.
@@ -72,40 +72,40 @@ var req struct {
 }
 ```
 
-##### Parse the encoded request body into `req`
+#### Parse the encoded request body into `req`
 Reading the request body can be done by `ioutil.ReadAll`\
 Parsing the data into `req` can be done by `json.Unmarshal` 
 
-##### Finally add the fact to the store\
+#### Finally add the fact to the store\
 Use the `factsStore.add` method from Exercise 2.
 
-#### End result
+### End result
 `POST /facts` will create a new fact and add it to store
 
 ***
-### Exercise 4 - list the facts as HTML
+## Exercise 4 - list the facts as HTML
 
-#### Goal
+### Goal
 List the index results you created in exercise 2, using HTML template
-#### Description
+### Steps
 1. Crate an HTML template using package `text/template` syntax
 2. Execute template with `store.getAll` results (that means write to `ResponseWriter` all results in the applied template)
-#### End result
+### End result
 return the index results (GET /facts) with an HTML template
 
 ***
 
-### Exercise 5 - use MentalFloss API
+## Exercise 5 - use MentalFloss API
 
-#### Goal
+### Goal
 Replace the static data with data of external provider (mentalfloss)
 
-#### Description
+### Steps
 
-##### Create a mentalfloss struct 
+#### Create a mentalfloss struct 
 In a seperate file, create mentalfloss struct which will be the provider for fetching the facts
 
-##### Add `func (mf mentalfloss) Facts() ([]fact, error) {…}`
+#### Add `func (mf mentalfloss) Facts() ([]fact, error) {…}`
 Function for fetching facts using MetnalFloss API\
 * Call `http://mentalfloss.com/api/facts` using `http.Get`
   * This return array of MentalFloss facts in a JSON format
@@ -122,26 +122,26 @@ Function for fetching facts using MetnalFloss API\
     * `func parseFromRawItems(b []byte) ([]fact, error) {…}`
     * (After you read the response body by `ioutil.ReadAll`)   
 
-##### Use mentalfloss instead of static data
+#### Use mentalfloss instead of static data
 In main, get facts from `mentalfloss`, and add these facts to the store.
 
-#### End result
+### End result
 `GET /facts` should show facts from MentalFloss.\
 (By sending request to external provider (MentalFloss) to fetch facts and saving them in the store)
 
 ***
 
-### Exercise 6 - seperate to packages
+## Exercise 6 - seperate to packages
 
-#### Goal
+### Goal
 Separate structs into separate packages
-#### Description
+### Steps
 
-##### Create package `fact`
+#### Create package `fact`
 Create a new folder fact - move store and fact definition into that folder (change the package name to fact)
 
 Make sure that the struct `Fact` is exported (public)  
-##### Create package `mentalfloss`
+#### Create package `mentalfloss`
 Create a new folder `mentalfloss` - move mentalfloss struct and methods into that folder (change the package name to mentalfloss)
 
 > You will encounter compile error since the `fact` is now in another package.\
@@ -149,7 +149,7 @@ You will need to import your fact package And replace `fact` with `fact.Fact`\
 (for example in v6 `import "github.com/FTBpro/go-workshop/coolfacts/v6/fact"`)
 
 
-##### Create package `http`
+#### Create package `http`
 The goal is to separate http.HandlerFunc logic outside of main\
 
 Create a new folder `http` and `handler.go` file (can be other file name)\
@@ -192,11 +192,11 @@ http.HandleFunc("/ping", handlerer.Ping)
 
 ***
 
-### Exercise 7 - add ticker for updating the facts
+## Exercise 7 - add ticker for updating the facts
 
-#### Goal
+### Goal
 Use go channel and ticker for updating the fact inventory
-#### Description
+### Steps
 1. Init a context.WithCancel (remember to defer its closer…)
 2. Add a function - func updateFactsWithTicker(ctx context.Context, updateFunc func() error)
     1. (Outside from updateFactsWithTicker) Create the updateFunc from step 7.2. that updates the store from an external              provider
@@ -206,23 +206,23 @@ Use go channel and ticker for updating the fact inventory
             1. If the ticker channel (ticker.C) was selected - use the given updateFunc to update store
             2. If the context channel (context.Done()) was selected -return (it means the main closed the context)
             
-#### End result
+### End result
 every const time a ticker will send a signal to a `thread` (go built-in) that will fetch new fact from provider (mentalfloss)
 *** 
 
-### Exercise 8 - refactor
+## Exercise 8 - refactor
 
-#### Goal
+### Goal
 * Enable switching between persistent layers easily
 * Enable replacing and adding new providers
-#### Description
+### Steps
 
-##### Extract store logic to package `inmem`
+### Extract store logic to package `inmem`
 Create `inmem` package and Move the store currently in `fact` package
     
 > `package inmem` is a common name for handling in memory cache. For handling cache in sql for example, you can use `package sql`
 
-##### Create fact service for abstracting how we update the facts
+### Create fact service for abstracting how we update the facts
 in package `fact`, declare two interfaces:
 ```go
 type provider interface {
@@ -248,7 +248,7 @@ Add initializer - `func NewService(s Store, r Provider) *service`  \
 And a method for updating facts `func (s *service) UpdateFacts() error`
 > in `UpdateFacts` you will use the provider to fetch the facts, and the store to save them. Although the service is updating, it doesn't know who is the provider, and what is the persistent layer
 
-##### Replace calls in main
+### _Replace calls in main_
 Use `inmem.FactStore{}` for the fact store (instead of `fact.Store{}`)
 
 Init the service with the mentalfloss provider and the inmem store
@@ -259,6 +259,6 @@ service := fact.NewService(&factsStore, &mf)
 
 Use the `service.UpdateFacts` method to update the store, and to use with the ticker
 
-#### End result
+### End result
 
 We now can add another provider and cache layer easily
