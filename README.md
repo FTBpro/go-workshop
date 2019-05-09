@@ -1,9 +1,16 @@
 # welcome
+This is a step-by-step tutorial for creating a simple server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
-* [Excercise 0 - build and run](#exercise-0---build-and-run)
-* [Excercise 1 - ping](#exercise-1---ping)
+* [Exercise 0 - build and run](#exercise-0---build-and-run)
+* [Exercise 1 - ping](#exercise-1---ping)
+* [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json)
+* [Exercise 3 - create new fact](#exercise-3---create-new-fact)
+* [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html)
+* [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api)
+* [Exercise 6 - separate to packages](#exercise-6---separate-to-packages)
+* [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts)
+* [Exercise 8 - refactor](#exercise-8---refactor)
 
-go workshop - steps
 ***
 ## Exercise 0 - build and run
 ### Goal 
