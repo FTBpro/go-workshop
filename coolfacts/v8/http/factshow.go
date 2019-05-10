@@ -21,31 +21,51 @@ var newsTemplate = `
 	</head>
 	<style>
 body {
-	font-family: Helvetica, Arial, sans-serif;
-	color: #26323d;
-  max-width: 720px;
-  margin: auto;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #26323d;
+    max-width: 720px;
+    margin: auto;
 }
 
 article {
-	border: 1px solid #0095c4;
-	border-radius: 4px;
-	max-width: 256px;
-	text-align: center;
+    border: 1px solid #0095c4;
+    border-radius: 4px;
+    max-width: 320px;
+    text-align: center;
 }
 
-a {
-	color: #26323d;
+article h3 {
+    font-weight: normal;
 }
-a:hover {
-	color: #f16957;
+
+article a {
+    color: #26323d;
 }
-img {
-	border-radius: 4px;
+
+article a:hover {
+    color: #f16957;
+}
+
+article img {
+    border-radius: 4px;
+}
+
+table input[type="submit"] {
+    font-size: unset;
+    width: 100%;
+    color: #26323d;
+    border: 1px solid #26323d;
+    border-radius: 4px;
+}
+
+table input[type="submit"]:hover {
+    color: white;
+    background-color: #f16957;
+    border: 1px solid #f16957;
 }
 	</style>
 <body>
-	<h1>Amazing Fact Generator</h1>
+	<h1>Hear This Amazing Fact</h1>
 	<article>
 		<a href="http://mentalfloss.com/api{{.Url}}">
 				<h3>{{.Description}}</h3>

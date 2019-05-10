@@ -14,27 +14,47 @@ var formTemplate = `
 	</head>
 	<style>
 body {
-	font-family: Helvetica, Arial, sans-serif;
-	color: #26323d;
-  max-width: 720px;
-  margin: auto;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #26323d;
+    max-width: 720px;
+    margin: auto;
 }
 
 article {
-	border: 1px solid #0095c4;
-	border-radius: 4px;
-	max-width: 256px;
-	text-align: center;
+    border: 1px solid #0095c4;
+    border-radius: 4px;
+    max-width: 320px;
+    text-align: center;
 }
 
-a {
-	color: #26323d;
+article h3 {
+    font-weight: normal;
 }
-a:hover {
-	color: #f16957;
+
+article a {
+    color: #26323d;
 }
-img {
-	border-radius: 4px;
+
+article a:hover {
+    color: #f16957;
+}
+
+article img {
+    border-radius: 4px;
+}
+
+table input[type="submit"] {
+    font-size: unset;
+    width: 100%;
+    color: #26323d;
+    border: 1px solid #26323d;
+    border-radius: 4px;
+}
+
+table input[type="submit"]:hover {
+    color: white;
+    background-color: #f16957;
+    border: 1px solid #f16957;
 }
 	</style>
 	<body>
@@ -42,13 +62,22 @@ img {
 		<h1>Fact created! to show fact <a href="http://localhost:9002/facts?index={{.Index}}">click here</a></h1>
 	{{else}}
 				<form action="/facts/new" method="post">
-						<label for="url">Fact Url:</label>
-						<input id="url" type="text" name="url" display="block"><br/>
-						<label for="image">Image:</label>
-            <input id="image" type="text" name="primaryImage" display="block"><br/>
-						<label for="fact">Description:</label>
-						<input id="fact" type="textarea" name="fact" display="block"><br/>
-						<input type="submit" value="Create">
+					<table>
+						<th>Add a new fact</th>
+						<tr>
+							<td><label for="url">Fact Url:</label></td>
+							<td><input id="url" type="text" name="url" display="block"></td>
+						</tr>
+						<tr>
+							<td><label for="image">Image:</label></td>
+            	<td><input id="image" type="text" name="primaryImage" display="block"></td>
+						</tr>
+						<tr>
+							<td><label for="fact">Description:</label></td>
+							<td><input id="fact" type="textarea" name="fact" display="block"></td>
+						</tr>
+						<tr><td/><td><input type="submit" value="Create"></td></tr>
+					</table>
 				</form>
 	{{end}}
 	</body>
