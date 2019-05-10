@@ -19,9 +19,33 @@ var newsTemplate = `
 	<head>
 		<title>Coolfacts</title>
 	</head>
-	<link rel="stylesheet" href="https://github.com/FTBpro/go-workshop/blob/master/coolfacts/styles.css">
+	<style>
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	color: #26323d;
+  max-width: 720px;
+  margin: auto;
+}
+
+article {
+	border: 1px solid #0095c4;
+	border-radius: 4px;
+	max-width: 256px;
+	text-align: center;
+}
+
+a {
+	color: #26323d;
+}
+a:hover {
+	color: #f16957;
+}
+img {
+	border-radius: 4px;
+}
+	</style>
 <body>
-	<h1>Did you know?</h1>
+	<h1>Amazing Fact Generator</h1>
 	<article>
 		<a href="http://mentalfloss.com/api{{.Url}}">
 				<h3>{{.Description}}</h3>
