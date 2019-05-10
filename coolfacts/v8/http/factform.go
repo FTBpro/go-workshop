@@ -9,7 +9,7 @@ import (
 
 var formTemplate = `<html>
     <head>
-    <title></title>
+    <title>Coolfacts</title>
     </head>
     <body>
 		{{if .Success}}
