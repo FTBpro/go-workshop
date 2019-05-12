@@ -15,6 +15,6 @@ func (s *Store) Add(f Fact) {
 	s.facts = append(s.facts , f)
 }
 
-func (s Store) GetAll() []Fact {
+func (s *Store) GetAll() []Fact {
 	return s.facts
 }
