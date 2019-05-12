@@ -21,7 +21,7 @@ Go can be developed using a set of standard tools using only the commandline, bu
 
 ## Code Editor
 
-We recommend [Visual Studio Code][vscode] as it is open source and has Go support.
+We recommend [Visual Studio Code][vscode] as it is open source and has Go support. (It is also possible to use [goland], there is a free trial for 30 days)
 
 [Download Visual Studio Code][vscode]
 
@@ -48,4 +48,5 @@ Being an experimental feature, this hasn't affected anyone that wasn't willing t
 [vscode]: https://code.visualstudio.com
 [https://golang.org/dl]: https://golang.org/dl
 [plugins]: https://github.com/golang/go/wiki/IDEsAndTextEditorPlugins
-[vscode plugin]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go 
+[vscode plugin]: https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go
+[goland]: https://www.jetbrains.com/go/
