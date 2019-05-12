@@ -7,10 +7,13 @@ import "fmt"
 var m = map[string]int{
 	"Game of Thrones": 8,
 	"The Simpsons":    30,
+	"Breaking Bad":    6,
 }
 
 func main() {
-	fmt.Println(m)
+	for k, v := range m {
+		fmt.Printf("Show name : %s, # of seasons: %d\n", k, v)
+	}
 }
 
 // end OMIT

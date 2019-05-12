@@ -13,9 +13,6 @@ func main() {
 	m["Brooklyn 99"] = 6
 	fmt.Println(m["Brooklyn 99"])
 
-	delete(m, "The Simpsons")
-	fmt.Println(m)
-
 	v, ok := m["Game of Thrones"]
 	fmt.Println("The value:", v, "Present?", ok)
 }

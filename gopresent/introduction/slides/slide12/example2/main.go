@@ -5,14 +5,14 @@ import "fmt"
 // start OMIT
 
 func main() {
-	names := [4]string{"John", "Paul", "George", "Rob"}
-	fmt.Println(names)
+	names := []string{"John", "Paul", "George", "Rob"}
+	fmt.Printf("Names slice : %v\n", names)
 
-	namesCopy := names
 	names[1] = "XXX"
+	fmt.Printf("Names slice : %v\n", names)
 
-	fmt.Println(names)
-	fmt.Println(namesCopy)
+	names = append(names, "Tom")
+	fmt.Printf("Names slice : %v\n", names)
 }
 
 // end OMIT
