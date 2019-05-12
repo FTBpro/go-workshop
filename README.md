@@ -18,7 +18,7 @@ This is a step-by-step tutorial for creating a simple server for fetching facts 
 Build and run
 
 ### Steps
-For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md) \
 To run just write in the command line `go run <name of file>` or `go run ./<name of folder>`
 ***
 ## Exercise 1 - Ping
