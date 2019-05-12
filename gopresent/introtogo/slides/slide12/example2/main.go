@@ -5,15 +5,14 @@ import "fmt"
 // start OMIT
 
 func main() {
-	names := [4]string{"John", "Paul", "George"}
+	names := [4]string{"John", "Paul", "George", "Rob"}
+	fmt.Println(names)
 
-	a := names[0:2]
-	fmt.Println(a)
-
-	a[0] = "XXX"
-	fmt.Println(a)
+	namesCopy := names
+	names[1] = "XXX"
 
 	fmt.Println(names)
+	fmt.Println(namesCopy)
 }
 
 // end OMIT

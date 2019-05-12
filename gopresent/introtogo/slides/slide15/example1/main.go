@@ -7,9 +7,8 @@ import (
 	"net/http"
 )
 
-func helloWorldHandler(w http.ResponseWriter, req *http.Request) {
-	log.Println("servinig - ", req.URL)
-	w.Write([]byte("Welcome to my website!")) // []byte(..) casts the given argument to []byte
+func helloWorldHandler(w http.ResponseWriter, _ *http.Request) {
+	w.Write([]byte("Welcome to my website!"))
 }
 
 func main() {
