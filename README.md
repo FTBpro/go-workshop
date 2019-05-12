@@ -18,7 +18,8 @@ This is a step-by-step tutorial for creating a simple server for fetching facts 
 Build and run
 
 ### Steps
-For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md) \
+To run just write in the command line `go run <name of file>` or `go run ./<name of folder>`
 ***
 ## Exercise 1 - Ping
 ### Goal
@@ -31,7 +32,7 @@ When navigating to `localhost:9002/ping` the browser should show `PONG` string
 
 ##### Create `/ping` endpoint
 Register handler function of to `/ping` pattern\
-Use `http.HandleFunc` function to register an anonymous function of type `func(ResponseWriter, *Request)` to `/ping`
+Use `http.HandleFunc` function to register an anonymous function of type `func(http.ResponseWriter, *http.Request)` to `/ping`
 
 > For printing into `http.ResponseWriter` you can use `fmt.Fprintf`\
 In case of an error you can use `http.Error` function
@@ -50,16 +51,18 @@ Create `/facts` endpoint for listing facts in a JSON format by using a static st
 ### Steps
 
 ##### Create fact struct
+Create a struct named fact (`type Fact struct {...}`)\
 The `fact` struct should have 3 string fields : `Image`, `Url`, `Description`
 
 ##### Create store struct
+Create a struct named store (`type Store struct {...}`)\
 The store can use in memory cache for storing the facts.\
 It can be done by one field `facts` of type `[]fact` (a slice of facts).
 
 Add store functionality:
-* `func (s store) getAll() []fact {…}`
+* `func (s *store) getAll() []fact {…}`
   * The method should return all facts in the `store.facts` field
-* `func (s store) add(f fact) {…}`
+* `func (s *store) add(f fact) {…}`
   * The method should add the given fact f to the store\
   For adding to a slice you can use `store.facts = append(store.facts, f)`
   

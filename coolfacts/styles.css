@@ -13,16 +13,32 @@ article {
     text-align: center;
 }
 
-a {
+article h3 {
+    font-weight: normal;
+}
+
+article a {
     color: #26323d;
 }
-a:hover {
+
+article a:hover {
     color: #f16957;
 }
-img {
+
+article img {
     border-radius: 4px;
 }
 
-form {
+table input[type="submit"] {
+    font-size: unset;
+    width: 100%;
+    color: #26323d;
+    border: 1px solid #26323d;
+    border-radius: 4px;
+}
 
+table input[type="submit"]:hover {
+    color: white;
+    background-color: #f16957;
+    border: 1px solid #f16957;
 }
