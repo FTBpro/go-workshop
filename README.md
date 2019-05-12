@@ -112,7 +112,9 @@ In this function you will:
 Create POST request for creating a new fact
 
 ### End result
-`POST /facts` will create a new fact and add it to store
+`POST /facts` will create a new fact from the request body, and add it to the store
+> For issuing a POST request you can use 'postman', or the next command from terminal:\
+curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<imageName>", "Url": "\<imageURL>", "Description": "\<imageDescription>"}' http://localhost:9002/facts
 
 ### Steps
 
