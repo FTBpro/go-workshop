@@ -23,7 +23,7 @@ Omer Fox
 
 * Just go
 Creating a new goroutine is simple
-.play -edit code/simplegoroutine.go /^func main/,/^}/
+.play -edit concurrency/code/simplegoroutine.go /^func main/,/^}/
 whats the problem here?
 
 * Wait with WaitGroup
@@ -32,7 +32,7 @@ whats the problem here?
 - Add 1 per goroutine or n for total number of goroutines
 - Call Done in the end of each goroutine 
 - Wait in the end
-.play -edit code/waitgroup.go /^func main/,/^}/
+.play -edit concurrency/code/waitgroup.go /^func main/,/^}/
 
 * Channels
 * The main way for communicating between goroutines
@@ -48,7 +48,7 @@ whats the problem here?
     close(chan)
 
 * Channels - Send a message
-.play -edit code/simplechannel.go /^func main/,/^}/
+.play -edit concurrency/code/simplechannel.go /^func main/,/^}/
 
 * Select statement
 * Handling for channels that can help data flow in a func
@@ -79,7 +79,7 @@ whats the problem here?
     func (t *Ticker) Stop()
 
 * Using channels with select
-.play -edit code/simpleselectticker.go /^func main/,/^}/
+.play -edit concurrency/code/simpleselectticker.go /^func main/,/^}/
 
 * Locks
 * Mutex
@@ -99,7 +99,7 @@ whats the problem here?
         time.Sleep(time.Second)
         p.Unlock()
     }
-.play -edit code/synclock.go /^func main/,/^}/
+.play -edit concurrency/code/synclock.go /^func main/,/^}/
 
 * Conclusion
 - Goroutines
