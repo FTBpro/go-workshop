@@ -25,7 +25,7 @@ var store Store = Store{
 	},
 }
 
-func getTVShowsHandler(w http.ResponseWriter, req *http.Request) {
+func getTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.Marshal(store)
 	if err != nil {
 		log.Fatal(err)
@@ -33,8 +33,8 @@ func getTVShowsHandler(w http.ResponseWriter, req *http.Request) {
 	w.Write(j)
 }
 
-func postTVShowsHandler(w http.ResponseWriter, req *http.Request) {
-	bodyBytes, err := ioutil.ReadAll(req.Body)
+func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
+	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,14 +49,14 @@ func postTVShowsHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 // start OMIT
-func tvshowsHandler(w http.ResponseWriter, req *http.Request) {
-	if req.Method == http.MethodGet {
-		getTVShowsHandler(w, req)
+func tvshowsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		getTVShowsHandler(w, r)
 		return
 	}
 
-	if req.Method == http.MethodPost {
-		postTVShowsHandler(w, req)
+	if r.Method == http.MethodPost {
+		postTVShowsHandler(w, r)
 		return
 	}
 

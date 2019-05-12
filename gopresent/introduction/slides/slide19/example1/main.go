@@ -26,8 +26,8 @@ var store Store = Store{
 }
 
 // start OMIT
-func postTVShowsHandler(w http.ResponseWriter, req *http.Request) {
-	bodyBytes, err := ioutil.ReadAll(req.Body)
+func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
+	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
