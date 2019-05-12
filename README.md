@@ -50,11 +50,11 @@ Create `/facts` endpoint for listing facts in a JSON format by using a static st
 ### Steps
 
 ##### Create fact struct
-Create a struct named fact (`type Fact struct {...}`)
+Create a struct named fact (`type Fact struct {...}`)\
 The `fact` struct should have 3 string fields : `Image`, `Url`, `Description`
 
 ##### Create store struct
-Create a struct named store (`type Store struct {...}`)
+Create a struct named store (`type Store struct {...}`)\
 The store can use in memory cache for storing the facts.\
 It can be done by one field `facts` of type `[]fact` (a slice of facts).
 
