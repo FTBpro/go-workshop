@@ -1,6 +1,17 @@
 # welcome
 This is a step-by-step tutorial for creating a simple server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
+## How to use this repo
+The entrypoint described below is intended for setting up your environment and placing you in a ready-to-go folder you can start your project from.
+
+Each exercise continues the previous one by adding or changing functionality. 
+
+If you are encountering issues you can use the steps defined in each exercise for more detailed wolkthrough.\
+Farther more, you can find the implementation for each exercise under folder `coolfacts/exerciseN/...`
+
+Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
+
+
 * [Entrypoint - Hello World](#entrypoint---hello-world)
   * [Installation and Editor guide](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
   * [Build and Run guide](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
@@ -12,19 +23,6 @@ This is a step-by-step tutorial for creating a simple server for fetching facts 
 * [Exercise 6 - separate to packages](#exercise-6---separate-to-packages)
 * [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts)
 * [Exercise 8 - refactor](#exercise-8---refactor)
-
-## How to handle this repository:
-This is an introduction to golang for building a simple server for fetching facts from MentalFloss.
-
-The entrypoint for this project is for getting an enviorinment up and running, with a ready go project to build and run.
-
-After the entrypoint is complete, you can continue adding your code there for the farther exercises.\
-Each exercise continues the previous one by adding or changing functionality. 
-
-If you are encountering issues you can use the steps defined in each exercise for more detailed wolkthrough.\
-Farther more, you can find the implementation for each exercise under folder `coolfacts/exerciseN/...`
-
-Hope you will have fun, and good luck <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
 
 ***
 ## Entrypoint - Hello World <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/witch-learning.svg" width="55">
