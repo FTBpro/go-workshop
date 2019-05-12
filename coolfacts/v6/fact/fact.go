@@ -7,14 +7,14 @@ type Fact struct {
 }
 
 type Store struct {
-	Facts []Fact
+	facts []Fact
 }
 
 func (s *Store) Add(f Fact) {
 	// append is a Go built in function
-	s.Facts = append(s.Facts, f)
+	s.facts = append(s.facts , f)
 }
 
 func (s Store) GetAll() []Fact {
-	return s.Facts
+	return s.facts
 }

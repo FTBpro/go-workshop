@@ -11,13 +11,9 @@ import (
 
 const getFactsAPI = "http://mentalfloss.com/api/facts"
 
-type provider struct{}
+type Mentalfloss struct{}
 
-func NewProvider() *provider {
-	return &provider{}
-}
-
-func (r *provider) Facts() ([]fact.Fact, error) {
+func (r *Mentalfloss) Facts() ([]fact.Fact, error) {
 	resp, err := http.Get(getFactsAPI)
 	if err != nil {
 		return nil, fmt.Errorf("error get = %v", err)
@@ -36,6 +32,8 @@ func (r *provider) Facts() ([]fact.Fact, error) {
 
 	return facts, nil
 }
+
+// private
 
 func parseFromRawItems(b []byte) ([]fact.Fact, error) {
 	items := make([]item, 0)

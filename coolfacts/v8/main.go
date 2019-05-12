@@ -17,20 +17,23 @@ const (
 )
 
 func main() {
-	store := inmem.NewFactStore()
-	factProvider := mentalfloss.NewProvider()
-	service := fact.NewService(store, factProvider)
+	factsStore := inmem.FactStore{}
+	handlerer := facthttp.FactsHandler{
+		FactStore: &factsStore,
+	}
+
+	mf := mentalfloss.Mentalfloss{}
+	service := fact.NewService(&factsStore, &mf)
 
 	if err := service.UpdateFacts(); err != nil {
 		log.Fatal("couldn't update facts, try later", err.Error())
 	}
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
-	startTickerFactsUpdate(ctx, service.UpdateFacts, updateFactInterval)
+	updateFactsWithTicker(ctx, service.UpdateFacts)
 
-	http.HandleFunc("/ping", facthttp.PingHandler)
-	http.HandleFunc("/facts", facthttp.FactShowHandler(store))
-	http.HandleFunc("/facts/new", facthttp.FactFormHandler(store))
+	http.HandleFunc("/ping", handlerer.Ping)
+	http.HandleFunc("/facts", handlerer.Facts)
 
 	const port = ":9002"
 	log.Println("started server on http://localhost" + port)
@@ -39,8 +42,8 @@ func main() {
 
 // private
 
-func startTickerFactsUpdate(ctx context.Context, updateFunc func() error, rate time.Duration) {
-	tk := time.NewTicker(rate)
+func updateFactsWithTicker(ctx context.Context, updateFunc func() error) {
+	tk := time.NewTicker(updateFactInterval)
 	go func(c context.Context) {
 		for {
 			select {
