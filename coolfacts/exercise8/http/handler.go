@@ -3,7 +3,7 @@ package http
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
 	"html/template"
 	"io/ioutil"
 	"net/http"

@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
-	facthttp "github.com/FTBpro/go-workshop/coolfacts/v8/http"
-	"github.com/FTBpro/go-workshop/coolfacts/v8/inmem"
-	"github.com/FTBpro/go-workshop/coolfacts/v8/mentalfloss"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/exercise8/http"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise8/inmem"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise8/mentalfloss"
 )
 
 const (

@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/FTBpro/go-workshop/coolfacts/v6/fact"
-	facthttp "github.com/FTBpro/go-workshop/coolfacts/v6/http"
-	"github.com/FTBpro/go-workshop/coolfacts/v6/mentalfloss"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/exercise6/http"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise6/mentalfloss"
 )
 
 func main() {
@@ -22,7 +21,7 @@ func main() {
 	http.HandleFunc("/ping", handlerer.Ping)
 	http.HandleFunc("/facts", handlerer.Facts)
 
-	fmt.Println("starting server")
+	log.Println("starting server")
 	err = http.ListenAndServe(":9002", nil)
 	if err != nil {
 		log.Fatal(err)

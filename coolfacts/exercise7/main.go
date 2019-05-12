@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/FTBpro/go-workshop/coolfacts/v7/fact"
-	facthttp "github.com/FTBpro/go-workshop/coolfacts/v7/http"
-	"github.com/FTBpro/go-workshop/coolfacts/v7/mentalfloss"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise7/fact"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/exercise7/http"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise7/mentalfloss"
 )
 
 const (

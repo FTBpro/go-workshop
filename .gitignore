@@ -1,16 +1,16 @@
 .idea
 .vscode
 
-coolfacts/v0/v0
-coolfacts/v1/v1
-coolfacts/v2/v2
-coolfacts/v3/v3
-coolfacts/v4/v4
-coolfacts/v5/v5
-coolfacts/v6/v6
-coolfacts/v7/v7
-coolfacts/v8/v8
+.DS_Store
+
+coolfacts/exercise0/exercise0
+coolfacts/exercise1/exercise1
+coolfacts/exercise2/exercise2
+coolfacts/exercise3/exercise3
+coolfacts/exercise4/exercise4
+coolfacts/exercise5/exercise5
+coolfacts/exercise6/exercise6
+coolfacts/exercise7/exercise7
+coolfacts/exercise8/exercise8
 
 coolfacts/main
-
-gopresent/.DS_Store

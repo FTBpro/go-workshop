@@ -176,7 +176,7 @@ Create a new folder `mentalfloss` - move mentalfloss struct and methods into tha
 
 > You will encounter compile error since the `fact` is now in another package.\
 You will need to import your fact package And replace `fact` with `fact.Fact`\
-(for example in v6 `import "github.com/FTBpro/go-workshop/coolfacts/v6/fact"`)
+(for example in exercise 6 `import "github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"`)
 
 
 ##### Create package `http`
@@ -204,7 +204,7 @@ For example
 ```go
 import (
 	"net/http"
-	facthttp "github.com/FTBpro/go-workshop/coolfacts/v8/http"
+	facthttp "github.com/FTBpro/go-workshop/coolfacts/exercise8/http"
 )
 ```
 ```go
