@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
 )
 
 const getFactsAPI = "http://mentalfloss.com/api/facts"

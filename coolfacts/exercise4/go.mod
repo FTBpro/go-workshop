@@ -1,1 +1,1 @@
-module github.com/FTBpro/go-workshop/coolfacts/v4
+module github.com/FTBpro/go-workshop/coolfacts/exercise4

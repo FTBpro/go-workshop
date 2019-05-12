@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/FTBpro/go-workshop/coolfacts/v6/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"
 )
 
 type Mentalfloss struct {
