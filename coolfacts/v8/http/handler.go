@@ -18,17 +18,46 @@ type FactsHandler struct {
 	FactStore FactStore
 }
 
-var newsTemplate = `<html>
-                    <h1>Facts</h1>
-                    <div>
-                        {{range .}}
-                            <div>
-                                <h3>{{.Description}}</h3>
-                                <img src="{{.Image}}" width="25%" height="25%"> </img>
-                            </div>
-                        {{end}}
-                    <div>
-                    </html>`
+var newsTemplate = `
+<html>
+	<head>
+		<title>Coolfacts</title>
+	</head>
+	<style>
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	color: #26323d;
+  max-width: 720px;
+  margin: auto;
+}
+
+article {
+	border: 1px solid #0095c4;
+	border-radius: 4px;
+	max-width: 256px;
+	text-align: center;
+}
+
+a {
+	color: #26323d;
+}
+a:hover {
+	color: #f16957;
+}
+img {
+	border-radius: 4px;
+}
+	</style>
+<body>
+	<h1>Amazing Fact Generator</h1>
+	<article>
+		<a href="http://mentalfloss.com/api{{.Url}}">
+				<h3>{{.Description}}</h3>
+				<img src="{{.Image}}" width="100%" />
+		</a>
+	</article>
+</body>
+</html>`
 
 
 func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
@@ -49,15 +78,16 @@ func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
 	}
 
-	if r.Method == http.MethodGet {
-		h.getFacts(w)
+	switch r.Method {
+	case http.MethodGet:
+		h.showFacts(w)
 		return
-	}
-	if r.Method == http.MethodPost {
+	case http.MethodPost:
 		h.postFacts(r, w)
 		return
+	default:
+		http.Error(w, "no http handler found", http.StatusNotFound)
 	}
-	http.Error(w, "no http handler found", http.StatusNotFound)
 }
 
 func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
@@ -86,7 +116,7 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	w.Write([]byte("SUCCESS"))
 }
 
-func (h *FactsHandler) getFacts(w http.ResponseWriter) {
+func (h *FactsHandler) showFacts(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", "text/html")
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {

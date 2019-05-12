@@ -44,15 +44,16 @@ func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
 	}
 
-	if r.Method == http.MethodGet {
-		h.getFacts(w)
+	switch r.Method {
+	case http.MethodGet:
+		h.showFacts(w)
 		return
-	}
-	if r.Method == http.MethodPost {
+	case http.MethodPost:
 		h.postFacts(r, w)
 		return
+	default:
+		http.Error(w, "no http handler found", http.StatusNotFound)
 	}
-	http.Error(w, "no http handler found", http.StatusNotFound)
 }
 
 func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
@@ -81,7 +82,7 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	w.Write([]byte("SUCCESS"))
 }
 
-func (h *FactsHandler) getFacts(w http.ResponseWriter) {
+func (h *FactsHandler) showFacts(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", "text/html")
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {

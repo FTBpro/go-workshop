@@ -2,17 +2,18 @@ package main
 
 import (
 	"context"
+	"log"
+	"net/http"
+	"time"
+
 	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 	facthttp "github.com/FTBpro/go-workshop/coolfacts/v8/http"
 	"github.com/FTBpro/go-workshop/coolfacts/v8/inmem"
 	"github.com/FTBpro/go-workshop/coolfacts/v8/mentalfloss"
-	"log"
-	"net/http"
-	"time"
 )
 
 const (
-	updateFactInterval = time.Minute * 5
+	updateFactInterval = 5 * time.Minute
 )
 
 func main() {
@@ -34,8 +35,9 @@ func main() {
 	http.HandleFunc("/ping", handlerer.Ping)
 	http.HandleFunc("/facts", handlerer.Facts)
 
-	log.Println("start server")
-	log.Fatal(http.ListenAndServe(":9002", nil))
+	const port = ":9002"
+	log.Println("started server on http://localhost" + port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
 
 // private

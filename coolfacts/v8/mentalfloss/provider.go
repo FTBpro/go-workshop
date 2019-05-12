@@ -3,9 +3,10 @@ package mentalfloss
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/FTBpro/go-workshop/coolfacts/v8/fact"
 )
 
 const getFactsAPI = "http://mentalfloss.com/api/facts"
