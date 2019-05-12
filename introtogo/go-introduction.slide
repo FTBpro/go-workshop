@@ -224,6 +224,17 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 
 
+* Links
+.link https://tour.golang.org
+.link https://gobyexample.com/
+.link https://github.com/davecheney/introduction-to-go
+.link https://www.youtube.com/watch?v=ytEkHepK08c
+.link https://www.youtube.com/watch?v=_c_tQ6_3cCg
+
+: NOTES - slide22
+
+
+
 * Next - Do it yourself...
 
 * Go tools
