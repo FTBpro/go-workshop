@@ -1,8 +1,7 @@
 # welcome
 This is a step-by-step tutorial for creating a simple server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
-* [Exercise 0 - Hello World](#exercise-0---hello-world)
-  * [Install](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+* [Entry Point - Hello World](#exercise-0---hello-world)
 * [Exercise 1 - ping](#exercise-1---ping)
 * [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json)
 * [Exercise 3 - create new fact](#exercise-3---create-new-fact)
