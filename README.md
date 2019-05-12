@@ -25,6 +25,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
 * [Exercise 8 - refactor](#exercise-8---refactor-)
 
 ***
+> By the way, all the gophers images are taken from the wonderfull https://github.com/egonelbre/gophers
 ## Entrypoint - Hello World <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/witch-learning.svg" width="55">
 
 ### Goal 
