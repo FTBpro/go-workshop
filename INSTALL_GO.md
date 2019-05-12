@@ -4,7 +4,7 @@ Installing Go is very straightforward on any operationg system.
 
 1. Download the Go compiler installer: [https://golang.org/dl]
 2. Follow the installer and use the defaults.
-3. If you have any problems with the installer, wave 👋 
+3. If you have any problems with the installer and google didn't help, contact us. 
 4. In order to make sure the go binary is available on your path:
  
 ```sh
@@ -17,7 +17,7 @@ go version go1.12.5 darwin/amd64
 
 If you got a similar output, you're ready to Go :)
 
-Go can be developed using a set of standard tools using only the commandline, but ain't nobody got time for that.
+Go can be developed using a set of standard tools using only the commandline, but ain't nobody got time for that!
 
 ## Code Editor
 
@@ -27,7 +27,7 @@ We recommend [Visual Studio Code][vscode] as it is open source and has Go suppor
 
 ### Installing Code Editor Plugins
 
-VSCode automagically detects you're writing go and suggests the relevant plugin. If prefer to install the plugin yourself, visit [VSCode Go Plugin in the Marketplace][vscode plugin].
+, visit [VSCode Go Plugin in the Marketplace][vscode plugin].
 
 If you're using another editor, you'll probably find your editor plugin [at the official wiki](plugins).
 
