@@ -12,17 +12,17 @@ Farther more, you can find the implementation for each exercise under folder `co
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
 
 
-* [Entrypoint - Hello World](#entrypoint---hello-world)
+* [Entrypoint - Hello World](#entrypoint---hello-world-)
   * [Installation and Editor guide](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
   * [Build and Run guide](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
-* [Exercise 1 - ping](#exercise-1---ping)
-* [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json)
-* [Exercise 3 - create new fact](#exercise-3---create-new-fact)
-* [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html)
-* [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api)
-* [Exercise 6 - separate to packages](#exercise-6---separate-to-packages)
-* [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts)
-* [Exercise 8 - refactor](#exercise-8---refactor)
+* [Exercise 1 - ping](#exercise-1---ping-)
+* [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json-)
+* [Exercise 3 - create new fact](#exercise-3---create-new-fact-)
+* [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html-)
+* [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
+* [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
+* [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts-)
+* [Exercise 8 - refactor](#exercise-8---refactor-)
 
 ***
 ## Entrypoint - Hello World <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/witch-learning.svg" width="55">
