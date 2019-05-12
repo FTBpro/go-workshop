@@ -13,13 +13,44 @@ This is a step-by-step tutorial for creating a simple server for fetching facts 
 * [Exercise 8 - refactor](#exercise-8---refactor)
 
 ***
-## Exercise 0 - Hello World
+## Entry Point - Hello World
 ### Goal 
 Build and run
 
 ### Steps
-For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md) \
-To run just write in the command line `go run <name of file>` or `go run ./<name of folder>`
+##### Install go
+For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+
+##### Clone the project
+
+In your favourite terminal, clone the project into your favourite folder
+
+```bash
+/your/favourite/folder$ git clone https://github.com/FTBpro/go-workshop.git
+```
+
+##### Run the project
+Go into the `entrypoint` folder:
+```
+/your/favourite/folder$ cd go-workshop/coolfacts/entrypoint/
+```
+
+From there, run the project:
+
+```
+/your/favourite/folder/go-workshop/coolfacts/entrypoint$ go run main.go
+```
+
+Now you should see some welcome string in your terminal.\
+Be sure you know where the code that prints this line is coming from. (hint: you can finc it in `entrypoint/main.go`)
+
+For more details on build and run, you can checkout [this readme](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/exercise0/build-and-run.md)
+
+##### Next exercises:
+For all farther exercises you can continue to write the code in this folder, (in `main.go` and later in other files)
+
+At any time if you are having any issues, you can use the reference for the exercise implementation under `/exerciseN/...`
+
 ***
 ## Exercise 1 - Ping
 ### Goal

@@ -45,8 +45,7 @@ Go Interfaces
 
 * How do we use interfaces 
 
-- Implicitly rather than explicitly
-- No "implements" keyword
+Implicitly rather than explicitly (*No* *"implements"* *keyword*)
 
 * Example 
 
