@@ -25,7 +25,7 @@ var store Store = Store{
 	},
 }
 
-func getTVShowsHandler(w http.ResponseWriter, req *http.Request) {
+func getTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.Marshal(store)
 	if err != nil {
 		log.Fatal(err)
