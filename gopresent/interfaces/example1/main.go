@@ -6,7 +6,7 @@ type Action interface {
 	Do(int, int) int
 }
 
-func doSomething(x, y int, action Action) {
+func DoSomething(x, y int, action Action) {
 	fmt.Printf("x = %d, y = %d, action.Do(x, y) = %d\n", x, y, action.Do(x, y))
 }
 
@@ -23,7 +23,7 @@ func (m multiplier) Do(x, y int) int {
 }
 
 func main() {
-	doSomething(3, 4, adder{})
-	doSomething(3, 4, multiplier{})
+	DoSomething(3, 4, adder{})
+	DoSomething(3, 4, multiplier{})
 }
 // end OMIT

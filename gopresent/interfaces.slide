@@ -1,69 +1,73 @@
 Go Interfaces
 17 May 2019
 
-: NOTES - slide1
+* Concrete Types vs Interfaces
+
+*Concrete* *types*
+
+- `int`, `int64`, `[]string`, `Fact`, etc...
+- We can attach a behaviour to any type by attaching methods
+
+  type store struct {
+    facts []fact
+  }
+
+  func (s *store) add(f fact) {
+    s.facts = append(s.facts, f)
+  }
+
+: In go there are main seperation between only two kinds of types
+: Concrete types are any type we seen in go by now and the structs we define
+: We know how they look like in memory, and on top we can attach a behaviour on them
+: In go we do that by attaching methods to a type
+: .
+: example
+: `store` is a concrete type, and we added the behaviour for adding a fact by attaching the method add
+: .
+: .
+: .
 
 
-* Interfaces in go
 
-- Implicit rather than explicit
-- example:
+* Concrete Types vs Interfaces
 
+*Interfaces*
 
-  type Action interface {
+: - Describe beahviour
+
+- The abstract type of go - a way for unrelated types to communicate with one another
+- Describe beahviour
+- Define methods without specifying the reciever
+
+  type Actioner interface {
     Do(int, int) int
   }
 
-  func doSomething(x, y int, action Action) {
+* How do we use interfaces 
+
+- Implicitly rather than explicitly
+- No "implements" keyword
+
+* Example 
+
+* How do we use interfaces
+: With interfactes we can define a behaviour, we can require a behaviour instead of type
+
+  type Actioner interface {
+    Do(int, int) int
+  }
+
+  func DoSomething(x int, y int, action Actioner) {
     result := action.Do(x, y)
     fmt.Printf("x = %d, y = %d, action.Do(x, y) = %d\n", x, y, result)
   }
 
+: (alternative to using func)
 
-(alternative to using func)
+:  func DoSomething(x int, y int, action func(int, int) int) {
+:    fmt.Printf("x = %d, y = %d, action(x, y) = %d\n", x, y, action(x, y))
+:  }
 
-  func doSomething(x int, y int, action func(int, int) int) {
-    fmt.Printf("x = %d, y = %d, action(x, y) = %d\n", x, y, action(x, y))
-  }
-
-
-
-: NOTES - slide2
-
-* 
+* How do we use interfaces
 
 .play -edit interfaces/example1/main.go /start OMIT/,/end OMIT
-
-: NOTES - slide3
-
-
-
-* Example from package http
-
-ListenAndServe
-
-  func ListenAndServe(addr string, handler Handler) error {...}
-
-Interface Handler:
-
-  type Handler interface {
-    ServeHTTP(ResponseWriter, *Request)
-  }
-
-
-  
-
-: NOTES - slide4
-
-
-* Go basics
-
-: NOTES - slide5
-
-
-
-* The "hello world"
-
-
-
-*Packages*

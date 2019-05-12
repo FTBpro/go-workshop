@@ -1,5 +1,6 @@
 package main
 
+type Lala string
 // type speaker struct{}
 
 // func (s speaker) Speak() {
