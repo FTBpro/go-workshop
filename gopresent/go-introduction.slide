@@ -15,7 +15,7 @@ Go Workshop
 
 
 
-.image presentation/gopher.jpg
+.image introtogo/presentation/gopher.jpg
 
 : NOTES - slide2
 
@@ -49,7 +49,7 @@ Go Workshop
 
 Packages
 
-.play -edit slides/slide6/example1/main.go
+.play -edit introtogo/slides/slide6/example1/main.go
 
 - Go programs are made up of packages
 - Programs start running in package main
@@ -81,7 +81,7 @@ Packages
 
 - Declaring your own types
     
-.play -edit slides/slide8/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide8/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide8
 
@@ -95,7 +95,7 @@ Packages
 
 - Functions can be passed as arguments to other functions as all other Go types
 
-.play -edit slides/slide9/example1/main.go /start OMIT/,/end OMIT/   
+.play -edit introtogo/slides/slide9/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide9
 
@@ -105,11 +105,11 @@ Packages
 
 - Go's if
 
-.play -edit slides/slide10/example1/main.go /start OMIT/,/end OMIT/   
+.play -edit introtogo/slides/slide10/example1/main.go /start OMIT/,/end OMIT/
 
 - Go's For loop
 
-.play -edit slides/slide10/example2/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide10/example2/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide10
 
@@ -117,11 +117,11 @@ Packages
 
 * Go Types - Maps
 
-.play -edit slides/slide11/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide11/example1/main.go /start OMIT/,/end OMIT/
 
 - Insert, Retrieve, Delete and Test maps - 
 
-.play -edit slides/slide11/example2/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide11/example2/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide11
 
@@ -131,11 +131,11 @@ Packages
 
 - A slice does not store any data, it just describes a section of an underlying array
 
-.play -edit slides/slide12/example2/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide12/example2/main.go /start OMIT/,/end OMIT/
 
 - Iterating over a Slice
 
-.play -edit slides/slide12/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide12/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide12
 
@@ -145,15 +145,15 @@ Packages
 
 - Structs
 
-.code -edit slides/slide13/example1/main.go /start1 OMIT/,/end1 OMIT/
+.code -edit introtogo/slides/slide13/example1/main.go /start1 OMIT/,/end1 OMIT/
 
 - Methods
 
-.code -edit slides/slide13/example1/main.go /start2 OMIT/,/end2 OMIT/
+.code -edit introtogo/slides/slide13/example1/main.go /start2 OMIT/,/end2 OMIT/
 
 - The `fmt` package will use the `.String()` method of the passed type if it has one
 
-.play -edit slides/slide13/example1/main.go /start3 OMIT/,/end3 OMIT/
+.play -edit introtogo/slides/slide13/example1/main.go /start3 OMIT/,/end3 OMIT/
 
 : NOTES - slide13
 
@@ -169,7 +169,7 @@ Packages
 
 - Writing web servers in Go can be as simple as a few lines. Here is an example:
 
-.play -edit slides/slide15/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide15/example1/main.go /start OMIT/,/end OMIT/
 
 Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
@@ -185,7 +185,7 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 * The TVShows server - Get to know the structs
 
-.play -edit slides/slide17/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide17/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide17
 
@@ -193,7 +193,7 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 * The TVShows server - Go struct to JSON
 
-.play -edit slides/slide18/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide18/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide18
 
@@ -201,7 +201,7 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 *  The TVShows server - JSON to Go struct
 
-.play -edit slides/slide19/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide19/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide19
 
@@ -209,9 +209,9 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 * The TVShows server - (recap) The GET and POST handlers
 
-.code -edit slides/slide20/example1/main.go /start1 OMIT/,/end1 OMIT/
+.code -edit introtogo/slides/slide20/example1/main.go /start1 OMIT/,/end1 OMIT/
 
-.code -edit slides/slide20/example1/main.go /start2 OMIT/,/end2 OMIT/
+.code -edit introtogo/slides/slide20/example1/main.go /start2 OMIT/,/end2 OMIT/
 
 : NOTES - slide20
 
@@ -219,7 +219,7 @@ Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 * The TVShows server - Putting it all together
 
-.play -edit slides/slide21/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introtogo/slides/slide21/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide21
 
