@@ -21,7 +21,7 @@ Go can be developed using a set of standard tools using only the commandline, bu
 
 ## Code Editor
 
-We recommend [Visual Studio Code][vscode] as it is open source and has Go support. You can also use any other text editor. [Even vim][plugins]. 
+We recommend [Visual Studio Code][vscode] as it is open source and has Go support.
 
 [Download Visual Studio Code][vscode]
 
