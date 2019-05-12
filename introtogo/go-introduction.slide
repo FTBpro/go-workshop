@@ -151,8 +151,6 @@ Packages
 
 .code -edit slides/slide13/example1/main.go /start2 OMIT/,/end2 OMIT/
 
-- The `fmt` package will use the `.String()` method of the passed type if it has one
-
 .play -edit slides/slide13/example1/main.go /start3 OMIT/,/end3 OMIT/
 
 : NOTES - slide13
@@ -167,7 +165,8 @@ Packages
 
 * Hello World - web version
 
-- Writing web servers in Go can be as simple as a few lines. Here is an example:
+- Writing web servers in Go can be as simple as a few lines.
+- Here is an example:
 
 .play -edit slides/slide15/example1/main.go /start OMIT/,/end OMIT/
 
