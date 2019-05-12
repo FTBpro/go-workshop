@@ -117,7 +117,7 @@ Packages
 
 .play -edit introduction/slides/slide11/example1/main.go /start OMIT/,/end OMIT/
 
-- Insert, Retrieve, Delete and Test maps - 
+- Insert, Retrieve and Test maps - 
 
 .play -edit introduction/slides/slide11/example2/main.go /start OMIT/,/end OMIT/
 
@@ -165,11 +165,11 @@ Packages
 * Hello World - web version
 
 - Writing web servers in Go can be as simple as a few lines.
-- Here is an example:
 
 .play -edit introduction/slides/slide15/example1/main.go /start OMIT/,/end OMIT/
 
-Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
+- func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
+- Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
 
 : NOTES - slide15
 

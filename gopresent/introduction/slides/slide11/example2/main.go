@@ -11,10 +11,12 @@ var m = map[string]int{
 
 func main() {
 	m["Brooklyn 99"] = 6
-	fmt.Println(m["Brooklyn 99"])
+	fmt.Printf("The show Brooklyn 99 has %d seasons\n", m["Brooklyn 99"])
+
+	fmt.Printf("The show Breaking bad has %d seasons\n", m["Breaking bad"])
 
 	v, ok := m["Game of Thrones"]
-	fmt.Println("The value:", v, "Present?", ok)
+	fmt.Printf("The value %v present? %v\n", v, ok)
 }
 
 // end OMIT

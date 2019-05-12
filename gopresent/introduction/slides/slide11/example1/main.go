@@ -7,7 +7,6 @@ import "fmt"
 var m = map[string]int{
 	"Game of Thrones": 8,
 	"The Simpsons":    30,
-	"Breaking Bad":    6,
 }
 
 func main() {
