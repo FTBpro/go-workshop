@@ -25,7 +25,7 @@ For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob
 
 In your favourite terminal, clone the project into your favourite folder
 
-```
+```bash
 /your/favourite/folder$ git clone https://github.com/FTBpro/go-workshop.git
 ```
 
