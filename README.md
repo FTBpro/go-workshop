@@ -32,13 +32,13 @@ In your favourite terminal, clone the project into your favourite folder
 ##### Run the project
 Go into the `entrypoint` folder:
 ```
-/your/favourite/folder$ cd coolfacts/entrypoint/
+/your/favourite/folder$ cd go-workshop/coolfacts/entrypoint/
 ```
 
 From there, run the project:
 
 ```
-/your/favourite/folder/coolfacts/entrypoint$ go run main.go
+/your/favourite/folder/go-workshop/coolfacts/entrypoint$ go run main.go
 ```
 
 Now you should see some welcome string in your terminal.\
@@ -49,7 +49,7 @@ For more details on build and run, you can checkout [this readme](https://github
 ##### Next exercises:
 For all farther exercises you can continue to write the code in this folder, (in `main.go` and later in other files)
 
-If you are having any issues you have reference to all exercises implementation under `/exerciseN/...`
+At any time if you are having any issues, you can use the reference for the exercise implementation under `/exerciseN/...`
 
 ***
 ## Exercise 1 - Ping
