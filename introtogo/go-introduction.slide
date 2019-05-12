@@ -47,12 +47,13 @@ Go Workshop
 
 * The "hello world"
 
-.play -edit slides/slide6/example1/main.go
-
-*Packages*
+Packages
 - Go programs are made up of packages
 - Programs start running in package main
 - When importing a package only *exported* names (begins with a capital letter) can be referred
+
+.play -edit slides/slide6/example1/main.go
+
 
 : NOTES - slide6
 
