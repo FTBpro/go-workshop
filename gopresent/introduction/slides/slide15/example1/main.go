@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func helloWorldHandler(w http.ResponseWriter, _ *http.Request) {
+func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome to my website!"))
 }
 
