@@ -191,8 +191,6 @@ type FactsHandler struct {
 }
 ```
 
-> Optional: you can declare `type FactStore interface` and use it instead of directly use `*fact.Store`. (Will be used only in exercise 8)
-
 Create methods for handling the request
 * `func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request)`
 * `func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request)`
@@ -279,6 +277,24 @@ type service struct {
 Add initializer - `func NewService(s Store, r Provider) *service`  \
 And a method for updating facts `func (s *service) UpdateFacts() error`
 > in `UpdateFacts` you will use the provider to fetch the facts, and the store to save them. Although the service is updating, it doesn't know who is the provider, and what is the persistent layer
+
+##### Add abstraction in local `http` package
+In package 'http' declare the FactStore interface:
+```go
+type FactStore interface {
+	Add(f Fact)
+	GetAll() []Fact
+}
+```
+
+This will be used as a field to `FactsHandler`:
+```go
+type FactsHandler struct {
+	FactStore FactStore
+}
+```
+> The FactStore provider is replacing the field type from exercise 7 which is a concrete struct `fact.Store`. This enables us to add another layer for persistent data
+
 
 ##### Replace calls in main
 Use `inmem.FactStore{}` for the fact store (instead of `fact.Store{}`)

@@ -18,7 +18,7 @@ const (
 
 func main() {
 	factsStore := fact.Store{}
-	handlerer := &facthttp.FactsHandler{
+	handlerer := facthttp.FactsHandler{
 		FactStore: &factsStore,
 	}
 
