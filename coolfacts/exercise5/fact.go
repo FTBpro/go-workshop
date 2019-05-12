@@ -15,6 +15,6 @@ func (s *store) add(f fact) {
 	s.facts = append(s.facts, f)
 }
 
-func (s store) getAll() []fact {
+func (s *store) getAll() []fact {
 	return s.facts
 }

@@ -57,9 +57,9 @@ The store can use in memory cache for storing the facts.\
 It can be done by one field `facts` of type `[]fact` (a slice of facts).
 
 Add store functionality:
-* `func (s store) getAll() []fact {…}`
+* `func (s *store) getAll() []fact {…}`
   * The method should return all facts in the `store.facts` field
-* `func (s store) add(f fact) {…}`
+* `func (s *store) add(f fact) {…}`
   * The method should add the given fact f to the store\
   For adding to a slice you can use `store.facts = append(store.facts, f)`
   
