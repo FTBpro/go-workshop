@@ -31,7 +31,7 @@ When navigating to `localhost:9002/ping` the browser should show `PONG` string
 
 ##### Create `/ping` endpoint
 Register handler function of to `/ping` pattern\
-Use `http.HandleFunc` function to register an anonymous function of type `func(ResponseWriter, *Request)` to `/ping`
+Use `http.HandleFunc` function to register an anonymous function of type `func(http.ResponseWriter, *http.Request)` to `/ping`
 
 > For printing into `http.ResponseWriter` you can use `fmt.Fprintf`\
 In case of an error you can use `http.Error` function
