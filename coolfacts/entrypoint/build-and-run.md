@@ -8,26 +8,26 @@ The Go compiler creates an executable that is run directly on your system.
 usage: go build [-o output] [-i] [build flags] [packages]
 ```
 
-For example, if you want to build `exercise0`: 
+For example, if you want to build `entrypoint`: 
 
 ```bash
 $ cd coolfacts/entrypoint
 $ go build .
 ```
 
-This will create a binary called `exercise0` in the current directory.
-(`exercise0.exe` on windows)
+This will create a binary called `entrypoint` in the current directory.
+(`entrypoint.exe` on windows)
 
 ```bash
 $ ls -l
--rwxr-xr-x  [...] exercise0
+-rwxr-xr-x  [...] entrypoint
 -rw-r--r--  [...] main.go
 ```
 
 And now run the binary directly on your operating system
 
 ```bash
-$ ./exercise0
+$ ./entrypoint
 Hello World!
 ```
 
