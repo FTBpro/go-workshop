@@ -11,7 +11,7 @@ usage: go build [-o output] [-i] [build flags] [packages]
 For example, if you want to build `exercise0`: 
 
 ```bash
-$ cd coolfacts/exercise0
+$ cd coolfacts/entrypoint
 $ go build .
 ```
 
