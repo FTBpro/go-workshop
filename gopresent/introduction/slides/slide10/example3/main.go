@@ -7,14 +7,14 @@ import (
 
 // start OMIT
 
-func pow(x float64, n float64, lim float64) {
-	if v := math.Pow(x, n); v < lim {
-		fmt.Printf("%.f ^ %.f = %.f", x, n, v)
+func bigPow(x float64, n float64) {
+	if v := math.Pow(x, n); v > 1000 {
+		fmt.Printf("%.f ^ %.f = %.f thats a big pow!", x, n, v)
 	}
 }
 
 func main() {
-	pow(3, 2, 10)
+	bigPow(2, 10)
 }
 
 // end OMIT

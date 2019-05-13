@@ -2,18 +2,17 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 // start OMIT
-func sqrti(x float64) {
-	if x < 0 {
-		fmt.Printf("%.fi", math.Sqrt(-x))
+func bigNum(x int) {
+	if x > 1000 {
+		fmt.Printf("%d - thats a big number!", x)
 	}
 }
 
 func main() {
-	sqrti(-4)
+	bigNum(1001)
 }
 
 // end OMIT
