@@ -25,20 +25,7 @@ var store Store = Store{
 	},
 }
 
-// start1 OMIT
-
-func getTVShowsHandler(w http.ResponseWriter, r *http.Request) {
-	j, err := json.Marshal(store)
-	if err != nil {
-		log.Fatal(err)
-	}
-	w.Write(j)
-}
-
-// end1 OMIT
-
-// start2 OMIT
-
+// start OMIT
 func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -54,24 +41,10 @@ func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Successfully added to store"))
 }
 
-// end2 OMIT
-
-func tvshowsHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		getTVShowsHandler(w, r)
-		return
-	}
-
-	if r.Method == http.MethodPost {
-		postTVShowsHandler(w, r)
-		return
-	}
-
-	log.Fatal("Unsupported request method")
-}
-
 func main() {
-	http.HandleFunc("/tvshows", tvshowsHandler)
+	http.HandleFunc("/tvshows", postTVShowsHandler)
 	log.Println("Listen and Serve on port: 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+// end OMIT

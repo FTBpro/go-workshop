@@ -9,8 +9,10 @@ Go Workshop
 
 - Introduction to Go
 - Go do it yourself
+- Go pointers (lightning talk)
 - Go concurrency
 - Go do it yourself
+- Go interfaces (lightning talk)
 - Idiomatic Go
 
 .image images/gopher.jpg
@@ -29,7 +31,7 @@ Go Workshop
 
 - Modern
 - Garbage-collected
-- Compiles to native code
+- No classes, no inheritance
 - Built-in concurrency
 - Go tools
 - Gophers community
@@ -105,23 +107,37 @@ Packages
 
 .play -edit introduction/slides/slide10/example1/main.go /start OMIT/,/end OMIT/
 
-- Go's For loop
+- If with a short statement
 
-.play -edit introduction/slides/slide10/example2/main.go /start OMIT/,/end OMIT/
+.play -edit introduction/slides/slide10/example3/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide10
 
 
 
-* Go Types - Maps
+* Go`s flow control statements - 
 
-.play -edit introduction/slides/slide11/example1/main.go /start OMIT/,/end OMIT/
-
-- Insert, Retrieve and Test maps - 
+- Go's For loop
 
 .play -edit introduction/slides/slide11/example2/main.go /start OMIT/,/end OMIT/
 
+- For is Go's "while"
+
+.play -edit introduction/slides/slide11/example4/main.go /start OMIT/,/end OMIT/
+
 : NOTES - slide11
+
+
+
+* Go Types - Maps
+
+.play -edit introduction/slides/slide12/example1/main.go /start OMIT/,/end OMIT/
+
+- Insert, Retrieve and Test maps - 
+
+.play -edit introduction/slides/slide12/example2/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide12
 
 
 
@@ -129,13 +145,13 @@ Packages
 
 - A slice does not store any data, it just describes a section of an underlying array
 
-.play -edit introduction/slides/slide12/example2/main.go /start OMIT/,/end OMIT/
+.play -edit introduction/slides/slide13/example2/main.go /start OMIT/,/end OMIT/
 
 - Iterating over a Slice
 
-.play -edit introduction/slides/slide12/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introduction/slides/slide13/example1/main.go /start OMIT/,/end OMIT/
 
-: NOTES - slide12
+: NOTES - slide13
 
 
 
@@ -143,22 +159,21 @@ Packages
 
 - Structs
 
-.code -edit introduction/slides/slide13/example1/main.go /start1 OMIT/,/end1 OMIT/
+.code -edit introduction/slides/slide14/example1/main.go /start1 OMIT/,/end1 OMIT/
 
 - Methods
 
-.code -edit introduction/slides/slide13/example1/main.go /start2 OMIT/,/end2 OMIT/
+.code -edit introduction/slides/slide14/example1/main.go /start2 OMIT/,/end2 OMIT/
 
-.play -edit introduction/slides/slide13/example1/main.go /start3 OMIT/,/end3 OMIT/
+.play -edit introduction/slides/slide14/example1/main.go /start3 OMIT/,/end3 OMIT/
 
-
-: NOTES - slide13
+: NOTES - slide14
 
 
 
 * Now that we know the basics
 
-: NOTES - slide14
+: NOTES - slide15
 
 
 
@@ -166,30 +181,22 @@ Packages
 
 - Writing web servers in Go can be as simple as a few lines.
 
-.play -edit introduction/slides/slide15/example1/main.go /start OMIT/,/end OMIT/
+.play -edit introduction/slides/slide16/example1/main.go /start OMIT/,/end OMIT/
 
 - func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
 - Go to - [[https://golang.org/pkg/net/http][`net/http`]] for additional info
-
-: NOTES - slide15
-
-
-
-* Go by example - The TVShows server 
 
 : NOTES - slide16
 
 
 
-* The TVShows server - Get to know the structs
-
-.play -edit introduction/slides/slide17/example1/main.go /start OMIT/,/end OMIT/
+* Go by example - The TVShows server 
 
 : NOTES - slide17
 
 
 
-* The TVShows server - Go struct to JSON
+* The TVShows server - Get to know the structs
 
 .play -edit introduction/slides/slide18/example1/main.go /start OMIT/,/end OMIT/
 
@@ -197,7 +204,7 @@ Packages
 
 
 
-*  The TVShows server - JSON to Go struct
+* The TVShows server - Go struct to JSON
 
 .play -edit introduction/slides/slide19/example1/main.go /start OMIT/,/end OMIT/
 
@@ -205,21 +212,29 @@ Packages
 
 
 
-* The TVShows server - (recap) The GET and POST handlers
+*  The TVShows server - JSON to Go struct
 
-.code -edit introduction/slides/slide20/example1/main.go /start1 OMIT/,/end1 OMIT/
-
-.code -edit introduction/slides/slide20/example1/main.go /start2 OMIT/,/end2 OMIT/
+.play -edit introduction/slides/slide20/example1/main.go /start OMIT/,/end OMIT/
 
 : NOTES - slide20
 
 
 
-* The TVShows server - Putting it all together
+* The TVShows server - (recap) The GET and POST handlers
 
-.play -edit introduction/slides/slide21/example1/main.go /start OMIT/,/end OMIT/
+.code -edit introduction/slides/slide21/example1/main.go /start1 OMIT/,/end1 OMIT/
+
+.code -edit introduction/slides/slide21/example1/main.go /start2 OMIT/,/end2 OMIT/
 
 : NOTES - slide21
+
+
+
+* The TVShows server - Putting it all together
+
+.play -edit introduction/slides/slide22/example1/main.go /start OMIT/,/end OMIT/
+
+: NOTES - slide22
 
 
 
@@ -230,7 +245,7 @@ Packages
 .link https://www.youtube.com/watch?v=ytEkHepK08c
 .link https://www.youtube.com/watch?v=_c_tQ6_3cCg
 
-: NOTES - slide22
+: NOTES - slide23
 
 
 

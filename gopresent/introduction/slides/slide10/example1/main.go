@@ -6,15 +6,14 @@ import (
 )
 
 // start OMIT
-func sqrt(x float64) string {
+func sqrti(x float64) {
 	if x < 0 {
-		return sqrt(-x) + "i"
+		fmt.Printf("%.fi", math.Sqrt(-x))
 	}
-	return fmt.Sprint(math.Sqrt(x))
 }
 
 func main() {
-	fmt.Println(sqrt(-4))
+	sqrti(-4)
 }
 
 // end OMIT
