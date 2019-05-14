@@ -12,7 +12,7 @@ Farther more, you can find the implementation for each exercise under folder `co
 Also, you can get a better perspective by running each exercise by
 ```
 cd coolfacts/exerciseN
-go run main.go
+go run .
 ```
 
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
@@ -38,7 +38,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
 Build and run
 
 ### Steps
-##### Install go
+##### Installation (go + editor)
 For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
 
 ##### Clone the project
@@ -53,7 +53,7 @@ git clone https://github.com/FTBpro/go-workshop.git
 cd into the `entrypoint` folder and run the entrypoint project:
 ```
 cd go-workshop/coolfacts/entrypoint/
-go run main.go
+go run .
 ```
 
 ### End Result
@@ -73,7 +73,7 @@ At any time if you are having any issues, you can use the reference for the exer
 First use of `http` package with a simple server
 
 ### End result
-When navigating to `localhost:9002/ping` the browser should show `PONG` string
+When navigating to `http://localhost:9002/ping` the browser should show `PONG` string
 
 ### Steps
 
