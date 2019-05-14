@@ -38,7 +38,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
 Build and run
 
 ### Steps
-##### Install go
+##### Installation (go + editor)
 For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
 
 ##### Clone the project
