@@ -9,6 +9,12 @@ Each exercise continues the previous one by adding or changing functionality.
 If you are encountering issues you can use the steps defined in each exercise for more detailed wolkthrough.\
 Farther more, you can find the implementation for each exercise under folder `coolfacts/exerciseN/...`
 
+Also, you can get a better perspective by running each exercise by
+```
+cd coolfacts/exerciseN
+go run main.go
+```
+
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
 
 
