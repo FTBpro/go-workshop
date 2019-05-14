@@ -27,13 +27,43 @@ We recommend [Visual Studio Code][vscode] as it is open source and has Go suppor
 
 ### Installing Code Editor Plugins
 
-, visit [VSCode Go Plugin in the Marketplace][vscode plugin].
+Visit [VSCode Go Plugin in the Marketplace][vscode plugin].
 
 If you're using another editor, you'll probably find your editor plugin [at the official wiki](plugins).
 
 ## Let's Go ☕️
 
 The first task in the workshop is to make an `hello world` app. We'll do it together, so you can kick back and relax 🏖
+
+### Hello World!
+
+open a new directory (somewhere) and create a file called `main.go`
+
+```sh
+$ mkdir helloworld && cd helloworld
+$ touch main.go
+```
+
+copy and paste the following Go code into `main.go`
+
+```go
+package main
+
+import "fmt"
+
+func main(){
+	fmt.Println("Hello World!")
+}
+```
+
+Now we'll use `go run` to compile an executable and immediately run it 
+
+```sh 
+$ go run .
+Hello World!
+```
+
+Yay! you did it 👏
 
 #### Trivia
 
