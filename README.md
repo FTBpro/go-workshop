@@ -1,27 +1,68 @@
 # welcome
 This is a step-by-step tutorial for creating a simple server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
-* [Exercise 0 - Hello World](#exercise-0---hello-world)
-  * [Install](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
-* [Exercise 1 - ping](#exercise-1---ping)
-* [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json)
-* [Exercise 3 - create new fact](#exercise-3---create-new-fact)
-* [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html)
-* [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api)
-* [Exercise 6 - separate to packages](#exercise-6---separate-to-packages)
-* [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts)
-* [Exercise 8 - refactor](#exercise-8---refactor)
+## How to use this repo
+The entrypoint described below is intended for setting up your environment and placing you in a ready-to-go folder you can start your project from.
+
+Each exercise continues the previous one by adding or changing functionality. 
+
+If you are encountering issues you can use the steps defined in each exercise for more detailed wolkthrough.\
+Farther more, you can find the implementation for each exercise under folder `coolfacts/exerciseN/...`
+
+Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
+
+
+* [Entrypoint - Hello World](#entrypoint---hello-world-)
+  * [Installation and Editor guide](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+  * [Build and Run guide](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
+* [Exercise 1 - ping](#exercise-1---ping-)
+* [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json-)
+* [Exercise 3 - create new fact](#exercise-3---create-new-fact-)
+* [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html-)
+* [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
+* [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
+* [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts-)
+* [Exercise 8 - refactor](#exercise-8---refactor-)
 
 ***
-## Exercise 0 - Hello World
+> By the way, all the gophers images are taken from the wonderfull https://github.com/egonelbre/gophers
+## Entrypoint - Hello World <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/witch-learning.svg" width="55">
+
 ### Goal 
 Build and run
 
 ### Steps
-For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md) \
-To run just write in the command line `go run <name of file>` or `go run ./<name of folder>`
+##### Install go
+For install go and editor, see [here](https://github.com/FTBpro/go-workshop/blob/master/INSTALL_GO.md)
+
+##### Clone the project
+
+Clone the project in your favourite terminal, 
+
+```
+git clone https://github.com/FTBpro/go-workshop.git
+```
+
+##### Run the project
+cd into the `entrypoint` folder and run the entrypoint project:
+```
+cd go-workshop/coolfacts/entrypoint/
+go run main.go
+```
+
+### End Result
+If everything was successfull you should see a lovely welcome msg in your terminal :smile_cat:\
+Be sure you know where the code which prints this line is coming from. (hint: you can find it in `entrypoint/main.go` :)
+
+For more details on build and run, you can checkout [this readme](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
+
+##### Next exercises:
+For all farther exercises you can continue to write the code in this folder, (in `main.go` and later in other files)
+
+At any time if you are having any issues, you can use the reference for the exercise implementation under `/exerciseN/...`
+
 ***
-## Exercise 1 - Ping
+## Exercise 1 - Ping <img src="https://github.com/egonelbre/gophers/blob/master/vector/projects/go-grpc-web.svg" width="45">
 ### Goal
 First use of `http` package with a simple server
 
@@ -41,7 +82,7 @@ In case of an error you can use `http.Error` function
 You can use `http.ListenAndServe` for starting the server
 
 ***
-## Exercise 2 - list the facts as JSON
+## Exercise 2 - list the facts as JSON <img src="https://github.com/egonelbre/gophers/blob/master/vector/projects/wwgl.svg" width="45">
 ### Goal
 Create `/facts` endpoint for listing facts in a JSON format by using a static store
 
@@ -77,12 +118,14 @@ In this function you will:
 > Use `json.Marshal` to format the struct as json and to write to the `ResponseWriter` 
 
 ***
-## Exercise 3 - create new fact
+## Exercise 3 - create new fact <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/sage.svg" width="55">
 ### Goal
 Create POST request for creating a new fact
 
 ### End result
-`POST /facts` will create a new fact and add it to store
+`POST /facts` will create a new fact from the request body, and add it to the store
+> For issuing a POST request you can use 'postman', or the next command from terminal:\
+curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<imageName>", "Url": "\<imageURL>", "Description": "\<imageDescription>"}' http://localhost:9002/facts
 
 ### Steps
 
@@ -107,7 +150,7 @@ Parsing the data into `req` can be done by `json.Unmarshal`
 Use the `factsStore.add` method from Exercise 2.
 
 ***
-## Exercise 4 - list the facts as HTML
+## Exercise 4 - list the facts as HTML <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/power-to-the-linux.svg" width="95">
 
 ### Goal
 * Using HTML template
@@ -126,7 +169,7 @@ Execute template with `store.getAll` results (that means write to `ResponseWrite
 
 ***
 
-## Exercise 5 - use MentalFloss API
+## Exercise 5 - use MentalFloss API <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/jet-pack.svg" width="55">
 
 ### Goal
 Use MetnalFloss API for fetching the facts and initialize the store, instead of the static data
@@ -164,7 +207,7 @@ In main, get facts from `mentalfloss`, and add these facts to the store.
 
 ***
 
-## Exercise 6 - separate to packages
+## Exercise 6 - separate to packages <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/gotham.svg" width="95">
 
 ### Goal
 Separate structs into separate packages
@@ -179,7 +222,8 @@ Make sure that the struct `Fact` is exported (public)
 ##### Create package `mentalfloss`
 Create a new folder `mentalfloss` - move mentalfloss struct and methods into that folder (change the package name to mentalfloss)
 
-> You will encounter compile error since the `fact` is now in another package.\
+> You will encounter compile error since the `fact` is 
+in another package.\
 You will need to import your fact package And replace `fact` with `fact.Fact`\
 (for example in exercise 6 `import "github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"`)
 
@@ -225,7 +269,7 @@ http.HandleFunc("/ping", handlerer.Ping)
 
 ***
 
-## Exercise 7 - add ticker for updating the facts
+## Exercise 7 - add ticker for updating the facts <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/zorro.svg" width="55">
 
 ### Goal
 Use go channel and ticker for updating the fact inventory
@@ -245,7 +289,7 @@ Every const time a ticker will send a signal to a `thread` (go built-in) that wi
             
 *** 
 
-## Exercise 8 - refactor
+## Exercise 8 - refactor <img src="https://github.com/ashleymcnamara/gophers/blob/master/SPACEGIRL1.png" width="55">
 
 ### Goal
 * Enable switching between persistent layers easily

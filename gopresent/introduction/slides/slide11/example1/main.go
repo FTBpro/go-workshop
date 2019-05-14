@@ -1,18 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // start OMIT
-
-var m = map[string]int{
-	"Game of Thrones": 8,
-	"The Simpsons":    30,
+func sqrti(x float64) {
+	if x < 0 {
+		fmt.Printf("%.fi", math.Sqrt(-x))
+	}
 }
 
 func main() {
-	for k, v := range m {
-		fmt.Printf("Show name : %s, # of seasons: %d\n", k, v)
-	}
+	sqrti(-4)
 }
 
 // end OMIT

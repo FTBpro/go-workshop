@@ -2,19 +2,17 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 // start OMIT
-func sqrt(x float64) string {
-	if x < 0 {
-		return sqrt(-x) + "i"
+func bigNum(x int) {
+	if x > 1000 {
+		fmt.Printf("%d - thats a big number!", x)
 	}
-	return fmt.Sprint(math.Sqrt(x))
 }
 
 func main() {
-	fmt.Println(sqrt(-4))
+	bigNum(1001)
 }
 
 // end OMIT

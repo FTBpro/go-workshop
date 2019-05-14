@@ -12,7 +12,7 @@ type Store struct {
 
 func (s *Store) Add(f Fact) {
 	// append is a Go built in function
-	s.facts = append(s.facts, f)
+	s.facts = append([]Fact{f}, s.facts...)
 }
 
 func (s *Store) GetAll() []Fact {

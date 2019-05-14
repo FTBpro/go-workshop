@@ -25,8 +25,6 @@ var store Store = Store{
 	},
 }
 
-// start1 OMIT
-
 func getTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	j, err := json.Marshal(store)
 	if err != nil {
@@ -34,10 +32,6 @@ func getTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(j)
 }
-
-// end1 OMIT
-
-// start2 OMIT
 
 func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	bodyBytes, err := ioutil.ReadAll(r.Body)
@@ -54,8 +48,7 @@ func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Successfully added to store"))
 }
 
-// end2 OMIT
-
+// start OMIT
 func tvshowsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		getTVShowsHandler(w, r)
@@ -75,3 +68,5 @@ func main() {
 	log.Println("Listen and Serve on port: 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+// end OMIT
