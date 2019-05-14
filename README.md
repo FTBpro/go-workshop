@@ -207,15 +207,43 @@ For adding it to the store you should use the `factStore.Add` from exercise 2.
 
 ### End result
 `GET /facts` will list the facts in HTML
+`http://localhost:9002/facts` will show a all facts in store in HTML.
 
 ### Steps
 
 ##### Create an HTML template
-This can be done using package `text/template` syntax
 
-##### Execute the template with facts
-Execute template with `store.getAll` results (that means write to `ResponseWriter` all results in the applied template)
+We will use `html/template` package.\
+For a very basic use, you can declare this variable outside of main
+```go
+var newsTemplate = `<html>
+                    <h1>Facts</h1>
+                    <div>
+                        {{range .}}
+                            <div>
+                                <h3>{{.Description}}</h3>
+                                <img src="{{.Image}}" width="25%" height="25%"> </img>
+                            </div>
+                        {{end}}
+                    <div>
+                    </html>`
+```
 
+> This is called a 'package defined variable' (global variable), We can use it from anywhere in the package it defined in
+
+##### Return HTML representation of the facts
+This step will replace the JSON you added in exercise 2, so you will need to replace the code in the section under GET method in the handler for `/facts`.
+
+Using `html/template`, create a new template from the `newsTemplate` defined earlier:
+```go
+tmpl, err := template.New("facts").Parse(newsTemplate)
+```
+
+Next, all you need to do is just to execute the template with the facts, and the http.ResponseWriter:
+```go
+facts := factsStore.getAll()
+err = tmpl.Execute(w, facts)
+```
 ***
 
 ## Exercise 5 - use MentalFloss API <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/jet-pack.svg" width="55">
