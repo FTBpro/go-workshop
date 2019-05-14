@@ -18,81 +18,18 @@ type FactsHandler struct {
 	FactStore FactStore
 }
 
-var newsTemplate = `
-<html>
-	<head>
-		<title>Coolfacts</title>
-	</head>
-	<style>
-body {
-    font-family: Helvetica, Arial, sans-serif;
-    color: #26323d;
-    max-width: 720px;
-    margin: auto;
-}
-
-article {
-    border: 1px solid #0095c4;
-    border-radius: 4px;
-    max-width: 320px;
-    text-align: center;
-}
-
-article h3 {
-    font-weight: normal;
-}
-
-article a {
-    color: #26323d;
-}
-
-article a:hover {
-    color: #f16957;
-}
-
-article img {
-    border-radius: 4px;
-}
-
-table input[type="submit"] {
-    font-size: unset;
-    width: 100%;
-    color: #26323d;
-    border: 1px solid #26323d;
-    border-radius: 4px;
-}
-
-table input[type="submit"]:hover {
-    color: white;
-    background-color: #f16957;
-    border: 1px solid #f16957;
-}
-	</style>
-	<body>
-	{{if .Success}}
-		<h1>Fact created! to show fact <a href="http://localhost:9002/facts?index={{.Index}}">click here</a></h1>
-	{{else}}
-				<form action="/facts/new" method="post">
-					<table>
-						<th>Add a new fact</th>
-						<tr>
-							<td><label for="url">Fact Url:</label></td>
-							<td><input id="url" type="text" name="url" display="block"></td>
-						</tr>
-						<tr>
-							<td><label for="image">Image:</label></td>
-            	<td><input id="image" type="text" name="primaryImage" display="block"></td>
-						</tr>
-						<tr>
-							<td><label for="fact">Description:</label></td>
-							<td><input id="fact" type="textarea" name="fact" display="block"></td>
-						</tr>
-						<tr><td/><td><input type="submit" value="Create"></td></tr>
-					</table>
-				</form>
+var newsTemplate = `<html>
+<h1>Facts</h1>
+<div>
+	{{range .}}
+		<div>
+			<h3>{{.Description}}</h3>
+			<img src="{{.Image}}" width="25%" height="25%"> </img>
+		</div>
 	{{end}}
-	</body>
+<div>
 </html>`
+
 
 
 func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
