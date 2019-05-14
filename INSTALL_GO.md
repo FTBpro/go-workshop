@@ -35,7 +35,7 @@ If you're using another editor, you'll probably find your editor plugin [at the 
 
 The first task in the workshop is to make an `hello world` app. We'll do it together, so you can kick back and relax 🏖
 
-### Hello World!
+### Hello World! ⚠️optional!⚠️
 
 open a new directory (somewhere) and create a file called `main.go`
 
