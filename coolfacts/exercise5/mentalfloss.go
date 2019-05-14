@@ -7,14 +7,16 @@ import (
 	"net/http"
 )
 
-type mentalfloss struct {
-}
+type mentalfloss struct {}
 
 func (mf mentalfloss) Facts()([]fact, error) {
 	resp, err := http.Get("http://mentalfloss.com/api/facts")
 	if err != nil {
 		return nil, fmt.Errorf("error making request: %v", err)
 	}
+
+	// A `defer` statement defers the execution of a function until the surrounding function returns.
+	// This is how we make sure that we close the response body before we exit the function.
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
@@ -32,7 +34,6 @@ func (mf mentalfloss) Facts()([]fact, error) {
 
 func parseFromRawItems(b []byte) ([]fact, error) {
 	var items []struct {
-		Url          string `json:"url"`
 		FactText     string `json:"fact"`
 		PrimaryImage string `json:"primaryImage"`
 	}
@@ -44,7 +45,6 @@ func parseFromRawItems(b []byte) ([]fact, error) {
 	for _, it := range items {
 		newFact := fact{
 			Image:       it.PrimaryImage,
-			Url:         it.Url,
 			Description: it.FactText,
 		}
 		facts = append(facts, newFact)

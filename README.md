@@ -252,35 +252,67 @@ err = tmpl.Execute(w, facts)
 Use MetnalFloss API for fetching the facts and initialize the store, instead of the static data
 
 ### End result
-`GET /facts` should show facts from MentalFloss.\
+`GET /facts` should show facts from MentalFloss.
 > This will be done by sending request to the external provider (MentalFloss) to fetch facts and saving them in the store\
 You can use this API for fetching the data: ``http://mentalfloss.com/api/facts``
 
 ### Steps
 
-##### Create a mentalfloss struct 
-Create `mentalfloss` struct which will act as the provider for fetching the facts
-> For convenience you can do this in a separate file, but still in package `main`  
+##### Create a mentalfloss struct
+Open a new file names `mentalfloss.go`, still in the same folder (package main).
 
-Add `metnalfloss` functionality
-* `func (mf mentalfloss) Facts() ([]fact, error) {…}`
-  * Function for fetching facts using MetnalFloss API
-  * Call `http://mentalfloss.com/api/facts` using `http.Get`, this returns an array of MentalFloss facts in a JSON format
-  * Parse the response body into a custom struct like in exercise 3 using `json.Unmarshal`
-  * The custom struct you can use in here is an array of fact equivalent struct:
-  ```go
-  var items []struct {
-      Url          string `json:"url"`
-      FactText     string `json:"fact"`
-      PrimaryImage string `json:"primaryImage"`
-  }
-  ```
-  * For convenience you may use a private func for parsing the response data and converting to `[]fact` 
-    * `func parseFromRawItems(b []byte) ([]fact, error) {…}`
-      > After you read the response body by `ioutil.ReadAll`   
+In that file, create a struct names `mentalfloss`, for now it will be an empty struct:
+```go
+type mentalfloss struct{}
+```
+This struct will used as the provider for fetching the facts.  
+
+##### Add functionality to `metnalfloss`
+
+Attach a method for fetching the facts to `mentalfloss`:
+```go
+func (mf mentalfloss) Facts() ([]fact, error) {…}
+``` 
+For fetching the facts, call `http://mentalfloss.com/api/facts` using `http.Get`:
+```go
+resp, err := http.Get("http://mentalfloss.com/api/facts")
+if err != nil {
+	...
+	return nil, err
+}
+defer resp.Body.Close()
+```
+
+> A `defer` statement defers the execution of a function until the surrounding function returns. This is how we make sure that we close the response body before we exit the function.  
+
+This API return an array of JSON representation of MentalFloss facts:
+```json
+[
+  {
+    "fact": "fact text",
+    "primaryImage": "image/url", 
+  },
+  .
+  .
+  .
+]
+
+```
+
+You will need to parse the response body into a custom struct like in exercise 3 using `json.Unmarshal`
+
+Here, a request struct, matching the payload of the response can be:
+```go
+var items []struct {
+    FactText     string `json:"fact"`
+    PrimaryImage string `json:"primaryImage"`
+ }
+``` 
+
+Like in exercise 3, parse the response body into a custom struct using `json.Unmarshal`.   
 
 ##### Use `mentalfloss` instead of static data
-In main, get facts from `mentalfloss`, and add these facts to the store.
+In `main` function, replace the hard coded facts with facts from `mentalfloss`.
 
 ***
 
