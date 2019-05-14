@@ -34,12 +34,14 @@ func main() {
 	})
 
 	http.HandleFunc("/facts", func(w http.ResponseWriter, r *http.Request) {
+		// We are checking that we are answering only for GET  method
 		if r.Method != http.MethodGet {
 			http.Error(w, "no http handler found", http.StatusNotFound)
 			return
 		}
 		w.Header().Add("Content-Type", "application/json")
 
+		// Here we are getting the JSON encoding of for the all facts from the store
 		b, err := json.Marshal(factsStore.getAll())
 		if err != nil {
 			errMessage := fmt.Sprintf("error marshaling facts : %v", err)
@@ -47,6 +49,7 @@ func main() {
 			return
 		}
 
+		// Next we are writing it the the http.ResponseWriter
 		_, err = w.Write(b)
 		if err != nil {
 			errMessage := fmt.Sprintf("error writing response: %v", err)

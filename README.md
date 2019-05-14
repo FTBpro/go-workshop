@@ -11,8 +11,8 @@ Farther more, you can find the implementation for each exercise under folder `co
 
 Also, you can get a better perspective by running each exercise by
 ```
-cd coolfacts/exerciseN
-go run .
+cd /path/to/go-workshop/coolfacts
+go run ./exerciseN
 ```
 
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
@@ -105,10 +105,10 @@ http.ListenAndServe(":9002", nil)
 ***
 ## Exercise 2 - list the facts as JSON <img src="https://github.com/egonelbre/gophers/blob/master/vector/projects/wwgl.svg" width="45">
 ### Goal
-Create `/facts` endpoint for listing facts in a JSON format by using a static store
+Create `/facts` endpoint for listing facts in a JSON format by using a store.
 
 ### End result
-`GET /facts` will return JSON of all facts in store, for now it will be hard coded facts
+`http://localhost:9002/facts` will show a JSON of all facts in store, for now it will be hard coded facts.
 
 ### Steps
 
@@ -131,7 +131,7 @@ Add store functionality:
 Init the store from `main` with some static data. 
 
 ##### Register `http.HandleFunc` to `/facts` pattern  
-Like in the ping from previous exercise, use an anonymous function as argument to `http.HandleFunc` function.
+Like in the ping from previous exercise, use an anonymous function as an argument to `http.HandleFunc` function.
 
 In this function you will:
 * Get all the facts from the store
@@ -145,8 +145,8 @@ Create POST request for creating a new fact
 
 ### End result
 `POST /facts` will create a new fact from the request body, and add it to the store
-> For issuing a POST request you can use 'postman', or the next command from terminal:\
-curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<imageName>", "Url": "\<imageURL>", "Description": "\<imageDescription>"}' http://localhost:9002/facts
+> For issuing a POST request you can use the next command from terminal while your server is running:\
+curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<insertName>", "Url": "\<insertURL>", "Description": "\<insertDescription>"}' http://localhost:9002/facts
 
 ### Steps
 
