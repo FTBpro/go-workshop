@@ -12,7 +12,7 @@ Farther more, you can find the implementation for each exercise under folder `co
 Also, you can get a better perspective by running each exercise by
 ```
 cd coolfacts/exerciseN
-go run main.go
+go run .
 ```
 
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
@@ -53,7 +53,7 @@ git clone https://github.com/FTBpro/go-workshop.git
 cd into the `entrypoint` folder and run the entrypoint project:
 ```
 cd go-workshop/coolfacts/entrypoint/
-go run main.go
+go run .
 ```
 
 ### End Result
