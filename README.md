@@ -73,7 +73,7 @@ At any time if you are having any issues, you can use the reference for the exer
 First use of `http` package with a simple server
 
 ### End result
-When navigating to `localhost:9002/ping` the browser should show `PONG` string
+When navigating to `http://localhost:9002/ping` the browser should show `PONG` string
 
 ### Steps
 
