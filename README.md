@@ -23,7 +23,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
   * [Build and Run guide](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
 * [Exercise 1 - ping](#exercise-1---ping-)
 * [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json-)
-* [Exercise 3 - create new fact](#exercise-3---create-new-fact-)
+* [Exercise 3 - create a new fact](#exercise-3---create-a-new-fact-)
 * [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html-)
 * [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
 * [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
@@ -139,21 +139,46 @@ In this function you will:
 > Use `json.Marshal` to format the struct as json and to write to the `ResponseWriter` 
 
 ***
-## Exercise 3 - create new fact <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/sage.svg" width="55">
+## Exercise 3 - create a new fact <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/sage.svg" width="55">
 ### Goal
-Create POST request for creating a new fact
+Create a new fact by a POST request.
 
 ### End result
-`POST /facts` will create a new fact from the request body, and add it to the store
+Create a new fact and add it to the store by issuing a `POST /facts` request with the next payloiad:
+```json
+{
+  "image": "image name",
+  "url": "image/url",
+  "description": "image description"
+}
+```
 > For issuing a POST request you can use the next command from terminal while your server is running:\
-curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<insertName>", "Url": "\<insertURL>", "Description": "\<insertDescription>"}' http://localhost:9002/facts
+curl --header "Content-Type: application/json" --request POST --data '{"image":"\<insertName>", "url": "\<insertURL>", "description": "\<insertDescription>"}' http://localhost:9002/facts
 
 ### Steps
 
 ##### Add `POST` functionality to `/facts` handlerFunc
-In the handler from the previous exercise check for the request method (GET/POST) add the logic of this step under POST section
+In the handler from the previous exercise check for the request method (GET/POST) and add the logic of this exercise under POST section
 
-Create a json format equivalent in fields (types and names) to the fact struct.
+##### Parse the request body into a `fact`
+
+First, read the request body into a byte stream using `ioutil.ReadAll`:
+```go
+b, err := ioutil.ReadAll(r.Body)
+```
+
+Next, we need to parse this data into some sort of a "request model".\
+We which use a struct, which should be a representation of the expected payload:
+
+```json
+{
+  "image": "image name",
+  "url": "image/url",
+  "description": "image description"
+}
+```
+
+For example:
 
 ```go
 var req struct {
@@ -163,12 +188,15 @@ var req struct {
 }
 ```
 
-##### Parse the encoded request body into `req`
-Reading the request body can be done by `ioutil.ReadAll`\
-Parsing the data into `req` can be done by `json.Unmarshal` 
+Now we need to parse the data into this struct.\
+For this we can use `json.Unmarshal`: 
+```go
+err = json.Unmarshal(b, &req)
+```
 
-##### Finally add the fact to the store
-Use the `factsStore.add` method from Exercise 2.
+Finally, after we have this struct filled, create a new fact from it, and add it to the store.
+
+For adding it to the store you should use the `factStore.Add` from exercise 2.
 
 ***
 ## Exercise 4 - list the facts as HTML <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/power-to-the-linux.svg" width="95">
