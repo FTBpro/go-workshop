@@ -78,14 +78,29 @@ When navigating to `localhost:9002/ping` the browser should show `PONG` string
 ### Steps
 
 ##### Create `/ping` endpoint
-Register handler function of to `/ping` pattern\
-Use `http.HandleFunc` function to register an anonymous function of type `func(http.ResponseWriter, *http.Request)` to `/ping`
+From main function, you will need to register to `/ping` pattern.\
+You can use [`http.HandleFunc`](https://golang.org/pkg/net/http/#HandleFunc) for doing that in a simple way.
 
-> For printing into `http.ResponseWriter` you can use `fmt.Fprintf`\
-In case of an error you can use `http.Error` function
+
+Foe example:
+
+```go
+http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	// place your code here
+}
+```
+
+> For printing into `http.ResponseWriter` you can use `fmt.Fprintf`.\
+In case of an error you can use `http.Error` function.
 
 ##### Listen on port :9002
-You can use `http.ListenAndServe` for starting the server
+Next you will need to have a server listening on port :9002 to get the ping.\
+We will use the default server in the http package using `http.ListenAndServe`. 
+
+For example:
+```go
+http.ListenAndServe(":9002", nil)
+``` 
 
 ***
 ## Exercise 2 - list the facts as JSON <img src="https://github.com/egonelbre/gophers/blob/master/vector/projects/wwgl.svg" width="45">
