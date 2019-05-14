@@ -319,19 +319,29 @@ In `main` function, replace the hard coded facts with facts from `mentalfloss`.
 ## Exercise 6 - separate to packages <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/gotham.svg" width="95">
 
 ### Goal
-Separate structs into separate packages
+Separate structs into packages.
+- Move the facgt entity and store into `fact` package
+- Move mentalfloss functionality into `mentalfloss` package
+- Move the http handlers into a into `http` package (which we will creae in our project, not `net/http`...)
 
 ### Steps
 
 ##### Create package `fact`
-Create a new folder fact - move store and fact definition into that folder (change the package name to fact)
+Create a new folder named `fact` and a new file named `fact.go`. This file will contain the fact entity and the store.\
+In the top of the file add 
+```go
+package fact
+````
 
-Make sure that the struct `Fact` is exported (public)
+Move the `fact` and the `store` structs into that file.\
+> Make sure that the struct `Fact` is exported (capitalized)
   
 ##### Create package `mentalfloss`
-Create a new folder `mentalfloss` - move mentalfloss struct and methods into that folder (change the package name to mentalfloss)
+Create a new folder `mentalfloss` and a new file named `mentalfloss.go` and move mentalfloss struct and methods into that folder
 
-> You will encounter compile error since the `fact` is 
+Set the package name in that file as `package mentalfloss`
+
+> You will encounter compile error since now the `fact` is 
 in another package.\
 You will need to import your fact package And replace `fact` with `fact.Fact`\
 (for example in exercise 6 `import "github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"`)
@@ -340,8 +350,11 @@ You will need to import your fact package And replace `fact` with `fact.Fact`\
 ##### Create package `http`
 The goal is to separate `http.HandlerFunc` logic outside of main
 
-Create a new folder `http` and `handler.go` file (can be other file name)\
-Create handler struct for handling the request.\
+Create a new folder `http` and some `.go` file
+
+The handler struct will be the maker of our http handler functions.
+
+Create an handler struct for handling the request.\
 Example 
 ```go
 type FactsHandler struct {
@@ -356,8 +369,8 @@ Create methods for handling the request
 > Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`) 
 
 
-In main, init `FactsHandler` struct with the `factStore`\
-Since we already importing `net/http` in main, we need to rename the name we will use for our own http ([How to import and use different packages of the same name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language))\
+In main, init `FactsHandler` struct with the `factStore`.\
+> Since we are already importing `net/http` in main, we need to rename the name we will use for our own http ([How to import and use different packages of the same name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language))\
 For example 
 ```go
 import (
@@ -370,12 +383,12 @@ handlerer := facthttp.FactsHandler{
 	FactStore: &factsStore,
 }
 ```
-Use this handlerer methods for registering to the entpoints\
+From main, replcae the anonymous functions and use this handlerer methods for registering to the entpoints
+
 For example:
 ```go
 http.HandleFunc("/ping", handlerer.Ping)
 ```
-
 ***
 
 ## Exercise 7 - add ticker for updating the facts <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/zorro.svg" width="55">
