@@ -92,8 +92,8 @@ When navigating to `http://localhost:9002/ping` the browser should show `PONG` s
 ##### Create `/ping` endpoint
 
 From main function, you will need to register to `/ping` pattern.
-You can use [`http.HandleFunc`](https://golang.org/pkg/net/http/#HandleFunc) for doing that in a simple way.
 
+You can use [`http.HandleFunc`](https://golang.org/pkg/net/http/#HandleFunc) for doing that in a simple way.
 
 For example:
 
