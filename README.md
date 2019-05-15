@@ -11,8 +11,8 @@ Farther more, you can find the implementation for each exercise under folder `co
 
 Also, you can get a better perspective by running each exercise by
 ```
-cd coolfacts/exerciseN
-go run .
+cd /path/to/go-workshop/coolfacts
+go run ./exerciseN
 ```
 
 Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/gophers/blob/master/vector/adventure/hiking.svg" width="48">
@@ -23,7 +23,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
   * [Build and Run guide](https://github.com/FTBpro/go-workshop/blob/master/coolfacts/entrypoint/build-and-run.md)
 * [Exercise 1 - ping](#exercise-1---ping-)
 * [Exercise 2 - list facts as JSON](#exercise-2---list-the-facts-as-json-)
-* [Exercise 3 - create new fact](#exercise-3---create-new-fact-)
+* [Exercise 3 - create a new fact](#exercise-3---create-a-new-fact-)
 * [Exercise 4 - list the facts as HTML](#exercise-4---list-the-facts-as-html-)
 * [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
 * [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
@@ -78,22 +78,37 @@ When navigating to `http://localhost:9002/ping` the browser should show `PONG` s
 ### Steps
 
 ##### Create `/ping` endpoint
-Register handler function of to `/ping` pattern\
-Use `http.HandleFunc` function to register an anonymous function of type `func(http.ResponseWriter, *http.Request)` to `/ping`
+From main function, you will need to register to `/ping` pattern.\
+You can use [`http.HandleFunc`](https://golang.org/pkg/net/http/#HandleFunc) for doing that in a simple way.
 
-> For printing into `http.ResponseWriter` you can use `fmt.Fprintf`\
-In case of an error you can use `http.Error` function
+
+Foe example:
+
+```go
+http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+	// place your code here
+}
+```
+
+> For printing into `http.ResponseWriter` you can use `fmt.Fprintf`.\
+In case of an error you can use `http.Error` function.
 
 ##### Listen on port :9002
-You can use `http.ListenAndServe` for starting the server
+Next you will need to have a server listening on port :9002 to get the ping.\
+We will use the default server in the http package using `http.ListenAndServe`. 
+
+For example:
+```go
+http.ListenAndServe(":9002", nil)
+``` 
 
 ***
 ## Exercise 2 - list the facts as JSON <img src="https://github.com/egonelbre/gophers/blob/master/vector/projects/wwgl.svg" width="45">
 ### Goal
-Create `/facts` endpoint for listing facts in a JSON format by using a static store
+Create `/facts` endpoint for listing facts in a JSON format by using a store.
 
 ### End result
-`GET /facts` will return JSON of all facts in store, for now it will be hard coded facts
+`http://localhost:9002/facts` will show a JSON of all facts in store, for now it will be hard coded facts.
 
 ### Steps
 
@@ -116,7 +131,7 @@ Add store functionality:
 Init the store from `main` with some static data. 
 
 ##### Register `http.HandleFunc` to `/facts` pattern  
-Like in the ping from previous exercise, use an anonymous function as argument to `http.HandleFunc` function.
+Like in the ping from previous exercise, use an anonymous function as an argument to `http.HandleFunc` function.
 
 In this function you will:
 * Get all the facts from the store
@@ -124,21 +139,46 @@ In this function you will:
 > Use `json.Marshal` to format the struct as json and to write to the `ResponseWriter` 
 
 ***
-## Exercise 3 - create new fact <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/sage.svg" width="55">
+## Exercise 3 - create a new fact <img src="https://github.com/egonelbre/gophers/blob/master/vector/fairy-tale/sage.svg" width="55">
 ### Goal
-Create POST request for creating a new fact
+Create a new fact by a POST request.
 
 ### End result
-`POST /facts` will create a new fact from the request body, and add it to the store
-> For issuing a POST request you can use 'postman', or the next command from terminal:\
-curl --header "Content-Type: application/json" --request POST --data '{"Image":"\<imageName>", "Url": "\<imageURL>", "Description": "\<imageDescription>"}' http://localhost:9002/facts
+Create a new fact and add it to the store by issuing a `POST /facts` request with the next payloiad:
+```json
+{
+  "image": "image name",
+  "url": "image/url",
+  "description": "image description"
+}
+```
+> For issuing a POST request you can use the next command from terminal while your server is running:\
+curl --header "Content-Type: application/json" --request POST --data '{"image":"\<insertName>", "url": "\<insertURL>", "description": "\<insertDescription>"}' http://localhost:9002/facts
 
 ### Steps
 
 ##### Add `POST` functionality to `/facts` handlerFunc
-In the handler from the previous exercise check for the request method (GET/POST) add the logic of this step under POST section
+In the handler from the previous exercise check for the request method (GET/POST) and add the logic of this exercise under POST section
 
-Create a json format equivalent in fields (types and names) to the fact struct.
+##### Parse the request body into a `fact`
+
+First, read the request body into a byte stream using `ioutil.ReadAll`:
+```go
+b, err := ioutil.ReadAll(r.Body)
+```
+
+Next, we need to parse this data into some sort of a "request model".\
+We which use a struct, which should be a representation of the expected payload:
+
+```json
+{
+  "image": "image name",
+  "url": "image/url",
+  "description": "image description"
+}
+```
+
+For example:
 
 ```go
 var req struct {
@@ -148,12 +188,15 @@ var req struct {
 }
 ```
 
-##### Parse the encoded request body into `req`
-Reading the request body can be done by `ioutil.ReadAll`\
-Parsing the data into `req` can be done by `json.Unmarshal` 
+Now we need to parse the data into this struct.\
+For this we can use `json.Unmarshal`: 
+```go
+err = json.Unmarshal(b, &req)
+```
 
-##### Finally add the fact to the store
-Use the `factsStore.add` method from Exercise 2.
+Finally, after we have this struct filled, create a new fact from it, and add it to the store.
+
+For adding it to the store you should use the `factStore.Add` from exercise 2.
 
 ***
 ## Exercise 4 - list the facts as HTML <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/power-to-the-linux.svg" width="95">
@@ -164,15 +207,43 @@ Use the `factsStore.add` method from Exercise 2.
 
 ### End result
 `GET /facts` will list the facts in HTML
+`http://localhost:9002/facts` will show a all facts in store in HTML.
 
 ### Steps
 
 ##### Create an HTML template
-This can be done using package `text/template` syntax
 
-##### Execute the template with facts
-Execute template with `store.getAll` results (that means write to `ResponseWriter` all results in the applied template)
+We will use `html/template` package.\
+For a very basic use, you can declare this variable outside of main
+```go
+var newsTemplate = `<html>
+                    <h1>Facts</h1>
+                    <div>
+                        {{range .}}
+                            <div>
+                                <h3>{{.Description}}</h3>
+                                <img src="{{.Image}}" width="25%" height="25%"> </img>
+                            </div>
+                        {{end}}
+                    <div>
+                    </html>`
+```
 
+> This is called a 'package defined variable' (global variable), We can use it from anywhere in the package it defined in
+
+##### Return HTML representation of the facts
+This step will replace the JSON you added in exercise 2, so you will need to replace the code in the section under GET method in the handler for `/facts`.
+
+Using `html/template`, create a new template from the `newsTemplate` defined earlier:
+```go
+tmpl, err := template.New("facts").Parse(newsTemplate)
+```
+
+Next, all you need to do is just to execute the template with the facts, and the http.ResponseWriter:
+```go
+facts := factsStore.getAll()
+err = tmpl.Execute(w, facts)
+```
 ***
 
 ## Exercise 5 - use MentalFloss API <img src="https://github.com/egonelbre/gophers/blob/master/vector/science/jet-pack.svg" width="55">
@@ -181,54 +252,96 @@ Execute template with `store.getAll` results (that means write to `ResponseWrite
 Use MetnalFloss API for fetching the facts and initialize the store, instead of the static data
 
 ### End result
-`GET /facts` should show facts from MentalFloss.\
+`GET /facts` should show facts from MentalFloss.
 > This will be done by sending request to the external provider (MentalFloss) to fetch facts and saving them in the store\
 You can use this API for fetching the data: ``http://mentalfloss.com/api/facts``
 
 ### Steps
 
-##### Create a mentalfloss struct 
-Create `mentalfloss` struct which will act as the provider for fetching the facts
-> For convenience you can do this in a separate file, but still in package `main`  
+##### Create a mentalfloss struct
+Open a new file names `mentalfloss.go`, still in the same folder (package main).
 
-Add `metnalfloss` functionality
-* `func (mf mentalfloss) Facts() ([]fact, error) {…}`
-  * Function for fetching facts using MetnalFloss API
-  * Call `http://mentalfloss.com/api/facts` using `http.Get`, this returns an array of MentalFloss facts in a JSON format
-  * Parse the response body into a custom struct like in exercise 3 using `json.Unmarshal`
-  * The custom struct you can use in here is an array of fact equivalent struct:
-  ```go
-  var items []struct {
-      Url          string `json:"url"`
-      FactText     string `json:"fact"`
-      PrimaryImage string `json:"primaryImage"`
-  }
-  ```
-  * For convenience you may use a private func for parsing the response data and converting to `[]fact` 
-    * `func parseFromRawItems(b []byte) ([]fact, error) {…}`
-      > After you read the response body by `ioutil.ReadAll`   
+In that file, create a struct names `mentalfloss`, for now it will be an empty struct:
+```go
+type mentalfloss struct{}
+```
+This struct will used as the provider for fetching the facts.  
+
+##### Add functionality to `metnalfloss`
+
+Attach a method for fetching the facts to `mentalfloss`:
+```go
+func (mf mentalfloss) Facts() ([]fact, error) {…}
+``` 
+For fetching the facts, call `http://mentalfloss.com/api/facts` using `http.Get`:
+```go
+resp, err := http.Get("http://mentalfloss.com/api/facts")
+if err != nil {
+	...
+	return nil, err
+}
+defer resp.Body.Close()
+```
+
+> A `defer` statement defers the execution of a function until the surrounding function returns. This is how we make sure that we close the response body before we exit the function.  
+
+This API return an array of JSON representation of MentalFloss facts:
+```json
+[
+  {
+    "fact": "fact text",
+    "primaryImage": "image/url", 
+  },
+  .
+  .
+  .
+]
+
+```
+
+You will need to parse the response body into a custom struct like in exercise 3 using `json.Unmarshal`
+
+Here, a request struct, matching the payload of the response can be:
+```go
+var items []struct {
+    FactText     string `json:"fact"`
+    PrimaryImage string `json:"primaryImage"`
+ }
+``` 
+
+Like in exercise 3, parse the response body into a custom struct using `json.Unmarshal`.   
 
 ##### Use `mentalfloss` instead of static data
-In main, get facts from `mentalfloss`, and add these facts to the store.
+In `main` function, replace the hard coded facts with facts from `mentalfloss`.
 
 ***
 
 ## Exercise 6 - separate to packages <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/gotham.svg" width="95">
 
 ### Goal
-Separate structs into separate packages
+Separate structs into packages.
+- Move the facgt entity and store into `fact` package
+- Move mentalfloss functionality into `mentalfloss` package
+- Move the http handlers into a into `http` package (which we will creae in our project, not `net/http`...)
 
 ### Steps
 
 ##### Create package `fact`
-Create a new folder fact - move store and fact definition into that folder (change the package name to fact)
+Create a new folder named `fact` and a new file named `fact.go`. This file will contain the fact entity and the store.\
+In the top of the file add 
+```go
+package fact
+````
 
-Make sure that the struct `Fact` is exported (public)
+Move the `fact` and the `store` structs into that file.\
+> Make sure that the struct `Fact` is exported (capitalized)
   
 ##### Create package `mentalfloss`
-Create a new folder `mentalfloss` - move mentalfloss struct and methods into that folder (change the package name to mentalfloss)
+Create a new folder `mentalfloss` and a new file named `mentalfloss.go` and move mentalfloss struct and methods into that folder
 
-> You will encounter compile error since the `fact` is 
+Set the package name in that file as `package mentalfloss`
+
+> You will encounter compile error since now the `fact` is 
 in another package.\
 You will need to import your fact package And replace `fact` with `fact.Fact`\
 (for example in exercise 6 `import "github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"`)
@@ -237,8 +350,11 @@ You will need to import your fact package And replace `fact` with `fact.Fact`\
 ##### Create package `http`
 The goal is to separate `http.HandlerFunc` logic outside of main
 
-Create a new folder `http` and `handler.go` file (can be other file name)\
-Create handler struct for handling the request.\
+Create a new folder `http` and some `.go` file
+
+The handler struct will be the maker of our http handler functions.
+
+Create an handler struct for handling the request.\
 Example 
 ```go
 type FactsHandler struct {
@@ -253,8 +369,8 @@ Create methods for handling the request
 > Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`) 
 
 
-In main, init `FactsHandler` struct with the `factStore`\
-Since we already importing `net/http` in main, we need to rename the name we will use for our own http ([How to import and use different packages of the same name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language))\
+In main, init `FactsHandler` struct with the `factStore`.\
+> Since we are already importing `net/http` in main, we need to rename the name we will use for our own http ([How to import and use different packages of the same name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language))\
 For example 
 ```go
 import (
@@ -267,12 +383,12 @@ handlerer := facthttp.FactsHandler{
 	FactStore: &factsStore,
 }
 ```
-Use this handlerer methods for registering to the entpoints\
+From main, replcae the anonymous functions and use this handlerer methods for registering to the entpoints
+
 For example:
 ```go
 http.HandleFunc("/ping", handlerer.Ping)
 ```
-
 ***
 
 ## Exercise 7 - add ticker for updating the facts <img src="https://github.com/egonelbre/gophers/blob/master/vector/superhero/zorro.svg" width="55">

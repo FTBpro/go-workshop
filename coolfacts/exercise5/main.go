@@ -55,7 +55,15 @@ func main() {
 				http.Error(w, errMessage, http.StatusInternalServerError)
 				return
 			}
-			tmpl.Execute(w, factsStore.getAll())
+
+			facts := factsStore.getAll()
+			err = tmpl.Execute(w, facts)
+			if err != nil {
+				errMessage := fmt.Sprintf("failed parse template: %v", err)
+				http.Error(w, errMessage, http.StatusInternalServerError)
+				return
+			}
+
 			return
 		}
 		if r.Method == http.MethodPost {

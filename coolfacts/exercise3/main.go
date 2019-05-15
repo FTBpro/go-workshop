@@ -55,23 +55,36 @@ func main() {
 			}
 		}
 		if r.Method == http.MethodPost {
+			// first read the request body into a byte stream
 			b, err := ioutil.ReadAll(r.Body)
 			if err != nil {
 				errMessage := fmt.Sprintf("error read from body: %v", err)
 				http.Error(w, errMessage, http.StatusInternalServerError)
 				return
 			}
+
+			// We are expecting the payload to be from the form:
+			// {
+			//		"image": "image name",
+			//		"url": "image/url",
+			//		"description": "image description"
+			// }
+			// We will use this struct representation of the expected request body, and parse into it the data
 			var req struct {
 				Image       string `json:"image"`
 				Url         string `json:"url"`
 				Description string `json:"description"`
 			}
+
+			// parse the JSON-encoded data and stores the result in req
 			err = json.Unmarshal(b, &req)
 			if err != nil {
 				errMessage := fmt.Sprintf("error parsing fact: %v", err)
 				http.Error(w, errMessage, http.StatusBadRequest)
+				return
 			}
 
+			// create a new fact from this request struct, and store it using the store
 			f := fact{
 				Image: req.Image,
 				Url: req.Url,
