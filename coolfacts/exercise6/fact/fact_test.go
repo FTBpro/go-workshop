@@ -8,7 +8,6 @@ func TestStore_Add(t *testing.T) {
 	store := Store{}
 	fact := Fact{
 		Image:       "img",
-		Url:         "url",
 		Description: "desc",
 	}
 	store.Add(fact)
@@ -16,7 +15,7 @@ func TestStore_Add(t *testing.T) {
 	gotFacts := store.GetAll()
 	var hasItem bool
 	for _, gotFact := range gotFacts {
-		if gotFact.Url == fact.Url && gotFact.Image == fact.Image && gotFact.Description == fact.Description {
+		if gotFact.Image == fact.Image && gotFact.Description == fact.Description {
 			hasItem = true
 		}
 	}

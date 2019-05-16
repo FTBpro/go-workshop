@@ -51,10 +51,8 @@ article img {
 	<h1>Hear These Amazing Facts!</h1>
 	{{ range . }}
 	<article>
-		<a href="http://mentalfloss.com/api{{.Url}}">
-				<h3>{{.Description}}</h3>
-				<img src="{{.Image}}" width="100%" />
-		</a>
+			<h3>{{.Description}}</h3>
+			<img src="{{.Image}}" width="100%" />
 	</article>
 	{{ end }}
 </body>
@@ -115,7 +113,6 @@ func main() {
 			}
 			var req struct {
 				Image       string `json:"image"`
-				Url         string `json:"url"`
 				Description string `json:"description"`
 			}
 			err = json.Unmarshal(b, &req)
@@ -126,7 +123,6 @@ func main() {
 
 			f := fact{
 				Image:       req.Image,
-				Url:         req.Url,
 				Description: req.Description,
 			}
 

@@ -250,10 +250,8 @@ var newsTemplate = `<!DOCTYPE html>
   <div>
     {{ range . }}
        <article>
-         <a href="http://mentalfloss.com/api{{.Url}}">
-           <h3>{{.Description}}</h3>
-           <img src="{{.Image}}" width="100%" />
-         </a>
+            <h3>{{.Description}}</h3>
+            <img src="{{.Image}}" width="100%" />
        </article>
     {{ end }}
   <div>

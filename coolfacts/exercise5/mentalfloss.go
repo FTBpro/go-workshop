@@ -4,16 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
 type mentalfloss struct {}
 
 func (mf mentalfloss) Facts()([]fact, error) {
+	log.Println("getting facts from mentalfloss")
 	resp, err := http.Get("http://mentalfloss.com/api/facts")
 	if err != nil {
 		return nil, fmt.Errorf("error making request: %v", err)
 	}
+	log.Println("got facts from mentalfloss successfully")
 
 	// A `defer` statement defers the execution of a function until the surrounding function returns.
 	// This is how we make sure that we close the response body before we exit the function.
