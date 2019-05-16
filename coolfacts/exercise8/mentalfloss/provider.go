@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
@@ -14,12 +15,14 @@ const getFactsAPI = "http://mentalfloss.com/api/facts"
 type Mentalfloss struct{}
 
 func (r *Mentalfloss) Facts() ([]fact.Fact, error) {
+	log.Println("getting facts from mentalfloss")
 	resp, err := http.Get(getFactsAPI)
 	if err != nil {
 		return nil, fmt.Errorf("error get = %v", err)
 	}
-
 	defer resp.Body.Close()
+
+	log.Println("got facts from mentalfloss successfully")
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error readAll = %v", err)
