@@ -12,12 +12,10 @@ func main() {
 	factsStore := store{}
 	factsStore.add(fact{
 		Image:       "https://images2.minutemediacdn.com/image/upload/v1556645500/shape/cover/entertainment/D5aliXvWsAEcYoK-fe997566220c082b98030508e654948e.jpg",
-		Url:         "http://example.com",
 		Description: "Did you know sonic is a hedgehog?!",
 	})
 	factsStore.add(fact{
 		Image:       "https://images2.minutemediacdn.com/image/upload/v1556641470/shape/cover/entertainment/uncropped-Screen-Shot-2019-04-30-at-122411-PM-3b804f143c543dfab4b75c81833bed1b.jpg",
-		Url:         "http://example.com",
 		Description: "You won't believe what happened to Arya!",
 	})
 
@@ -72,7 +70,6 @@ func main() {
 			// We will use this struct representation of the expected request body, and parse into it the data
 			var req struct {
 				Image       string `json:"image"`
-				Url         string `json:"url"`
 				Description string `json:"description"`
 			}
 
@@ -87,7 +84,6 @@ func main() {
 			// create a new fact from this request struct, and store it using the store
 			f := fact{
 				Image: req.Image,
-				Url: req.Url,
 				Description: req.Description,
 			}
 

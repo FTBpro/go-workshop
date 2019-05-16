@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/FTBpro/go-workshop/coolfacts/exercise6/fact"
@@ -13,11 +14,13 @@ type Mentalfloss struct {
 }
 
 func (mf Mentalfloss) Facts() ([]fact.Fact, error) {
+	log.Println("getting facts from mentalfloss")
 	resp, err := http.Get("http://mentalfloss.com/api/facts")
 	if err != nil {
 		return nil, fmt.Errorf("error making request: %v", err)
 	}
 	defer resp.Body.Close()
+	log.Println("got facts from mentalfloss successfully")
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -34,7 +37,6 @@ func (mf Mentalfloss) Facts() ([]fact.Fact, error) {
 
 func parseFromRawItems(b []byte) ([]fact.Fact, error) {
 	var items []struct {
-		Url          string `json:"url"`
 		FactText     string `json:"fact"`
 		PrimaryImage string `json:"primaryImage"`
 	}
@@ -46,7 +48,6 @@ func parseFromRawItems(b []byte) ([]fact.Fact, error) {
 	for _, it := range items {
 		newFact := fact.Fact{
 			Image:       it.PrimaryImage,
-			Url:         it.Url,
 			Description: it.FactText,
 		}
 		facts = append(facts, newFact)

@@ -47,6 +47,15 @@ Go Interfaces
 
 Implicitly rather than explicitly (*No* *"implements"* *keyword*)
 
+    type adder struct{}
+    func (a adder) Do(x, y int) int {
+        return x + y
+    }
+
+adder is Actioner:
+
+    action, ok := adder.(Actioner) // ok == true
+
 * Example 
 
 * How do we use interfaces

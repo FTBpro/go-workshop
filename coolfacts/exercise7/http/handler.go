@@ -61,10 +61,8 @@ article img {
 	<h1>Hear These Amazing Facts!</h1>
 	{{ range . }}
 	<article>
-		<a href="http://mentalfloss.com/api{{.Url}}">
-				<h3>{{.Description}}</h3>
-				<img src="{{.Image}}" width="100%" />
-		</a>
+			<h3>{{.Description}}</h3>
+			<img src="{{.Image}}" width="100%" />
 	</article>
 	{{ end }}
 </body>
@@ -110,7 +108,6 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	}
 	var req struct {
 		Image       string `json:"image"`
-		Url         string `json:"url"`
 		Description string `json:"description"`
 	}
 	err = json.Unmarshal(b, &req)
@@ -120,7 +117,6 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	}
 	f := fact.Fact{
 		Image:       req.Image,
-		Url:         req.Url,
 		Description: req.Description,
 	}
 	h.FactStore.Add(f)
