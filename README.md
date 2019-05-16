@@ -453,10 +453,21 @@ Use go channel and ticker for updating the fact inventory
 
 ### End result
 
-Every const time a ticker will send a signal to a `thread` (go built-in) that will fetch new fact from provider (mentalfloss)
+Every specified time a ticker will send a signal using a `channel` (go built-in) that will trigger fetch new fact from provider (mentalfloss)
 
 ### Steps
-1. Init a context.WithCancel (remember to defer its closer…)
+1. Init a `ctx, cancelFunc := context.WithCancel(context.Background())` (use the cancel func in the end of the run to terminate the go routing execution)
+    1. >`context.WithCancel(context.Background())` returns a context which have a done channel on it that can be used as follows : `<-ctx.Done()` to signal termintation.
+    2. >`context.WithCancel(context.Background())` also returns a cancel func that can be called at the end of the run - it will send a message to the `ctx.Done()` channel.
+    3. > The call to the `cancelFunc()` can be done using `defer` which invokes whatever defined after it at the end of the function that containes the declaration:
+    ``` go
+    func example(){
+      ctx, cancelFunc := context.WithCancel(context.Background())
+      defer cancelFunc() //defined but not invoked
+      doSomething(ctx)
+      //This is the end of the function so defer is invoked
+    }
+    ```
 2. Add a function - func updateFactsWithTicker(ctx context.Context, updateFunc func() error)
     1. (Outside from updateFactsWithTicker) Create the updateFunc from step 7.2. that updates the store from an external provider
     2. (Within the updateFactsWithTicker) Create a time.NewTicker 
