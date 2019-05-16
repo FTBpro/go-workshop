@@ -1,0 +1,53 @@
+Go Data & Pointers
+17 May 2019
+
+* Everything is passed by Value
+
+Data is passed *only* by value
+
+.play -edit pointers/value1.go /^func main/,/^}/
+
+The value 42 is copied, and it is assigned to b.
+
+* Everything is passed by Value
+
+Data is passed *only* by value
+
+.play -edit pointers/value2.go /^func main/,/^}/
+
+do(b int){...} can't change the original number, which is great for safety!
+
+* Managing state - The Problem
+
+*Mutable* objects?
+
+.play -edit pointers/ref1.go /start OMIT/,/end OMIT/
+
+* Managing state - Pointer
+
+Add an asterisk (*) in order to say it's a pointer
+
+.play -edit pointers/ref2.go /start OMIT/,/end OMIT/
+
+* Syntax & Summary
+: from https://tour.golang.org/moretypes/1
+
+The type *T is a pointer to a T value. Its zero value is nil.
+
+    var p *int
+
+The & operator generates a pointer to its operand.
+
+    i := 42
+    p = &i
+
+The * operator denotes the pointer's underlying value.
+
+    fmt.Println(*p) // read i through the pointer p
+    *p = 21         // set i through the pointer p
+
+Unlike C, Go has no pointer arithmetic.
+
+*Questions?*
+
+
