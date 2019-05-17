@@ -1,6 +1,9 @@
 # welcome
 This is a step-by-step tutorial for creating a simple web server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
+## Feedback
+Please help us improve ourselves for the next time with a quick feedback https://forms.gle/fNxcqSBdyZepoyVT6.
+
 ## Slides
 all relevant slides are available at [go slides]: http://present.minutemediaservices.com/gopresent
 
