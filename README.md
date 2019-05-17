@@ -599,3 +599,29 @@ Instead of using the `updateFunc` from exercise 7, we'll use our `fact.NewServic
 ```
 
 Now we will just the `service.UpdateFacts` method to update the store, and to use with the ticker and we're done 🥂
+
+# Usefull links for "idiometic go":
+
+- [Effective Go - a detailed set of the specialities and atyleguides for Go](https://golang.org/doc/effective_go.html)
+- [Code review comments - common comments made during reviews of Go code](https://github.com/golang/go/wiki/CodeReviewComments)
+
+#### Package Names:
+- [Go blog styleguides about naming packages](https://blog.golang.org/package-names)
+- [Blog post by Dave Cheney wbout why we shouldn't use `util` or `common`](https://dave.cheney.net/2019/01/08/avoid-package-names-like-base-util-or-common)
+
+#### Go Proverbs
+- [Lecture by Rob Pike](https://www.youtube.com/watch?v=PAAkCSZUG1c)
+- [The list](https://go-proverbs.github.io)
+
+#### More
+- [Idiomatic GO - general guidelines of what not to do](https://about.sourcegraph.com/go/idiomatic-go/)
+
+
+#### Errors:
+- [`pkg/errors` - a popular alternative to the standart `errors` package](https://github.com/pkg/errors)
+- [Article by Dave Chaney about the right error handling](https://dave.cheney.net/2016/04/27/dont-just-check-errors-handle-them-gracefully)
+
+#### Solid design in go
+
+- [Lecture of applying the solid principles in Go](https://www.youtube.com/watch?v=zzAdEt3xZ1M)
+- [The lecture's script](https://dave.cheney.net/2016/08/20/solid-go-design)
