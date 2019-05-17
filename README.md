@@ -29,7 +29,7 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
 * [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
 * [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
 * [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts-)
-* [Exercise 8 - refactor](#exercise-8---refactor-)
+* [Exercise 8 - refactor](#exercise-8---refactor-)use both package
 
 ***
 > By the way, all the gophers images are taken from the wonderfull https://github.com/egonelbre/gophers
@@ -414,11 +414,11 @@ Create methods for handling the request
 * `func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request)`
 * `func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request)`
 
-> Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with age name,the signature `func(w http.ResponseWriter, r *http.Request)`)
+> Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`)
 
 In main, init `FactsHandler` struct with the `factStore`.
 
-You may noticed that `http` is already taken as a package name by `net/http`. You're not wrong, we can't use both package in one file and still call each package `http`. But we can [rename the import name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language):
+You may noticed that `http` is already taken as a package name by `net/http`. You're not wrong, we can't use both packageS in one file and still call each package `http`. But we can [rename the import name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language):
 ```go
 package main
 
