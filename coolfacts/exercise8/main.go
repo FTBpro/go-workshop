@@ -23,11 +23,11 @@ func main() {
 	}
 
 	mf := mentalfloss.Mentalfloss{}
-	service := fact.NewService(&factsStore, &mf)
-
+	service := fact.NewService(&mf, &factsStore)
 	if err := service.UpdateFacts(); err != nil {
 		log.Fatal("couldn't update facts, try later", err.Error())
 	}
+
 	ctx, closer := context.WithCancel(context.Background())
 	defer closer()
 	updateFactsWithTicker(ctx, service.UpdateFacts)

@@ -398,7 +398,7 @@ You will need to import your fact package And replace `fact` with `fact.Fact`.\
 
 ##### Create package `http`
 
-The goal is to separate `http.HandlerFunc` logic outside of main
+The goal is to separate our application `http.HandlerFunc` logic outside of main.
 
 Create a new folder `http` and some `.go` file. In this package create a struct named `handler` which will hold a field of the fact store.
 
@@ -414,34 +414,29 @@ Create methods for handling the request
 * `func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request)`
 * `func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request)`
 
-> Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`)
+> Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with age name,the signature `func(w http.ResponseWriter, r *http.Request)`)
 
 In main, init `FactsHandler` struct with the `factStore`.
 
-> Since we are already importing `net/http` in main, we need to rename the name we will use for our own http ([How to import and use different packages of the same name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language))
-
-For example
- 
+You may noticed that `http` is already taken as a package name by `net/http`. You're not wrong, we can't use both package in one file and still call each package `http`. But we can [rename the import name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language):
 ```go
+package main
+
 import (
 	"net/http"
 	facthttp "github.com/FTBpro/go-workshop/coolfacts/exercise8/http"
 )
-```
 
-```go
-handlerer := facthttp.FactsHandler{
-	FactStore: &factsStore,
+func main() {
+	handlerer := facthttp.FactsHandler{
+		FactStore: &factsStore,    
+	}
+	
+	http.HandleFunc("/ping", handlerer.Ping)
 }
 ```
 
-From main, replace the anonymous functions and use this handlerer methods for registering to the entpoints
-
-For example:
-
-```go
-http.HandleFunc("/ping", handlerer.Ping)
-```
+> Creating a package `http` may not be the best idea. If we create a package with an infrastructure name (like sql, mentalfloss...) we need to make sure we import it only from main. 
 
 ***
 
@@ -481,22 +476,47 @@ Every specified time a ticker will send a signal using a `channel` (go built-in)
 ## Exercise 8 - refactor <img src="https://github.com/ashleymcnamara/gophers/blob/master/SPACEGIRL1.png" width="55">
 
 ### Goal
-* Enable switching between persistent layers easily
-* Enable replacing and adding new providers
+Decouple and break dependancies using interfasces
 
 ### Steps
 
 ##### Extract store logic to package `inmem`
 
-Create `inmem` package and Move the store currently in `fact` package
-    
-> `package inmem` is a common name for handling in memory cache. For handling cache in sql for example, you can use `package sql`
+We need to encapsulate the process of storing the facts. You can think of this package like some kind of an interactor between the actual caching/persistent layer to the application domain.
+
+In this example we will create a package dedicated for storing the facts in a simple `slice`. The package we'll create will be called `inmem`.
+
+After creating packe `inmem`, move the `store` currently in package `fact`
+
+```go
+pkg inmem
+
+type FactStore struct {
+	facts []fact.Fact
+}
+
+func (s *FactStore) Add(f fact.Fact) {
+	// code
+}
+
+func (s *FactStore) GetAll() []fact.Fact {
+	// code
+}
+```
 
 ##### Create fact service for abstracting how we update the facts
 
-in package `fact`, declare two interfaces:
+We need some kind of "service" to handle our update logic. This service will be initialized with the store and the mentalfloss provider, and have an `Update` method.
+
+We better not limit ourselves to only mentalfloss and only in memory cache. We can do that by using interfaces instead the concrete types.
+
+Example:
+
+In package `fact`, declare two interfaces:
 
 ```go
+package fact
+
 type provider interface {
 	Facts() ([]Fact, error)
 }
@@ -507,59 +527,69 @@ type store interface {
 }
 ```
 
-Create service struct which will have fields for these as inverted dependencies.
+The service will be a struct which for now we will enforce to initialize with a `Provider` and a `Store`, and `UpdateFacts` method which take no parameters.
 
 For example
+// continue package fact
 
 ```go
 type service struct {
 	provider Provider
 	store    Store
 }
+
+func NewService(s Store, r Provider) *service {
+	// code
+}
+
+func (s *service) UpdateFacts() error {
+	// code
+}
 ```
 
-Add initializer - `func NewService(s Store, r Provider) *service`
+> Although the service is updating the facts, it doesn't know from which provider or what is the persistent layer. That means we could easily replace inmem with a db, switch providers, and add middlewares (decorators) for logging and other stuff.
 
-And a method for updating facts `func (s *service) UpdateFacts() error`
-
-> in `UpdateFacts` you will use the provider to fetch the facts, and the store to save them. Although the service is updating, it doesn't know who is the provider, and what is the persistent layer
+> Instead of a service, we could just create an exported function `fact.UpdateFacts(p Provider, s Store) error`, which would achieve the same goal and have some advantages, same as `updateFactsFunc` principle in exercise 7.
 
 ##### Add abstraction in local `http` package
 
-In package 'http' declare the FactStore interface:
+By now you can see that we broke our custom `http` package. This is because `*fact.Store` isn't defined anymore (we moved the store to `inmem`).
+
+We'll use here the `Store` interface principle as well. But instead of using directly the interface we declared in `inmem`, we'll declare same interface in our `http` as well.
 
 ```go
+package http
+
 type FactStore interface {
 	Add(f Fact)
 	GetAll() []Fact
 }
-```
 
-This will be used as a field to `FactsHandler`:
-
-```go
 type FactsHandler struct {
 	FactStore FactStore
 }
 ```
 
-> The FactStore provider is replacing the field type from exercise 7 which is a concrete struct `fact.Store`. This enables us to add another layer for persistent data
-
+> Same as in the service, we can initialize the handler with a different persistent layer, add middlewared and more 
 
 ##### Replace calls in main
 
-Use `inmem.FactStore{}` for the fact store (instead of `fact.Store{}`)
+All left to do is to replcae our way we initialize our dependancies in main.
 
-Init the service with the mentalfloss provider and the inmem store
-
-Example
-
+instead of initializing the `factStore` like this:
 ```go
-service := fact.NewService(&factsStore, &mf)
+factsStore := fact.Store{}
 ```
 
-Use the `service.UpdateFacts` method to update the store, and to use with the ticker
+we will initialize it with our `inmem` package:
+```go
+factsStore := inmem.FactStore{}
+```
 
-### End result
+Instead of using the `updateFunc` from exercise 7, we'll use our `fact.NewService`:
+```go
+	mf := mentalfloss.Mentalfloss{}
+	service := fact.NewService(&mf, &factsStore)
+```
 
-We now can add another provider and cache layer easily
+Now we will just the `service.UpdateFacts` method to update the store, and to use with the ticker and we're done 🥂

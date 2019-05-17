@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -35,9 +34,12 @@ func main() {
 	http.HandleFunc("/ping", handlerer.Ping)
 	http.HandleFunc("/facts", handlerer.Facts)
 
-	fmt.Println("starting server")
-	log.Fatal(http.ListenAndServe(":9002", nil))
+	const port = ":9002"
+	log.Println("started server on http://localhost" + port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
+
+// private
 
 func updateFactsWithTicker(ctx context.Context, updateFunc func() error) {
 	tk := time.NewTicker(updateFactInterval)
