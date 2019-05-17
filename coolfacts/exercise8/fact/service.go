@@ -18,10 +18,10 @@ type service struct {
 	store    Store
 }
 
-func NewService(s Store, r Provider) *service {
+func NewService(p Provider, s Store) *service {
 	return &service{
+		provider: p,
 		store:    s,
-		provider: r,
 	}
 }
 

@@ -10,13 +10,8 @@ import (
 	"github.com/FTBpro/go-workshop/coolfacts/exercise7/fact"
 )
 
-type FactStore interface {
-	Add(f fact.Fact)
-	GetAll() []fact.Fact
-}
-
 type FactsHandler struct {
-	FactStore FactStore
+	FactStore *fact.Store
 }
 
 var newsTemplate = `<!DOCTYPE html>
