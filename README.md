@@ -1,6 +1,9 @@
 # welcome
 This is a step-by-step tutorial for creating a simple web server for fetching facts from MentalFloss API, and list them in a simple HTML template
 
+## Slides
+all relevant slides are available at [go slides]: http://present.minutemediaservices.com/gopresent
+
 ## How to use this repo
 The entrypoint described below is intended for setting up your environment and placing you in a ready-to-go folder you can start your project from.
 
