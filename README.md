@@ -35,7 +35,8 @@ Hope you will have fun and good luck :) <img src="https://github.com/egonelbre/g
 * [Exercise 5 - use MentalFloss API](#exercise-5---use-mentalfloss-api-)
 * [Exercise 6 - separate to packages](#exercise-6---separate-to-packages-)
 * [Exercise 7 - add ticker for updating the facts](#exercise-7---add-ticker-for-updating-the-facts-)
-* [Exercise 8 - refactor](#exercise-8---refactor-)use both package
+* [Exercise 8 - refactor](#exercise-8---refactor-)
+* [Idiometic Go links](#usefull-links-for-idiometic-go)
 
 ***
 > By the way, all the gophers images are taken from the wonderfull https://github.com/egonelbre/gophers
@@ -604,6 +605,7 @@ Now we will just the `service.UpdateFacts` method to update the store, and to us
 
 - [Effective Go - a detailed set of the specialities and atyleguides for Go](https://golang.org/doc/effective_go.html)
 - [Code review comments - common comments made during reviews of Go code](https://github.com/golang/go/wiki/CodeReviewComments)
+- [Idiomatic GO - general guidelines of what not to do](https://about.sourcegraph.com/go/idiomatic-go/)
 
 #### Package Names:
 - [Go blog styleguides about naming packages](https://blog.golang.org/package-names)
@@ -612,10 +614,6 @@ Now we will just the `service.UpdateFacts` method to update the store, and to us
 #### Go Proverbs
 - [Lecture by Rob Pike](https://www.youtube.com/watch?v=PAAkCSZUG1c)
 - [The list](https://go-proverbs.github.io)
-
-#### More
-- [Idiomatic GO - general guidelines of what not to do](https://about.sourcegraph.com/go/idiomatic-go/)
-
 
 #### Errors:
 - [`pkg/errors` - a popular alternative to the standart `errors` package](https://github.com/pkg/errors)
