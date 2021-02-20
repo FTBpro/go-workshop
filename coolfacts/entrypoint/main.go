@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 )
@@ -8,4 +7,3 @@ import (
 func main() {
 	fmt.Println("Welcome to the go-workshop, hope you will have fun!!")
 }
-

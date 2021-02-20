@@ -10,13 +10,13 @@ type TVShow struct {
 	Seasons int
 }
 
-type Store struct {
+type Repository struct {
 	TVShows []TVShow
 }
 
-var store Store = Store{
+var repo = Repository{
 	TVShows: []TVShow{
-		TVShow{
+		{
 			Name:    "Game of Thrones",
 			Seasons: 8,
 		},
@@ -24,7 +24,7 @@ var store Store = Store{
 }
 
 func main() {
-	fmt.Printf("%+v", store)
+	fmt.Printf("%+v", repo)
 }
 
 // end OMIT

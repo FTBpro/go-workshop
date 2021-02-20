@@ -11,7 +11,7 @@ import (
 )
 
 type FactsHandler struct {
-	FactStore *fact.Store
+	FactRepo *fact.Repository
 }
 
 var newsTemplate = `<!DOCTYPE html>
@@ -78,8 +78,8 @@ func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
-	if h.FactStore == nil {
-		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
+	if h.FactRepo == nil {
+		http.Error(w, "fact repo isn't initializes", http.StatusInternalServerError)
 	}
 
 	switch r.Method {
@@ -114,7 +114,7 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 		Image:       req.Image,
 		Description: req.Description,
 	}
-	h.FactStore.Add(f)
+	h.FactRepo.Add(f)
 	w.Write([]byte("SUCCESS"))
 }
 
@@ -126,5 +126,5 @@ func (h *FactsHandler) showFacts(w http.ResponseWriter) {
 		http.Error(w, errMessage, http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, h.FactStore.GetAll())
+	tmpl.Execute(w, h.FactRepo.GetAll())
 }

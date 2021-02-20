@@ -8,20 +8,20 @@ type Provider interface {
 	Facts() ([]Fact, error)
 }
 
-type Store interface {
+type Repository interface {
 	Add(f Fact)
 	GetAll() []Fact
 }
 
 type service struct {
 	provider Provider
-	store    Store
+	repo     Repository
 }
 
-func NewService(p Provider, s Store) *service {
+func NewService(p Provider, s Repository) *service {
 	return &service{
 		provider: p,
-		store:    s,
+		repo:     s,
 	}
 }
 
@@ -32,7 +32,7 @@ func (s *service) UpdateFacts() error {
 	}
 
 	for _, fact := range facts {
-		s.store.Add(fact)
+		s.repo.Add(fact)
 	}
 
 	return nil

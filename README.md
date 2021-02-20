@@ -128,11 +128,11 @@ http.ListenAndServe(":9002", nil)
 
 ### Goal
 
-Create `/facts` endpoint for listing facts in a JSON format by using a store.
+Create `/facts` endpoint for listing facts in a JSON format by using a repository.
 
 ### End result
 
-`http://localhost:9002/facts` will show a JSON of all facts in store, for now it will be hard coded facts.
+`http://localhost:9002/facts` will show a JSON of all facts in repository, for now it will be hard coded facts.
 
 ### Steps
 
@@ -141,26 +141,26 @@ Create `/facts` endpoint for listing facts in a JSON format by using a store.
 Create a struct named fact (`type Fact struct {...}`)\
 The `fact` struct should have 2 string fields : `Image`, `Description`
 
-##### Create store struct
+##### Create repository struct
 
-Create a struct named store (`type Store struct {...}`)\
-The store can use in memory cache for storing the facts, it can be done by one field `facts` of type `[]fact` (a slice of facts).
+Create a struct named repository (or repo)\
+The repository can use in memory cache for storing the facts, it can be done by one field `facts` of type `[]fact` (a slice of facts).
 
-Add store functionality:
-* `func (s *store) getAll() []fact {…}`
-  * The method should return all facts in the `store.facts` field
-* `func (s *store) add(f fact) {…}`
-  * The method should add the given fact f to the store\
-  For adding to a slice you can use `store.facts = append(store.facts, f)`
+Add repository functionality:
+* `func (r *repository) getAll() []fact {…}`
+  * The method should return all facts in the `repository.facts` field
+* `func (r *repository) add(f fact) {…}`
+  * The method should add the given fact f to the repository\
+  For adding to a slice you can use `repository.facts = append(repository.facts, f)`
   
-Init the store from `main` with some static data. 
+Init the repository from `main` with some static data. 
 
 ##### Register `http.HandleFunc` to `/facts` pattern  
 
 Like in the ping from previous exercise, use an anonymous function as an argument to `http.HandleFunc` function.
 
 In this function you will:
-* Get all the facts from the store
+* Get all the facts from the repository
 * Write the facts to the `ResponseWriter` in a JSON format
 > Use `json.Marshal` to format the struct as json and to write to the `ResponseWriter` 
 
@@ -174,7 +174,7 @@ Create a new fact by a POST request.
 
 ### End result
 
-Create a new fact and add it to the store by issuing a `POST /facts` request with the next payloiad:
+Create a new fact and add it to the repository by issuing a `POST /facts` request with the next payloiad:
 ```json
 {
   "image": "image/url",
@@ -222,9 +222,9 @@ Now we need to parse the data into this struct, for this we can use `json.Unmars
 err = json.Unmarshal(b, &req)
 ```
 
-Finally, after we have this struct filled, create a new fact from it, and add it to the store.
+Finally, after we have this struct filled, create a new fact from it, and add it to the repository.
 
-For adding it to the store you should use the `factStore.Add` from exercise 2.
+For adding it to the repository you should use the `factRepo.Add` from exercise 2.
 
 ***
 
@@ -238,7 +238,7 @@ For adding it to the store you should use the `factStore.Add` from exercise 2.
 ### End result
 
 `GET /facts` will list the facts in HTML
-`http://localhost:9002/facts` will show a all facts in store in HTML.
+`http://localhost:9002/facts` will show a all facts in repository in HTML.
 
 ### Steps
 
@@ -279,7 +279,7 @@ tmpl, err := template.New("facts").Parse(newsTemplate)
 
 Next, all you need to do is just to execute the template with the facts, and the http.ResponseWriter:
 ```go
-facts := factsStore.getAll()
+facts := factsRepo.getAll()
 err = tmpl.Execute(w, facts)
 ```
 
@@ -289,13 +289,13 @@ err = tmpl.Execute(w, facts)
 
 ### Goal
 
-Use MetnalFloss API for fetching the facts and initialize the store, instead of the static data
+Use MetnalFloss API for fetching the facts and initialize the repository, instead of the static data
 
 ### End result
 
 `GET /facts` should show facts from MentalFloss.
 
-> This will be done by sending request to the external provider (MentalFloss) to fetch facts and saving them in the store
+> This will be done by sending request to the external provider (MentalFloss) to fetch facts and saving them in the repository
 You can use this API for fetching the data: ``http://mentalfloss.com/api/facts``
 
 ### Steps
@@ -374,7 +374,7 @@ In `main` function, replace the hard coded facts with facts from `mentalfloss`.
 ### Goal
 
 Separate structs into packages.
-- Move the fact entity and store into `fact` package
+- Move the fact entity and repository into `fact` package
 - Move mentalfloss functionality into `mentalfloss` package
 - Move the http handlers into a into `http` package (which we will create in our project, not `net/http`...)
 
@@ -382,14 +382,14 @@ Separate structs into packages.
 
 ##### Create package `fact`
 
-Create a new folder named `fact` and a new file named `fact.go`. This file will contain the fact entity and the store.
+Create a new folder named `fact` and a new file named `fact.go`. This file will contain the fact entity and the repository.
 In the top of the file add
 
 ```go
 package fact
 ````
 
-Move the `fact` and the `store` structs into that file.
+Move the `fact` and the `repository` structs into that file.
 
 > Make sure that the struct `Fact` is exported (capitalized)
   
@@ -407,13 +407,13 @@ You will need to import your fact package And replace `fact` with `fact.Fact`.\
 
 The goal is to separate our application `http.HandlerFunc` logic outside of main.
 
-Create a new folder `http` and some `.go` file. In this package create a struct named `handler` which will hold a field of the fact store.
+Create a new folder `http` and some `.go` file. In this package create a struct named `handler` which will hold a field of the fact repository.
 
 Example:
 
 ```go
 type FactsHandler struct {
-	FactStore *fact.Store
+	FactRepo *fact.Repository
 }
 ```
 
@@ -423,7 +423,7 @@ Create methods for handling the request
 
 > Move the anonymous `http.HandleFunc` from main and put as this struct's methods (these with the signature `func(w http.ResponseWriter, r *http.Request)`)
 
-In main, init `FactsHandler` struct with the `factStore`.
+In main, init `FactsHandler` struct with the `factRepo`.
 
 You may noticed that `http` is already taken as a package name by `net/http`. You're not wrong, we can't use both packageS in one file and still call each package `http`. But we can [rename the import name](https://stackoverflow.com/questions/10408646/how-to-import-and-use-different-packages-of-the-same-name-in-go-language):
 ```go
@@ -436,7 +436,7 @@ import (
 
 func main() {
 	handlerer := facthttp.FactsHandler{
-		FactStore: &factsStore,    
+		FactRepo: &factsRepo,    
 	}
 	
 	http.HandleFunc("/ping", handlerer.Ping)
@@ -471,11 +471,11 @@ Every specified time a ticker will send a signal using a `channel` (go built-in)
     }
     ```
 2. Add a function - func updateFactsWithTicker(ctx context.Context, updateFunc func() error)
-    1. (Outside from updateFactsWithTicker) Create the updateFunc from step 7.2. that updates the store from an external provider
+    1. (Outside from updateFactsWithTicker) Create the updateFunc from step 7.2. that updates the repository from an external provider
     2. (Within the updateFactsWithTicker) Create a time.NewTicker 
     3. (Within the updateFactsWithTicker) Add a go routine with a function that accepts the context
         1. Inside the function add an endless loop that will select from the channel (the ticker channel and the context one)
-            1. If the ticker channel (ticker.C) was selected - use the given updateFunc to update store
+            1. If the ticker channel (ticker.C) was selected - use the given updateFunc to update repository
             2. If the context channel (context.Done()) was selected -return (it means the main closed the context)
             
 *** 
@@ -487,33 +487,38 @@ Decouple and break dependancies using interfasces
 
 ### Steps
 
-##### Extract store logic to package `inmem`
+##### Extract repository logic to package `inmem`
 
 We need to encapsulate the process of storing the facts. You can think of this package like some kind of an interactor between the actual caching/persistent layer to the application domain.
 
-In this example we will create a package dedicated for storing the facts in a simple `slice`. The package we'll create will be called `inmem`.
+In this example we will create a package dedicated for storing the facts in a simple `slice`. The package we'll create will be called `inmem`. (Accordinagly, if we will use SQL, we will create package `sql`)
 
-After creating packe `inmem`, move the `store` currently in package `fact`
+After creating packe `inmem`, we need to move the `repository` functionality currently in package `fact`.\
+For exporting it we will use function NewFactRepository. The consumer (main) will call it via `inmem.NewFactRepositry()`
 
 ```go
 pkg inmem
 
-type FactStore struct {
+type factRepository struct {
 	facts []fact.Fact
 }
 
-func (s *FactStore) Add(f fact.Fact) {
+func NewFactRepository() *factRepository {
+	return &factRepository{}
+}
+
+func (r *factRepository) Add(f fact.Fact) {
 	// code
 }
 
-func (s *FactStore) GetAll() []fact.Fact {
+func (r *factRepository) GetAll() []fact.Fact {
 	// code
 }
 ```
 
 ##### Create fact service for abstracting how we update the facts
 
-We need some kind of "service" to handle our update logic. This service will be initialized with the store and the mentalfloss provider, and have an `Update` method.
+We need some kind of "service" to handle our update logic. This service will be initialized with the repository and the mentalfloss provider, and have an `Update` method.
 
 We better not limit ourselves to only mentalfloss and only in memory cache. We can do that by using interfaces instead the concrete types.
 
@@ -524,28 +529,30 @@ In package `fact`, declare two interfaces:
 ```go
 package fact
 
-type provider interface {
+type Provider interface {
 	Facts() ([]Fact, error)
 }
 
-type store interface {
+type Repository interface {
 	Add(f Fact)
 	GetAll() []Fact
 }
 ```
 
-The service will be a struct which for now we will enforce to initialize with a `Provider` and a `Store`, and `UpdateFacts` method which take no parameters.
+The service will be a struct which we will export using NewService function that takes a `Provider` and a `Repository`.
+The service will have `UpdateFacts` method that take no parameters.
 
 For example
-// continue package fact
 
 ```go
+// continue package fact
+
 type service struct {
 	provider Provider
-	store    Store
+	repository    Repository
 }
 
-func NewService(s Store, r Provider) *service {
+func NewService(s Repository, r Provider) *service {
 	// code
 }
 
@@ -556,50 +563,71 @@ func (s *service) UpdateFacts() error {
 
 > Although the service is updating the facts, it doesn't know from which provider or what is the persistent layer. That means we could easily replace inmem with a db, switch providers, and add middlewares (decorators) for logging and other stuff.
 
-> Instead of a service, we could just create an exported function `fact.UpdateFacts(p Provider, s Store) error`, which would achieve the same goal and have some advantages, same as `updateFactsFunc` principle in exercise 7.
+> Instead of a service, we could just create an exported function `fact.UpdateFacts(p Provider, s Repository) error`, which would achieve the same goal and have some advantages, same as `updateFactsFunc` principle in exercise 7.
 
 ##### Add abstraction in local `http` package
 
-By now you can see that we broke our custom `http` package. This is because `*fact.Store` isn't defined anymore (we moved the store to `inmem`).
+By now you can see that we broke our custom `http` package. This is because `*fact.Repository` isn't defined anymore (we moved the repository to `inmem`).
 
-We'll use here the `Store` interface principle as well. But instead of using directly the interface we declared in `inmem`, we'll declare same interface in our `http` as well.
+We'll use here the interface principle as well. We'll declare same interface in our `http`:
 
 ```go
 package http
 
-type FactStore interface {
-	Add(f Fact)
-	GetAll() []Fact
+type FactRepository interface {
+	Add(f fact.Fact)
+	GetAll() []fact.Fact
 }
 
-type FactsHandler struct {
-	FactStore FactStore
+type factsHandler struct {
+	factRepo FactRepository
+}
+
+func NewFactsHandler(factRepo FactRepository) *factsHandler {
+	return &factsHandler{
+		factRepo: factRepo,
+	}
 }
 ```
 
-> Same as in the service, we can initialize the handler with a different persistent layer, add middlewared and more 
+> Same as in the service, we can initialize the handler with a different persistent layer, add middlewares and more
+
+##### Rename mentalfloss struct
+For making it more readable (perhaps), we will use the name `provider` instead of the `mentalfloss` struct. This is a naming convention when we are interacting with external services.
+
+```go
+package mentalfloss
+
+type provider struct{}
+
+func NewProvider() *provider {
+	return &provider{}
+}
+```
+
+The consumer will now use it by calling `mentalfloss.NewProvider()`
 
 ##### Replace calls in main
 
 All left to do is to replcae our way we initialize our dependancies in main.
 
-instead of initializing the `factStore` like this:
+instead of initializing the `factRepo` like this:
 ```go
-factsStore := fact.Store{}
+factsRepo := fact.Repository{}
 ```
 
 we will initialize it with our `inmem` package:
 ```go
-factsStore := inmem.FactStore{}
+factsRepo := inmem.NewFactRepository()
 ```
 
 Instead of using the `updateFunc` from exercise 7, we'll use our `fact.NewService`:
 ```go
-	mf := mentalfloss.Mentalfloss{}
-	service := fact.NewService(&mf, &factsStore)
+	mentalflossProvider := mentalfloss.NewProvider()
+	service := fact.NewService(mentalflossProvider, &factsRepo)
 ```
 
-Now we will just the `service.UpdateFacts` method to update the store, and to use with the ticker and we're done 🥂
+Now we will just the `service.UpdateFacts` method to update the repository, and to use with the ticker and we're done 🥂
 
 # Usefull links for "idiometic go":
 

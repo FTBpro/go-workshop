@@ -12,13 +12,13 @@ type TVShow struct {
 	Seasons int
 }
 
-type Store struct {
+type Repository struct {
 	TVShows []TVShow
 }
 
-var store Store = Store{
+var repo = Repository{
 	TVShows: []TVShow{
-		TVShow{
+		{
 			Name:    "Game of Thrones",
 			Seasons: 8,
 		},
@@ -36,9 +36,9 @@ func postTVShowsHandler(w http.ResponseWriter, r *http.Request) {
 	if err := json.Unmarshal(bodyBytes, &tvShow); err != nil {
 		log.Fatal(err)
 	}
-	store.TVShows = append(store.TVShows, tvShow)
+	repo.TVShows = append(repo.TVShows, tvShow)
 
-	w.Write([]byte("Successfully added to store"))
+	w.Write([]byte("Successfully added to repo"))
 }
 
 func main() {

@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-type mentalfloss struct {}
+type mentalfloss struct{}
 
-func (mf mentalfloss) Facts()([]fact, error) {
+func (mf mentalfloss) Facts() ([]fact, error) {
 	log.Println("getting facts from mentalfloss")
 	resp, err := http.Get("http://mentalfloss.com/api/facts")
 	if err != nil {
