@@ -16,13 +16,13 @@ const (
 )
 
 func main() {
-	factsStore := fact.Store{}
+	factsRepo := fact.Repository{}
 	handlerer := facthttp.FactsHandler{
-		FactStore: &factsStore,
+		FactRepo: &factsRepo,
 	}
 
-	mf := mentalfloss.Mentalfloss{}
-	updateFunc := updateFactsFunc(mf, &factsStore)
+	mentalflossProvider := mentalfloss.Mentalfloss{}
+	updateFunc := updateFactsFunc(mentalflossProvider, &factsRepo)
 	if err := updateFunc(); err != nil {
 		log.Fatal(err)
 	}
@@ -59,14 +59,14 @@ func updateFactsWithTicker(ctx context.Context, updateFunc func() error) {
 	}(ctx)
 }
 
-func updateFactsFunc(mf mentalfloss.Mentalfloss, factsStore *fact.Store) func() error {
+func updateFactsFunc(mf mentalfloss.Mentalfloss, factsRepo *fact.Repository) func() error {
 	return func() error {
 		facts, err := mf.Facts()
 		if err != nil {
 			log.Fatal("can't reach mentalfloss: ", err)
 		}
 		for _, f := range facts {
-			factsStore.Add(f)
+			factsRepo.Add(f)
 		}
 		return err
 	}

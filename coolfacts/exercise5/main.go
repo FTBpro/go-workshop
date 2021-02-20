@@ -60,14 +60,14 @@ article img {
 </html>`
 
 func main() {
-	factsStore := store{}
-	mf := mentalfloss{}
-	facts, err := mf.Facts()
+	factsRepo := repo{}
+	mentalflossProvider := mentalfloss{}
+	facts, err := mentalflossProvider.Facts()
 	if err != nil {
 		log.Fatal("can't reach mentalfloss: ", err)
 	}
 	for _, f := range facts {
-		factsStore.add(f)
+		factsRepo.add(f)
 	}
 
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +94,7 @@ func main() {
 				return
 			}
 
-			facts := factsStore.getAll()
+			facts := factsRepo.getAll()
 			err = tmpl.Execute(w, facts)
 			if err != nil {
 				errMessage := fmt.Sprintf("failed parse template: %v", err)
@@ -126,7 +126,7 @@ func main() {
 				Description: req.Description,
 			}
 
-			factsStore.add(f)
+			factsRepo.add(f)
 			w.Write([]byte("SUCCESS"))
 		}
 	})

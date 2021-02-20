@@ -4,17 +4,19 @@ import (
 	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
 )
 
-
-type FactStore struct {
+type factRepository struct {
 	facts []fact.Fact
 }
 
-func (s *FactStore) Add(f fact.Fact) {
+func NewFactRepository() *factRepository {
+	return &factRepository{}
+}
+
+func (r *factRepository) Add(f fact.Fact) {
 	// append is a Go built in function
-	s.facts = append(s.facts, f)
+	r.facts = append(r.facts, f)
 }
 
-func (s *FactStore) GetAll() []fact.Fact {
-	return s.facts
+func (r *factRepository) GetAll() []fact.Fact {
+	return r.facts
 }
-

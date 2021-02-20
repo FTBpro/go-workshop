@@ -26,3 +26,5 @@ replace github.com/FTBpro/go-workshop/coolfacts/exercise6 => ./exercise6
 replace github.com/FTBpro/go-workshop/coolfacts/exercise7 => ./exercise7
 
 replace github.com/FTBpro/go-workshop/coolfacts/exercise8 => ./exercise8
+
+go 1.13

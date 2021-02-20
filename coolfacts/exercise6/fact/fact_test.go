@@ -4,15 +4,15 @@ import (
 	"testing"
 )
 
-func TestStore_Add(t *testing.T) {
-	store := Store{}
+func TestRepo_Add(t *testing.T) {
+	repo := Repository{}
 	fact := Fact{
 		Image:       "img",
 		Description: "desc",
 	}
-	store.Add(fact)
+	repo.Add(fact)
 
-	gotFacts := store.GetAll()
+	gotFacts := repo.GetAll()
 	var hasItem bool
 	for _, gotFact := range gotFacts {
 		if gotFact.Image == fact.Image && gotFact.Description == fact.Description {

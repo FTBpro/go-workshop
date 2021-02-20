@@ -5,15 +5,15 @@ type Fact struct {
 	Description string
 }
 
-type Store struct {
+type Repository struct {
 	facts []Fact
 }
 
-func (s *Store) Add(f Fact) {
+func (r *Repository) Add(f Fact) {
 	// append is a Go built in function
-	s.facts = append([]Fact{f}, s.facts...)
+	r.facts = append([]Fact{f}, r.facts...)
 }
 
-func (s *Store) GetAll() []Fact {
-	return s.facts
+func (r *Repository) GetAll() []Fact {
+	return r.facts
 }

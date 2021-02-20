@@ -10,13 +10,19 @@ import (
 	"github.com/FTBpro/go-workshop/coolfacts/exercise8/fact"
 )
 
-type FactStore interface {
+type FactRepository interface {
 	Add(f fact.Fact)
 	GetAll() []fact.Fact
 }
 
-type FactsHandler struct {
-	FactStore FactStore
+type factsHandler struct {
+	factRepo FactRepository
+}
+
+func NewFactsHandler(factRepo FactRepository) *factsHandler {
+	return &factsHandler{
+		factRepo: factRepo,
+	}
 }
 
 var newsTemplate = `<!DOCTYPE html>
@@ -70,7 +76,7 @@ article img {
 </html>
 `
 
-func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
+func (h *factsHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, "no http handler found", http.StatusNotFound)
 		return
@@ -83,9 +89,9 @@ func (h *FactsHandler) Ping(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
-	if h.FactStore == nil {
-		http.Error(w, "fact store isn't initializes", http.StatusInternalServerError)
+func (h *factsHandler) Facts(w http.ResponseWriter, r *http.Request) {
+	if h.factRepo == nil {
+		http.Error(w, "fact repo isn't initializes", http.StatusInternalServerError)
 	}
 
 	switch r.Method {
@@ -100,7 +106,7 @@ func (h *FactsHandler) Facts(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
+func (h *factsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		errMessage := fmt.Sprintf("error read from body: %v", err)
@@ -120,11 +126,11 @@ func (h *FactsHandler) postFacts(r *http.Request, w http.ResponseWriter) {
 		Image:       req.Image,
 		Description: req.Description,
 	}
-	h.FactStore.Add(f)
+	h.factRepo.Add(f)
 	w.Write([]byte("SUCCESS"))
 }
 
-func (h *FactsHandler) showFacts(w http.ResponseWriter) {
+func (h *factsHandler) showFacts(w http.ResponseWriter) {
 	w.Header().Add("Content-Type", "text/html")
 	tmpl, err := template.New("facts").Parse(newsTemplate)
 	if err != nil {
@@ -132,5 +138,5 @@ func (h *FactsHandler) showFacts(w http.ResponseWriter) {
 		http.Error(w, errMessage, http.StatusInternalServerError)
 		return
 	}
-	tmpl.Execute(w, h.FactStore.GetAll())
+	tmpl.Execute(w, h.factRepo.GetAll())
 }

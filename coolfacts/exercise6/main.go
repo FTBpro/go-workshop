@@ -10,13 +10,13 @@ import (
 )
 
 func main() {
-	factsStore := fact.Store{}
+	factsRepo := fact.Repository{}
 	handlerer := facthttp.FactsHandler{
-		FactStore: &factsStore,
+		FactRepo: &factsRepo,
 	}
 
-	mf := mentalfloss.Mentalfloss{}
-	err := updateFacts(mf, &factsStore)
+	mentalflossProvider := mentalfloss.Mentalfloss{}
+	err := updateFacts(mentalflossProvider, &factsRepo)
 
 	http.HandleFunc("/ping", handlerer.Ping)
 	http.HandleFunc("/facts", handlerer.Facts)
@@ -28,13 +28,13 @@ func main() {
 	}
 }
 
-func updateFacts(mf mentalfloss.Mentalfloss, factsStore *fact.Store) error {
+func updateFacts(mf mentalfloss.Mentalfloss, factsRepo *fact.Repository) error {
 	facts, err := mf.Facts()
 	if err != nil {
 		log.Fatal("can't reach mentalfloss: ", err)
 	}
 	for _, f := range facts {
-		factsStore.Add(f)
+		factsRepo.Add(f)
 	}
 	return err
 }

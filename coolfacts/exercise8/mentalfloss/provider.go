@@ -12,9 +12,13 @@ import (
 
 const getFactsAPI = "http://mentalfloss.com/api/facts"
 
-type Mentalfloss struct{}
+type provider struct{}
 
-func (r *Mentalfloss) Facts() ([]fact.Fact, error) {
+func NewProvider() *provider {
+	return &provider{}
+}
+
+func (p *provider) Facts() ([]fact.Fact, error) {
 	log.Println("getting facts from mentalfloss")
 	resp, err := http.Get(getFactsAPI)
 	if err != nil {

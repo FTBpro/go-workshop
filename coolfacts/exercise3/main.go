@@ -9,12 +9,12 @@ import (
 )
 
 func main() {
-	factsStore := store{}
-	factsStore.add(fact{
+	factsRepo := repo{}
+	factsRepo.add(fact{
 		Image:       "https://images2.minutemediacdn.com/image/upload/v1556645500/shape/cover/entertainment/D5aliXvWsAEcYoK-fe997566220c082b98030508e654948e.jpg",
 		Description: "Did you know sonic is a hedgehog?!",
 	})
-	factsStore.add(fact{
+	factsRepo.add(fact{
 		Image:       "https://images2.minutemediacdn.com/image/upload/v1556641470/shape/cover/entertainment/uncropped-Screen-Shot-2019-04-30-at-122411-PM-3b804f143c543dfab4b75c81833bed1b.jpg",
 		Description: "You won't believe what happened to Arya!",
 	})
@@ -38,7 +38,7 @@ func main() {
 		if r.Method == http.MethodGet {
 			w.Header().Add("Content-Type", "application/json")
 
-			b, err := json.Marshal(factsStore.getAll())
+			b, err := json.Marshal(factsRepo.getAll())
 			if err != nil {
 				errMessage := fmt.Sprintf("error marshaling facts : %v", err)
 				http.Error(w, errMessage, http.StatusInternalServerError)
@@ -81,13 +81,13 @@ func main() {
 				return
 			}
 
-			// create a new fact from this request struct, and store it using the store
+			// create a new fact from this request struct, and repo it using the repo
 			f := fact{
-				Image: req.Image,
+				Image:       req.Image,
 				Description: req.Description,
 			}
 
-			factsStore.add(f)
+			factsRepo.add(f)
 			w.Write([]byte("SUCCESS"))
 		}
 	})
