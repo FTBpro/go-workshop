@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-type Service interface {
+type FactsService interface {
 	// TODO: add methods declerations
 	// 1. getFacts - returns a slice of fact.Fact and an error
 }
 
 type server struct {
-	// TODO: add service field
+	// TODO: add factsService field
 }
 
-func NewServer(service Service) *server {
-	// TODO: returns an initializes server with the service
+func NewServer(factsService FactsService) *server {
+	// TODO: returns an initializes server with the factsService
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 }
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
-	facts, err := s.service.GetFacts()
+	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
 	}
