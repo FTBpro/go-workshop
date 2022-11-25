@@ -6,40 +6,47 @@ import (
 	"strings"
 )
 
-// TODO: add methods declerations
-// 1. getFacts - returns a slice of fact.Fact and an error
 type Service interface {
+	// TODO: add methods declerations
+	// 1. getFacts - returns a slice of fact.Fact and an error
 }
 
 type server struct {
 	// TODO: add service field
 }
 
-// TODO: returns an initializes server
 func NewServer(service Service) *server {
+	// TODO: returns an initializes server with the service
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
-			s.PingHandler(w, r)
+			s.HandlePing(w)
 		case "/facts":
-			s.GetFactsHandler(w, r)
+			s.HandleGetFacts(w)
+		default:
+			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
+			s.HandleNotFound(w, err)
 		}
+	default:
+		err := fmt.Errorf("method %q is not allowed", r.Method)
+		s.HandleNotFound(w, err)
 	}
 }
 
-func (s *server) PingHandler(w http.ResponseWriter, r *http.Request) {
+func (s *server) HandlePing(w http.ResponseWriter) {
 	// TODO
 	// 1. write status header 200 using constant http.StatusOK
 	// 3. write ping
 }
 
-func (s *server) GetFactsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	facts, err := s.service.GetFacts()
 	if err != nil {
-		s.ErrorHandler(w, fmt.Errorf("server.GetFactsHandler: %w", err))
+		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
 	}
 
 	// TODO:
@@ -57,7 +64,7 @@ func (s *server) GetFactsHandler(w http.ResponseWriter, r *http.Request) {
 	//		]
 }
 
-func (s *server) NotFoundHandler(w http.ResponseWriter, err error) {
+func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 	// TODO:
 	// 1. write status header 404 using
 	// 2. set content type application/json
@@ -67,7 +74,7 @@ func (s *server) NotFoundHandler(w http.ResponseWriter, err error) {
 	//   }
 }
 
-func (s *server) ErrorHandler(w http.ResponseWriter, err error) {
+func (s *server) HandleError(w http.ResponseWriter, err error) {
 	// TODO:
 	// 1. write status header 500
 	// 2. set content type application/json

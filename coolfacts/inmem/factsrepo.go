@@ -5,7 +5,7 @@ import (
 )
 
 type factsRepo struct {
-	facts map[string]fact.Fact
+	facts []fact.Fact
 }
 
 func NewFactsRepository() *factsRepo {
