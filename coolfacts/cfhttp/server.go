@@ -1,22 +1,26 @@
 package cfhttp
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/fact"
 )
 
 type FactsService interface {
-	// TODO: add methods declerations
-	// 1. getFacts - returns a slice of fact.Fact and an error
+	GetFacts() ([]fact.Fact, error)
 }
 
 type server struct {
-	// TODO: add factsService field
+	factsService FactsService
 }
 
 func NewServer(factsService FactsService) *server {
-	// TODO: returns an initializes server with the factsService
+	return &server{
+		factsService: factsService,
+	}
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -38,9 +42,13 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
-	// TODO
-	// 1. write status header 200 using constant http.StatusOK
-	// 3. write ping
+	w.WriteHeader(http.StatusOK)
+
+	_, err := fmt.Fprint(w, "PONG")
+	if err != nil {
+		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
+		return
+	}
 }
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
@@ -49,37 +57,52 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
 	}
 
-	// TODO:
-	// 1. format the facts to a json response
-	// 2. write status 200
-	// 3. set content type application/json
-	// 4. write json response:
-	// 	{
-	//		"facts": [
-	//			{
-	//				"id": "..."
-	//				"description": "..."
-	//			},
-	//			...
-	//		]
+	// we first format the facts to map[string]interface.
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"image":       coolFact.Image,
+			"description": coolFact.Description,
+		}
+	}
+
+	response := map[string]interface{}{
+		"facts": formattedFacts,
+	}
+
+	// write status and content-type
+	// status must be written before the body
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	// write the body. We use json encoding
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
-	// TODO:
-	// 1. write status header 404 using
-	// 2. set content type application/json
-	// 3. write json indicating an error:
-	//   {
-	//       error: <the error message>
-	//   }
+	w.WriteHeader(http.StatusNotFound)
+	w.Header().Set("Content-Type", "application/json")
+
+	response := map[string]interface{}{
+		"error": err,
+	}
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
-	// TODO:
-	// 1. write status header 500
-	// 2. set content type application/json
-	// 3. write json indicating an error:
-	//   {
-	//       error: <the error message>
-	//   }
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Header().Set("Content-Type", "application/json")
+
+	response := map[string]interface{}{
+		"error": err,
+	}
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
 }
