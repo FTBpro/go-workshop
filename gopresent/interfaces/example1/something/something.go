@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type Actioner interface{
+type Actioner interface {
 	Do(int, int) int
 }
 
