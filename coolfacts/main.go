@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/FTBpro/go-workshop/coolfacts/cfhttp"
 	"github.com/FTBpro/go-workshop/coolfacts/fact"
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
-
-	"github.com/FTBpro/go-workshop/coolfacts/cfhttp"
 )
 
 func main() {
