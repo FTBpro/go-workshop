@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/FTBpro/go-workshop/coolfacts/cfhttp"
 	"github.com/FTBpro/go-workshop/coolfacts/fact"
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
 )
@@ -14,7 +13,7 @@ func main() {
 
 	factsRepo := inmem.NewFactsRepository()
 	service := fact.NewService(factsRepo)
-	server := cfhttp.NewServer(service)
+	server := NewServer(service)
 
 	fmt.Println("starting server on port 9002")
 	fmt.Println("You can go to http://127.0.0.1:9002/ping")
