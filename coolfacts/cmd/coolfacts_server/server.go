@@ -94,8 +94,8 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
-	response := map[string]interface{}{
-		"error": err,
+	response := map[string]string{
+		"error": err.Error(),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -109,8 +109,8 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
 
-	response := map[string]interface{}{
-		"error": err,
+	response := map[string]string{
+		"error": err.Error(),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
