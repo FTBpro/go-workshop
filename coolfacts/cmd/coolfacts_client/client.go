@@ -98,14 +98,9 @@ type errorResponse struct {
 }
 
 func (c *client) readError(res *http.Response) (string, error) {
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return "", fmt.Errorf("readBody failed to read response body: %v", err)
-	}
-
 	var errRes errorResponse
-	if err = json.NewDecoder(res.Body).Decode(&errRes); err != nil {
-		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err, string(resBody))
+	if err := json.NewDecoder(res.Body).Decode(&errRes); err != nil {
+		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err)
 	}
 
 	if errRes.Error == "" {
