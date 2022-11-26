@@ -48,12 +48,14 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 }
 
 func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
-	ul := c.endpoint + pathCreateFact
+	ul := c.endpoint + pathGetFacts
 	res, err := c.httpClient.Get(ul)
 	if err != nil {
 		return nil, fmt.Errorf("client.GetLastCreatedFact to do request: %v", err)
 	}
 
+	// The client must close the body after the response is handled
+	// We must read all the body before closing it, so for reading the body and copying to ioutil.Discard, which does nothing
 	defer func() {
 		if res != nil && res.Body != nil {
 			_, _ = io.Copy(ioutil.Discard, res.Body)
