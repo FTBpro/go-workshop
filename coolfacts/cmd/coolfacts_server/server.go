@@ -50,6 +50,8 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
 	w.WriteHeader(http.StatusOK)
 
 	_, err := fmt.Fprint(w, "PONG")
@@ -116,6 +118,8 @@ func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+	log.Println("Handling notFound ...")
+
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
@@ -129,6 +133,8 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
 
