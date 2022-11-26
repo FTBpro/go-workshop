@@ -175,6 +175,11 @@ func (r getFactsResponse) getLastFact() coolfact.Fact {
 	}
 }
 
+func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
+	// TODO: implement
+	// loop over the response facts and convert them to the entity type []coolfact.Fact
+}
+
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
