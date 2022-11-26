@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -24,6 +25,8 @@ func NewServer(factsService FactsService) *server {
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Println("incoming request", r.Method, r.URL.Path)
+
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -42,16 +45,19 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
 	w.WriteHeader(http.StatusOK)
 
-	_, err := fmt.Fprint(w, "PONG")
-	if err != nil {
+	if _, err := fmt.Fprint(w, "PONG"); err != nil {
 		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
 		return
 	}
 }
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
+	log.Println("Handling getFact ...")
+
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
@@ -83,6 +89,8 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+	log.Println("Handling notFound ...")
+
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
@@ -96,6 +104,8 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
 
