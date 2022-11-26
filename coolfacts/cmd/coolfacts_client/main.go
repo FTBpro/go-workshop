@@ -12,10 +12,17 @@ import (
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
-func main() {
-	fmt.Println("Hello, World!")
+const (
+	serverEndpoint = "http://127.0.0.1:9002"
 
-	cl := NewClient("http://127.0.0.1:9002")
+	createFactCommand  = "createFact"
+	commandGetLastFact = "getLastFact"
+)
+
+func main() {
+	fmt.Println("Hello, Client!")
+
+	cl := NewClient(serverEndpoint)
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -34,7 +41,7 @@ func main() {
 			return
 		}
 
-		res, err := processCmd(cl, command(cmd), args)
+		res, err := processCmd(cl, cmd, args)
 		if err != nil {
 			fmt.Println("ERROR:", err)
 			continue
@@ -47,14 +54,7 @@ func main() {
 
 }
 
-const (
-	createFactCommand  command = "createFact"
-	commandGetLastFact command = "getLastFact"
-)
-
-type command string
-
-func processCmd(cl *client, cmd command, args []string) (string, error) {
+func processCmd(cl *client, cmd string, args []string) (string, error) {
 	switch cmd {
 	case "":
 		return "", nil
@@ -76,7 +76,7 @@ func processCmd(cl *client, cmd command, args []string) (string, error) {
 			return "", err
 		}
 
-		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreateAt), nil
+		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreatedAt), nil
 
 	default:
 		return "", errors.New("unknown command")

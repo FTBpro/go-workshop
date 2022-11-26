@@ -30,9 +30,7 @@ func (s *service) GetFacts() ([]Fact, error) {
 }
 
 func (s *service) CreateFact(fct Fact) error {
-	// TODO
-	// don't forget to set the time
-	fct.CreateAt = time.Now()
+	fct.CreatedAt = time.Now()
 	if err := s.factsRepo.CreateFact(fct); err != nil {
 		return fmt.Errorf("factsService.CreateFact: %w", err)
 	}

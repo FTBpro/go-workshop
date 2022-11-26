@@ -12,6 +12,7 @@ type factsRepo struct {
 
 func NewFactsRepository() *factsRepo {
 	return &factsRepo{
+		// TODO: add createdAt to the facts.
 		facts: []coolfact.Fact{
 			{
 				Image:       "https://images2.minutemediacdn.com/image/upload/v1556645500/shape/cover/entertainment/D5aliXvWsAEcYoK-fe997566220c082b98030508e654948e.jpg",
@@ -26,8 +27,8 @@ func NewFactsRepository() *factsRepo {
 }
 
 func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
-	//TODO: return sorted
 	sort.Sort(byCreatedAt(r.facts))
+
 	return r.facts, nil
 }
 
@@ -45,5 +46,5 @@ func (s byCreatedAt) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 func (s byCreatedAt) Less(i, j int) bool {
-	return s[i].CreateAt.After(s[j].CreateAt)
+	return s[i].CreatedAt.After(s[j].CreatedAt)
 }

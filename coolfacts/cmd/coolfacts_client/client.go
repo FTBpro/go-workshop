@@ -13,8 +13,8 @@ import (
 )
 
 const (
-	pathCreateFact = "/facts"
 	pathGetFacts   = "/facts"
+	pathCreateFact = "/facts"
 )
 
 type client struct {
@@ -29,31 +29,29 @@ func NewClient(endpoint string) *client {
 	}
 }
 
-type getFactsResponse struct {
-	Facts []struct {
-		Image       string    `json:"image"`
-		Description string    `json:"description"`
-		CreatedAt   time.Time `json:"createdAt"`
-	} `json:"facts"`
-}
+func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
+	allFacts, err := c.GetAllFacts()
+	if err != nil {
+		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact: %v", err)
+	}
 
-func (r getFactsResponse) getLastFact() coolfact.Fact {
-	if len(r.Facts) == 0 {
-		return coolfact.Fact{}
+	if len(allFacts) == 0 {
+		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact didn't find facts")
 	}
 
 	return coolfact.Fact{
-		Image:       r.Facts[0].Image,
-		Description: r.Facts[0].Description,
-		CreateAt:    r.Facts[0].CreatedAt,
-	}
+		Image:       allFacts[0].Image,
+		Description: allFacts[0].Description,
+		CreatedAt:   allFacts[0].CreatedAt,
+	}, nil
+
 }
 
-func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
+func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
 	ul := c.endpoint + pathCreateFact
 	res, err := c.httpClient.Get(ul)
 	if err != nil {
-		return coolfact.Fact{}, fmt.Errorf("client.GetLastCreatedFact to do request: %v", err)
+		return nil, fmt.Errorf("client.GetLastCreatedFact to do request: %v", err)
 	}
 
 	defer func() {
@@ -66,28 +64,31 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	if res.StatusCode != http.StatusOK {
 		errMessage, err := c.readError(res)
 		if err != nil {
-			return coolfact.Fact{}, fmt.Errorf("client.CreateFact: %s", err)
+			return nil, fmt.Errorf("client.CreateFact: %s", err)
 		}
 
-		return coolfact.Fact{}, fmt.Errorf("client.GetLastCreatedFact got an error from server. status: %d. error: %s", res.StatusCode, errMessage)
+		return nil, fmt.Errorf("client.GetLastCreatedFact got an error from server. status: %d. error: %s", res.StatusCode, errMessage)
 	}
 
 	getFactsRes, err := c.readResponseGetFacts(res)
 	if err != nil {
-		return coolfact.Fact{}, fmt.Errorf("client.GetLastCreatedFact: %s", err)
+		return nil, fmt.Errorf("client.GetLastCreatedFact: %s", err)
 	}
 
-	return getFactsRes.getLastFact(), nil
+	return getFactsRes.ToCoolFacts(), nil
 }
 
 func (c *client) CreateFact(fct coolfact.Fact) error {
 	ul := c.endpoint + pathCreateFact
 
+	// First we are preparing the payload
 	payload := map[string]interface{}{
 		"image":       fct.Image,
 		"description": fct.Description,
 	}
 
+	// we need io.Reader to create a new http request.
+	// we will create bytes.Buffer which implement this interface
 	postBody, err := json.Marshal(payload)
 	if err != nil {
 		return fmt.Errorf("client.CreateFact failed to marshal payload: %v", err)
@@ -134,7 +135,7 @@ func (c *client) readError(res *http.Response) (string, error) {
 	}
 
 	var errRes errorResponse
-	if err = json.Unmarshal(resBody, &errRes); err != nil {
+	if err = json.NewDecoder(res.Body).Decode(&errRes); err != nil {
 		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err, string(resBody))
 	}
 
@@ -143,6 +144,35 @@ func (c *client) readError(res *http.Response) (string, error) {
 	}
 
 	return errRes.Error, nil
+}
+
+type getFactsResponse struct {
+	Facts []struct {
+		Image       string    `json:"image"`
+		Description string    `json:"description"`
+		CreatedAt   time.Time `json:"createdAt"`
+	} `json:"facts"`
+}
+
+func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
+	coolfacts := make([]coolfact.Fact, len(r.Facts))
+	for i, fact := range r.Facts {
+		coolfacts[i] = coolfact.Fact(fact)
+	}
+
+	return coolfacts
+}
+
+func (r getFactsResponse) getLastFact() coolfact.Fact {
+	if len(r.Facts) == 0 {
+		return coolfact.Fact{}
+	}
+
+	return coolfact.Fact{
+		Image:       r.Facts[0].Image,
+		Description: r.Facts[0].Description,
+		CreatedAt:   r.Facts[0].CreatedAt,
+	}
 }
 
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {

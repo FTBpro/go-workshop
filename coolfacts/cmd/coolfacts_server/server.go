@@ -12,7 +12,6 @@ import (
 
 type FactsService interface {
 	GetFacts() ([]coolfact.Fact, error)
-	// TODO
 	CreateFact(fact coolfact.Fact) error
 }
 
@@ -28,8 +27,6 @@ func NewServer(factsService FactsService) *server {
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
-
-	// TODO add case to support the create fact API
 
 	switch r.Method {
 	case http.MethodGet:
@@ -57,10 +54,11 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
 	w.WriteHeader(http.StatusOK)
 
-	_, err := fmt.Fprint(w, "PONG")
-	if err != nil {
+	if _, err := fmt.Fprint(w, "PONG"); err != nil {
 		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
 		return
 	}
@@ -80,8 +78,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 		formattedFacts[i] = map[string]interface{}{
 			"image":       coolFact.Image,
 			"description": coolFact.Description,
-			// TODO: add create at
-			"createdAt": coolFact.CreateAt,
+			"createdAt":   coolFact.CreatedAt,
 		}
 	}
 
@@ -128,12 +125,12 @@ func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// write status and content-type
-	// status must be written before the body
 	w.WriteHeader(http.StatusOK)
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+	log.Println("Handling notFound ...")
+
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
@@ -147,11 +144,13 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
 
-	response := map[string]interface{}{
-		"error": err,
+	response := map[string]string{
+		"error": err.Error(),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
