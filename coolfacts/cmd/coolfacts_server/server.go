@@ -1,4 +1,4 @@
-package cfhttp
+package main
 
 import (
 	"encoding/json"
