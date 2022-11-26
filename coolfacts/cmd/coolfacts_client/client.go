@@ -58,8 +58,8 @@ func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
 	// We must read all the body before closing it, so for reading the body and copying to ioutil.Discard, which does nothing
 	defer func() {
 		if res != nil && res.Body != nil {
-			_, _ = io.Copy(ioutil.Discard, res.Body)
-			_ = res.Body.Close()
+			io.Copy(ioutil.Discard, res.Body)
+			res.Body.Close()
 		}
 	}()
 
