@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -20,6 +21,8 @@ func NewServer(factsService FactsService) *server {
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Println("incoming request", r.Method, r.URL.Path)
+
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -38,12 +41,16 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
 	// TODO
 	// 1. write status header 200 using constant http.StatusOK
 	// 3. write ping
 }
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
+	log.Println("Handling getFact ...")
+
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
@@ -66,6 +73,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+	log.Println("Handling notFound ...")
 	// TODO:
 	// 1. write status header 404 using
 	// 2. set content type application/json
@@ -76,6 +84,8 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
 	// TODO:
 	// 1. write status header 500
 	// 2. set content type application/json
