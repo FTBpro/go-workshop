@@ -136,10 +136,6 @@ func (c *client) readError(res *http.Response) (string, error) {
 		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err)
 	}
 
-	if errRes.Error == "" {
-		return string(resBody), nil
-	}
-
 	return errRes.Error, nil
 }
 
