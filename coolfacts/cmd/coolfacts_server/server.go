@@ -54,8 +54,7 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 
 	w.WriteHeader(http.StatusOK)
 
-	_, err := fmt.Fprint(w, "PONG")
-	if err != nil {
+	if _, err := fmt.Fprint(w, "PONG"); err != nil {
 		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
 		return
 	}
@@ -138,8 +137,8 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
 
-	response := map[string]interface{}{
-		"error": err,
+	response := map[string]string{
+		"error": err.Error(),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
