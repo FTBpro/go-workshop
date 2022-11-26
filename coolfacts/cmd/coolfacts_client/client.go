@@ -47,7 +47,7 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 }
 
 func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
-	ul := c.endpoint + pathCreateFact
+	ul := c.endpoint + pathGetFacts
 	res, err := c.httpClient.Get(ul)
 	if err != nil {
 		return nil, fmt.Errorf("client.GetLastCreatedFact to do request: %v", err)
