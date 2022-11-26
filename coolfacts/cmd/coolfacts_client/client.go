@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
@@ -46,11 +47,23 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 }
 
 func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
-	// TODO: implement
-	// 1. For calling a simple GET request, you can use the c.httpClient.Get method.
-	//	  You just need to build the url. Use the client endpoint and the const for the path
-	// 2. this method returns *http.Response.
-	//		- The client must close the body of the request after use. Do this in defer
+	ul := c.endpoint + pathCreateFact
+	res, err := c.httpClient.Get(ul)
+	if err != nil {
+		return nil, fmt.Errorf("client.GetLastCreatedFact to do request: %v", err)
+	}
+
+	// The client must close the body after the response is handled
+	// We must read all the body before closing it, so for reading the body and copying to ioutil.Discard, which does nothing
+	defer func() {
+		if res != nil && res.Body != nil {
+			io.Copy(ioutil.Discard, res.Body)
+			res.Body.Close()
+		}
+	}()
+
+	// TODO: handle response
+	// this method returns *http.Response.
 	//		- If response status code isn't 200 (http.StatusOK), you should read the error from the response.
 	//			use method c.readError which is already implemented.
 	//		- If the response is OK, use method readResponseGetFacts (which you will implement) to return the facts
@@ -74,9 +87,10 @@ func (c *client) CreateFact(fct coolfact.Fact) error {
 	responseBody := bytes.NewBuffer(postBody)
 
 	// TODO:
-	// 1. create a new request. Use http.NewRequestWithContext
+	// 1. create a new request. Use http.NewRequestWithContext. For argument use the ul and the responseBody.
 	// 2. Do the request using c.httpClient
-	// 3. Ad in GetAllFacts, in case of a failure (response status code is not 200), return error using ReadErro
+	// 3. As in GetAllFacts, in case of a failure (response status code is not 200), return error using readError
+	// * don't forget to close the body like we did in GetAllFacts method
 }
 
 type errorResponse struct {
