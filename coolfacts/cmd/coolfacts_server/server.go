@@ -47,6 +47,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
+		return
 	}
 
 	// TODO:
