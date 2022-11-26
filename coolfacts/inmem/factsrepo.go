@@ -1,17 +1,17 @@
 package inmem
 
 import (
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type factsRepo struct {
-	facts []fact.Fact
+	facts []coolfact.Fact
 }
 
 func NewFactsRepository() *factsRepo {
 	// TODO: init facts repo
 }
 
-func (r *factsRepo) GetFacts() ([]fact.Fact, error) {
+func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 	// TODO: implement
 }

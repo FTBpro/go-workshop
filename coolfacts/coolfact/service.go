@@ -1,4 +1,4 @@
-package fact
+package coolfact
 
 type Repository interface {
 	// TODO: add functions decleration
