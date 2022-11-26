@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -11,6 +12,8 @@ import (
 
 type FactsService interface {
 	GetFacts() ([]coolfact.Fact, error)
+	// TODO
+	CreateFact(fact coolfact.Fact) error
 }
 
 type server struct {
@@ -24,6 +27,10 @@ func NewServer(factsService FactsService) *server {
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	log.Println("incoming request", r.Method, r.URL.Path)
+
+	// TODO add case to support the create fact API
+
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -31,6 +38,14 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			s.HandlePing(w)
 		case "/facts":
 			s.HandleGetFacts(w)
+		default:
+			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
+			s.HandleNotFound(w, err)
+		}
+	case http.MethodPost:
+		switch "/facts" {
+		case "/facts":
+			s.HandleCreateFact(w, r)
 		default:
 			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
 			s.HandleNotFound(w, err)
@@ -52,10 +67,11 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 }
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
+	log.Println("Handling getFact ...")
+
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
-		return
 	}
 
 	// we first format the facts to map[string]interface.
@@ -64,6 +80,8 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 		formattedFacts[i] = map[string]interface{}{
 			"image":       coolFact.Image,
 			"description": coolFact.Description,
+			// TODO: add create at
+			"createdAt": coolFact.CreateAt,
 		}
 	}
 
@@ -82,12 +100,45 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	}
 }
 
+type factRequest struct {
+	Image       string `json:"image"`
+	Description string `json:"description"`
+}
+
+func (r factRequest) ToCoolFact() coolfact.Fact {
+	return coolfact.Fact{
+		Image:       r.Image,
+		Description: r.Description,
+	}
+}
+
+func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
+	log.Println("Handling createFact ...")
+
+	var request factRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		err = fmt.Errorf("server.HandleCreateFact failed to decode request: %s", err)
+		s.HandleError(w, err)
+		return
+	}
+
+	if err := s.factsService.CreateFact(request.ToCoolFact()); err != nil {
+		err = fmt.Errorf("server.HandleCreateFact: %s", err)
+		s.HandleError(w, err)
+		return
+	}
+
+	// write status and content-type
+	// status must be written before the body
+	w.WriteHeader(http.StatusOK)
+}
+
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
-	response := map[string]interface{}{
-		"error": err,
+	response := map[string]string{
+		"error": err.Error(),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {

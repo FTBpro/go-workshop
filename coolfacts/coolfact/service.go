@@ -1,9 +1,13 @@
 package coolfact
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Repository interface {
 	GetFacts() ([]Fact, error)
+	CreateFact(fct Fact) error
 }
 
 type service struct {
@@ -23,4 +27,15 @@ func (s *service) GetFacts() ([]Fact, error) {
 	}
 
 	return facts, nil
+}
+
+func (s *service) CreateFact(fct Fact) error {
+	// TODO
+	// don't forget to set the time
+	fct.CreateAt = time.Now()
+	if err := s.factsRepo.CreateFact(fct); err != nil {
+		return fmt.Errorf("factsService.CreateFact: %w", err)
+	}
+
+	return nil
 }
