@@ -163,23 +163,6 @@ func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
 	return coolfacts
 }
 
-func (r getFactsResponse) getLastFact() coolfact.Fact {
-	if len(r.Facts) == 0 {
-		return coolfact.Fact{}
-	}
-
-	return coolfact.Fact{
-		Image:       r.Facts[0].Image,
-		Description: r.Facts[0].Description,
-		CreatedAt:   r.Facts[0].CreatedAt,
-	}
-}
-
-func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
-	// TODO: implement
-	// loop over the response facts and convert them to the entity type []coolfact.Fact
-}
-
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
