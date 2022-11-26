@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
 )
 
@@ -12,7 +12,7 @@ func main() {
 	fmt.Println("Hello, World!")
 
 	factsRepo := inmem.NewFactsRepository()
-	service := fact.NewService(factsRepo)
+	service := coolfact.NewService(factsRepo)
 	server := NewServer(service)
 
 	fmt.Println("starting server on port 9002")

@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/FTBpro/go-workshop/coolfacts/fact"
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type FactsService interface {
-	GetFacts() ([]fact.Fact, error)
+	GetFacts() ([]coolfact.Fact, error)
 }
 
 type server struct {
