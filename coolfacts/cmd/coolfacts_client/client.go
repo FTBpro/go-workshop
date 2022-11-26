@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	
+
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
@@ -43,7 +43,7 @@ type getFactsResponse struct {
 	//		]
 	// }
 	//
-	
+
 }
 
 func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
@@ -51,17 +51,17 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	if err != nil {
 		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact: %v", err)
 	}
-	
+
 	if len(allFacts) == 0 {
 		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact didn't find facts")
 	}
-	
+
 	return coolfact.Fact{
 		Image:       allFacts[0].Image,
 		Description: allFacts[0].Description,
 		CreateAt:    allFacts[0].CreatedAt,
 	}, nil
-	
+
 }
 
 func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
@@ -77,13 +77,13 @@ func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
 
 func (c *client) CreateFact(fct coolfact.Fact) error {
 	ul := c.endpoint + pathCreateFact
-	
+
 	// First we are preparing the payload
 	payload := map[string]interface{}{
 		"image":       fct.Image,
 		"description": fct.Description,
 	}
-	
+
 	// we need io.Reader to create a new http request.
 	// we will create bytes.Buffer which implement this interface
 	postBody, err := json.Marshal(payload)
@@ -91,7 +91,7 @@ func (c *client) CreateFact(fct coolfact.Fact) error {
 		return fmt.Errorf("client.CreateFact failed to marshal payload: %v", err)
 	}
 	responseBody := bytes.NewBuffer(postBody)
-	
+
 	// TODO:
 	// 1. create a new request. Use http.NewRequestWithContext
 	// 2. Do the request using c.httpClient
@@ -107,16 +107,16 @@ func (c *client) readError(res *http.Response) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("readBody failed to read response body: %v", err)
 	}
-	
+
 	var errRes errorResponse
 	if err = json.NewDecoder(res.Body).Decode(&errRes); err != nil {
 		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err, string(resBody))
 	}
-	
+
 	if errRes.Error == "" {
 		return string(resBody), nil
 	}
-	
+
 	return errRes.Error, nil
 }
 

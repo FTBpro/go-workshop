@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	
+
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
@@ -27,11 +27,11 @@ func NewServer(factsService FactsService) *server {
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
-	
+
 	// TODO: add case to support the create fact API
 	// the expected path for creating a fact is "/paths", and the http method is POST (http.MethodPost)
 	// use server method HandleCreateFact
-	
+
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -51,7 +51,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) HandlePing(w http.ResponseWriter) {
 	w.WriteHeader(http.StatusOK)
-	
+
 	_, err := fmt.Fprint(w, "PONG")
 	if err != nil {
 		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
@@ -61,12 +61,12 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	log.Println("Handling getFact ...")
-	
+
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
 	}
-	
+
 	// we first format the facts to map[string]interface.
 	formattedFacts := make([]map[string]interface{}, len(facts))
 	for i, coolFact := range facts {
@@ -76,16 +76,16 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 			// TODO: add create at to the response
 		}
 	}
-	
+
 	response := map[string]interface{}{
 		"facts": formattedFacts,
 	}
-	
+
 	// write status and content-type
 	// status must be written before the body
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	
+
 	// write the body. We use json encoding
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
@@ -107,7 +107,7 @@ func (r factRequest) ToCoolFact() coolfact.Fact {
 
 func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling createFact request ...")
-	
+
 	// TODO:
 	// 1. Read the request body into factRequest
 	//		Use json.NewDecoder and Decode
@@ -118,11 +118,11 @@ func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
-	
+
 	response := map[string]string{
 		"error": err.Error(),
 	}
-	
+
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
@@ -131,11 +131,11 @@ func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
 func (s *server) HandleError(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
-	
+
 	response := map[string]interface{}{
 		"error": err,
 	}
-	
+
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
