@@ -107,7 +107,7 @@ func (r factRequest) ToCoolFact() coolfact.Fact {
 }
 
 func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
-	log.Println("Handling createFact request ...")
+	log.Println("Handling createFact ...")
 
 	// TODO:
 	// 1. Read the request body into factRequest

@@ -40,7 +40,7 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	return coolfact.Fact{
 		Image:       allFacts[0].Image,
 		Description: allFacts[0].Description,
-		CreateAt:    allFacts[0].CreatedAt,
+		CreatedAt:   allFacts[0].CreatedAt,
 	}, nil
 
 }
@@ -119,6 +119,11 @@ type getFactsResponse struct {
 	//		]
 	// }
 	//
+}
+
+func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
+	// TODO: implement
+	// loop over the response facts and convert them to the entity type []coolfact.Fact
 }
 
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {

@@ -76,7 +76,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 			return "", err
 		}
 
-		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreateAt), nil
+		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreatedAt), nil
 
 	default:
 		return "", errors.New("unknown command")
