@@ -27,25 +27,6 @@ func NewClient(endpoint string) *client {
 	}
 }
 
-type getFactsResponse struct {
-	// TODO: add fields
-	// This struct represent the createFact API response body of the server.
-	// We will use this struct to
-	// The response is json:
-	// {
-	//		"facts": [
-	//			{
-	//				"image": "...",
-	//				"description": "...",
-	//				"createdAt": "...",
-	//          }
-	//			...
-	//		]
-	// }
-	//
-
-}
-
 func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	allFacts, err := c.GetAllFacts()
 	if err != nil {
@@ -118,6 +99,26 @@ func (c *client) readError(res *http.Response) (string, error) {
 	}
 
 	return errRes.Error, nil
+}
+
+type getFactsResponse struct {
+	// TODO: add fields
+	// This struct represent the createFact API response body of the server.
+	// We will decode the response into a variable of this struct type.
+	// Since the server response is json, we will use json decode method.
+	// For this be sure to add json tags on the struct. (https://gobyexample.com/json)
+	// The response body is:
+	// {
+	//		"facts": [
+	//			{
+	//				"image": "...",
+	//				"description": "...",
+	//				"createdAt": "...",
+	//          }
+	//			...
+	//		]
+	// }
+	//
 }
 
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
