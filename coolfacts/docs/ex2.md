@@ -184,16 +184,16 @@ The only recognized path is `GET /facts`. On every path it returns `HandleNotFou
 The main package of our server-application lives inside coolfacts/cmd/coolfacts_service.go, but the go.mod is under coolfacts directory.
 The go build must be called from the root of the module, in here it will be called from folder coolfacts. The path we will pass to go build will be the path to the main we want to run:
 ```commandline
-coolfacts/$ go build ./cmd/coolfacts_server/.
+.../coolfacts$ go build ./cmd/coolfacts_server/.
 ```
 This command will create executable name coolfacts_server which we can run by `./coolfacts_server`
 
 Alternatively we can build and run in one single command:
 ```commandline
-coolfacts/$ go run ./cmd/coolfacts_server/.
+.../coolfacts$ go run ./cmd/coolfacts_server/.
 ```
 
-If everything is implemented, this is what the final result should look like:
+If everything is implemented, this is what the final result should look like: (TODO:oren): not found path in gif
 ![factsgif](https://user-images.githubusercontent.com/5252381/204143457-6eaf59d3-6c52-4fbb-8d2a-19d22436cbd8.gif)
 
 # Full walkthrough
@@ -266,7 +266,7 @@ func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 }
 ```
 
-## Step 3. The HTTP transport layer
+## Step 3 - The HTTP transport layer
 The `server` receives the `Service interface{}` which implements the BL.
 ```go
 type Service interface {
@@ -390,40 +390,3 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 Congratulation! You've just implemented a web server and BL for returning facts.
 
 In the following exercise we will add an API for creating a fact, and a client application for calling our server.
-
-d
-d
-d
-d
-d
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
-
-d
