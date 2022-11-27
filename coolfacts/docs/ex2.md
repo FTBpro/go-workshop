@@ -113,7 +113,7 @@ Finally, we use `http.ListenAndServe`. This method receives an address and an `h
   The handler should handle the incoming `http.Request` and write the response to the `ResponseWriter`. In out application the http.Handler will be `coolfact.service` initialized with `coolfact.NewService(...)` 
 
 What you will have to complete is:
-### Step1 - package `coolfact`
+## Step1 - package `coolfact`
 This package handles the BL of the application.
 
 #### <u> file `coolfact/fact.go`: </u>
@@ -132,14 +132,14 @@ In service.go we have the service which will handle the "BL" for the application
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `NewService`. Return instance of `service` initialized with its field.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement methods `GetFacts`.
 
-### Step2 - Package `inmem`
+## Step2 - Package `inmem`
 #### <u> file `inmem/factsrepo.go`:</u>
 Here we will implement the facts repository. Currently, only with functionality to return facts.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `NewFactsRepository`
   - Just so we will have initial data, initialize the repo with two facts.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `GetFacts`.
 
-### Step3 - `cmd/server.go`
+## Step3 - `cmd/server.go`
 The server is responsible to respond to the incoming HTTP request. It initialized with the service for handling the BL. Currently our only use-case is getting facts.
 In addition, it will have ping route, for answering with PONG.
 
