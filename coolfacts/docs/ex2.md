@@ -387,6 +387,8 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 ```
 
 # Finish!
+<img src=https://user-images.githubusercontent.com/5252381/204150018-b6f1a5af-c557-443a-9301-7c0e98a4a3f7.png width="91">
+
 Congratulation! You've just implemented a web server and BL for returning facts.
 
 In the following exercise we will add an API for creating a fact, and a client application for calling our server.
