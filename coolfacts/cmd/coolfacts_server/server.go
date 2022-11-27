@@ -40,7 +40,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			s.HandleNotFound(w, err)
 		}
 	case http.MethodPost:
-		switch "/facts" {
+		switch strings.ToLower(r.URL.Path) {
 		case "/facts":
 			s.HandleCreateFact(w, r)
 		default:

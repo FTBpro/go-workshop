@@ -157,14 +157,9 @@ func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
 }
 
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v", err)
-	}
-
 	var factsRes getFactsResponse
-	if err = json.Unmarshal(resBody, &factsRes); err != nil {
-		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v. \nbody string is: %s", err, string(resBody))
+	if err := json.NewDecoder(res.Body).Decode(&factsRes); err != nil {
+		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v. \nbody string is: %s", err)
 	}
 
 	return factsRes, nil
