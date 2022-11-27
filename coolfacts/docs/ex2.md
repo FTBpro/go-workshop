@@ -61,6 +61,10 @@ Inside the `cmd` we have folder `coolfact_server`. This folder includes `main` p
 - `main.go`: file that includes our `main()` function
 - `server.go`: this is the transport of the application. In this file we will implement the http handlers for the server APIs.
 
+# What there is to do:
+
+You need to fix all the TODOs in the code. The next section describes each of them. The solution can be found in the branch `v2-initial-server-solution`. Also there is a full walkthrough in the end of this doc.
+
 ## Step 0 - notice main.go
 Let's have a look at `coolfacts_server/main.go`:
 ```go
