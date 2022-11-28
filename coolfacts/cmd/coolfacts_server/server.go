@@ -6,31 +6,34 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type FactsService interface {
-	// TODO: add methods declerations
-	// 1. getFacts - returns a slice of fact.Fact and an error
+	GetFacts() ([]coolfact.Fact, error)
 }
 
 type server struct {
-	// TODO: add factsService field
+	factsService FactsService
 }
 
-func NewServer() *server {
-	// TODO: returns an initializes server with the factsService
-	return &server{}
+func NewServer(factsService FactsService) *server {
+	return &server{
+		factsService: factsService,
+	}
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
 
-	// TODO: add case for GET /facts, that will call to `HandleGetFacts`
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
 			s.HandlePing(w)
+		case "/facts":
+			s.HandleGetFacts(w)
 		default:
 			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
 			s.HandleNotFound(w, err)
@@ -38,6 +41,17 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	default:
 		err := fmt.Errorf("method %q is not allowed", r.Method)
 		s.HandleNotFound(w, err)
+	}
+}
+
+func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
+	w.WriteHeader(http.StatusOK)
+
+	if _, err := fmt.Fprint(w, "PONG"); err != nil {
+		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
+		return
 	}
 }
 
@@ -50,29 +64,27 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 		return
 	}
 
-	// TODO:
-	// 1. format the facts to a json response
-	// 2. write status 200
-	// 3. set content type application/json
-	// 4. write json response:
-	// 	{
-	//		"facts": [
-	//			{
-	//				"id": "..."
-	//				"description": "..."
-	//			},
-	//			...
-	//		]
-}
+	// we first format the facts to map[string]interface.
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"image":       coolFact.Image,
+			"description": coolFact.Description,
+		}
+	}
 
-func (s *server) HandlePing(w http.ResponseWriter) {
-	log.Println("Handling Ping ...")
+	response := map[string]interface{}{
+		"facts": formattedFacts,
+	}
 
+	// write status and content-type
+	// status must be written before the body
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
 
-	if _, err := fmt.Fprint(w, "PONG"); err != nil {
-		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
-		return
+	// write the body. We use json encoding
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
 }
 
