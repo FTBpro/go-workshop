@@ -8,15 +8,24 @@ import (
 	"strings"
 )
 
-type server struct{}
+type FactsService interface {
+	// TODO: add methods declerations
+	// 1. getFacts - returns a slice of fact.Fact and an error
+}
+
+type server struct {
+	// TODO: add factsService field
+}
 
 func NewServer() *server {
+	// TODO: returns an initializes server with the factsService
 	return &server{}
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
 
+	// TODO: add case for GET /facts, that will call to `HandleGetFacts`
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -30,6 +39,30 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err := fmt.Errorf("method %q is not allowed", r.Method)
 		s.HandleNotFound(w, err)
 	}
+}
+
+func (s *server) HandleGetFacts(w http.ResponseWriter) {
+	log.Println("Handling getFact ...")
+
+	facts, err := s.factsService.GetFacts()
+	if err != nil {
+		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
+		return
+	}
+
+	// TODO:
+	// 1. format the facts to a json response
+	// 2. write status 200
+	// 3. set content type application/json
+	// 4. write json response:
+	// 	{
+	//		"facts": [
+	//			{
+	//				"id": "..."
+	//				"description": "..."
+	//			},
+	//			...
+	//		]
 }
 
 func (s *server) HandlePing(w http.ResponseWriter) {
