@@ -172,6 +172,11 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 }
 ```
 
+Since we are returning a JSON, we can use the Go `json` package, which can write a JSON encoding of the response to the writer.
+The `NewEncoder` method receives `io.Writer`. We already can notice the power of Go interfaces, and especially interfaces with one method.
+We can send the `http.ResponseWriter` to different packages methods, and use a different encoding, and the packages are totally agnostic to HTTP.
+
+
 # Finish!
 <img src=https://user-images.githubusercontent.com/5252381/204150018-b6f1a5af-c557-443a-9301-7c0e98a4a3f7.png width="91">
 
