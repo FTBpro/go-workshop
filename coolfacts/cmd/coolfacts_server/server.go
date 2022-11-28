@@ -41,6 +41,17 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (s *server) HandlePing(w http.ResponseWriter) {
+	log.Println("Handling Ping ...")
+
+	w.WriteHeader(http.StatusOK)
+
+	if _, err := fmt.Fprint(w, "PONG"); err != nil {
+		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
+		return
+	}
+}
+
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	log.Println("Handling getFact ...")
 
@@ -63,17 +74,6 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	//			},
 	//			...
 	//		]
-}
-
-func (s *server) HandlePing(w http.ResponseWriter) {
-	log.Println("Handling Ping ...")
-
-	w.WriteHeader(http.StatusOK)
-
-	if _, err := fmt.Fprint(w, "PONG"); err != nil {
-		fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
-		return
-	}
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
