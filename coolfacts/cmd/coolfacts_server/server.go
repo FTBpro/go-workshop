@@ -7,16 +7,9 @@ import (
 	"strings"
 )
 
-type FactsService interface {
-	// TODO: add methods declerations
-	// 1. getFacts - returns a slice of fact.Fact and an error
-}
+type server struct{}
 
-type server struct {
-	// TODO: add factsService field
-}
-
-func NewServer(factsService FactsService) *server {
+func NewServer() *server {
 	// TODO: returns an initializes server with the factsService
 }
 
@@ -28,8 +21,6 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
 			s.HandlePing(w)
-		case "/facts":
-			s.HandleGetFacts(w)
 		default:
 			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
 			s.HandleNotFound(w, err)
@@ -46,30 +37,6 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 	// TODO
 	// 1. write status header 200 using constant http.StatusOK
 	// 3. write ping
-}
-
-func (s *server) HandleGetFacts(w http.ResponseWriter) {
-	log.Println("Handling getFact ...")
-
-	facts, err := s.factsService.GetFacts()
-	if err != nil {
-		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
-		return
-	}
-
-	// TODO:
-	// 1. format the facts to a json response
-	// 2. write status 200
-	// 3. set content type application/json
-	// 4. write json response:
-	// 	{
-	//		"facts": [
-	//			{
-	//				"id": "..."
-	//				"description": "..."
-	//			},
-	//			...
-	//		]
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
