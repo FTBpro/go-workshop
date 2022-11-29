@@ -15,28 +15,19 @@ const (
 )
 
 type getFactsResponse struct {
-	// TODO: add fields
-	// This struct represent the createFact API response body of the server.
-	// We will decode the response into a variable of this struct type.
-	// Since the server response is json, we will use json decode method.
-	// For this be sure to add json tags on the struct. (https://gobyexample.com/json)
-	// The response body is:
-	// {
-	//		"facts": [
-	//			{
-	//				"image": "...",
-	//				"description": "...",
-	//				"createdAt": "...",
-	//          }
-	//			...
-	//		]
-	// }
-	//
+	Facts []struct {
+		Image       string `json:"image"`
+		Description string `json:"description"`
+	} `json:"facts"`
 }
 
-func (r getFactsResponse) ToCoolFacts() []coolfact.Fact {
-	// TODO: implement
-	// loop over the response facts and convert them to the entity type []coolfact.Fact
+func (r getFactsResponse) toCoolFacts() []coolfact.Fact {
+	coolfacts := make([]coolfact.Fact, len(r.Facts))
+	for i, fact := range r.Facts {
+		coolfacts[i] = coolfact.Fact(fact)
+	}
+
+	return coolfacts
 }
 
 type client struct {
@@ -67,11 +58,21 @@ func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
 		}
 	}()
 
-	// TODO: handle response
-	// this method returns *http.Response.
-	//		- If response status code isn't 200 (http.StatusOK), you should read the error from the response.
-	//			use method c.readError which is already implemented.
-	//		- If the response is OK, use method readResponseGetFacts (which you will implement) to return the facts
+	if res.StatusCode != http.StatusOK {
+		errMessage, err := c.readError(res)
+		if err != nil {
+			return nil, fmt.Errorf("client.CreateFact: %s", err)
+		}
+
+		return nil, fmt.Errorf("client.GetLastCreatedFact got an error from server. status: %d. error: %s", res.StatusCode, errMessage)
+	}
+
+	getFactsRes, err := c.readResponseGetFacts(res)
+	if err != nil {
+		return nil, fmt.Errorf("client.GetLastCreatedFact: %s", err)
+	}
+
+	return getFactsRes.toCoolFacts(), nil
 }
 
 type errorResponse struct {
@@ -88,7 +89,10 @@ func (c *client) readError(res *http.Response) (string, error) {
 }
 
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
-	// TODO: implement - decode the json response into the target
-	// Use variable of type getFactsResponse.
-	// Use json.NewDecoder(...).Decode(...) (unlike the decoding in readError method)
+	var factsRes getFactsResponse
+	if err := json.NewDecoder(res.Body).Decode(&factsRes); err != nil {
+		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v. \nbody string is: %s", err)
+	}
+
+	return factsRes, nil
 }
