@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 	"log"
 	"os"
 	"regexp"
@@ -14,6 +15,8 @@ const (
 	serverEndpoint = "http://127.0.0.1:9002"
 
 	commandGetAllFacts = "getAllFact"
+	createFactCommand  = "createFact"
+	commandGetLastFact = "getLastFact"
 )
 
 func main() {
@@ -68,6 +71,26 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 		}
 
 		return msg, nil
+	case commandGetLastFact:
+		lastFact, err := cl.GetLastCreatedFact()
+		if err != nil {
+			return "", err
+		}
+
+		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreatedAt), nil
+	case createFactCommand:
+		if len(args) < 2 {
+			return "", errors.New("invalid arguments")
+		}
+
+		fct := coolfact.Fact{
+			Image:       args[0],
+			Description: strings.Join(args[1:], " "),
+		}
+
+		err := cl.CreateFact(fct)
+		return "", err
+
 	default:
 		return "", errors.New("unknown command")
 	}
