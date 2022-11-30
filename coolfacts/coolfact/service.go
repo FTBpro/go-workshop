@@ -28,7 +28,6 @@ func (s *service) GetFacts() ([]Fact, error) {
 
 func (s *service) CreateFact(fact Fact) error {
 	// TODO: implement CreateFact
-	// Set the createdAt of the fact to now
 
 	return nil
 }
