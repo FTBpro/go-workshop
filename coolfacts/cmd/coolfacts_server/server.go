@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
@@ -24,6 +25,7 @@ func (r createFactRequest) ToCoolFact() coolfact.Fact {
 	return coolfact.Fact{
 		Image:       r.Image,
 		Description: r.Description,
+		CreatedAt:   time.Now(),
 	}
 }
 
