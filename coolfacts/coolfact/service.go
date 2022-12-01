@@ -4,7 +4,7 @@ import "fmt"
 
 type Repository interface {
 	GetFacts() ([]Fact, error)
-	// TODO: add method createFact
+	CreateFact(fct Fact) error
 }
 
 type service struct {
@@ -27,7 +27,9 @@ func (s *service) GetFacts() ([]Fact, error) {
 }
 
 func (s *service) CreateFact(fact Fact) error {
-	// TODO: implement CreateFact
+	if err := s.factsRepo.CreateFact(fact); err != nil {
+		return fmt.Errorf("factsService.CreateFact: %w", err)
+	}
 
 	return nil
 }

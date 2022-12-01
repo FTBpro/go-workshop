@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 	"log"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 const (
