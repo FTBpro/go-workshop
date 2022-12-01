@@ -57,7 +57,7 @@ func main() {
 We first can notice the imports `"fmt"`, `"log"` and `"net/http"`. These are standard Go libraries.
 
 Inside of the `main()` function, we're initializing the server, and sending it to `http.ListenAndserve` method.
-In Go, a package name is only the last param, and each type in Go has a name composed of the package name and the type identifier. Although the import path is `net/http`, the package name is `http`, and the identifier is `ListenAndServe`. 
+In Go, a package name is only the last param, and each type in Go has a name composed of the package name and the type identifier. Although the import path is `net/http`, the package name is `http`, and the identifier is `ListenAndServe`.
 
 The method `http.ListenAndServe` receives an address and an `http.Handler`:
 - address: This is the address it will listen on the TCP network.
@@ -69,7 +69,7 @@ The method `http.ListenAndServe` receives an address and an `http.Handler`:
     ServeHTTP(w ResponseWriter, r *Request)
   }
     ```
-  The handler should handle the incoming `http.Request` and write the response to the `ResponseWriter`. In our application the http.Handler will be the `server`. 
+  The handler should handle the incoming `http.Request` and write the response to the `ResponseWriter`. In our application the http.Handler will be the `server`.
 
 What you will have to complete is:
 
@@ -121,19 +121,19 @@ type server struct {
 }
 
 func NewServer(service Service) *server {
-  return &server{}
+return &server{}
 }
 ```
 
 ###`HandlePing` method:
 ```go
 func (s *server) HandlePing(w http.ResponseWriter) {
-  w.WriteHeader(http.StatusOK)
- 
-  if _, err := fmt.Fprint(w, "PONG"); err != nil {
-     fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
-     return
-  }
+w.WriteHeader(http.StatusOK)
+
+if _, err := fmt.Fprint(w, "PONG"); err != nil {
+fmt.Printf("ERROR writing to ResponseWriter: %s\n", err)
+return
+}
 }
 ```
 First, we need to write the status. For this we use `w.WriteHeader(http.StatusOK)`
@@ -146,31 +146,36 @@ These methods are almost identical, except of the status. `HandleNotFound` retur
 And `HandleError` returns status 500 - `http.StatusInternalServerError`
 ```go
 func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
-  w.WriteHeader(http.StatusNotFound)
-  w.Header().Set("Content-Type", "application/json")
- 
-  response := map[string]interface{}{
-     "error": err,
-  }
- 
-  if err := json.NewEncoder(w).Encode(response); err != nil {
-     fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
-  }
+w.WriteHeader(http.StatusNotFound)
+w.Header().Set("Content-Type", "application/json")
+
+response := map[string]interface{}{
+"error": err,
+}
+
+if err := json.NewEncoder(w).Encode(response); err != nil {
+fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+}
 }
 
 func (s *server) HandleError(w http.ResponseWriter, err error) {
-  w.WriteHeader(http.StatusInternalServerError)
-  w.Header().Set("Content-Type", "application/json")
- 
-  response := map[string]interface{}{
-     "error": err,
-  }
- 
-  if err := json.NewEncoder(w).Encode(response); err != nil {
-     fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
-  }
+w.WriteHeader(http.StatusInternalServerError)
+w.Header().Set("Content-Type", "application/json")
+
+response := map[string]interface{}{
+"error": err,
+}
+
+if err := json.NewEncoder(w).Encode(response); err != nil {
+fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+}
 }
 ```
+
+Since we are returning a JSON, we can use the Go `json` package, which can write a JSON encoding of the response to the writer.
+The `NewEncoder` method receives `io.Writer`. We already can notice the power of Go interfaces, and especially interfaces with one method.
+We can send the `http.ResponseWriter` to different packages methods, and use a different encoding, and the packages are totally agnostic to HTTP.
+
 
 # Finish!
 <img src=https://user-images.githubusercontent.com/5252381/204150018-b6f1a5af-c557-443a-9301-7c0e98a4a3f7.png width="91">
