@@ -30,18 +30,16 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
-			s.HandlePing(w)
+			s.HandlePing(w, r)
 		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
+			s.HandleNotFound(w, r)
 		}
 	default:
-		err := fmt.Errorf("method %q is not allowed", r.Method)
-		s.HandleNotFound(w, err)
+		s.HandleNotFound(w, r)
 	}
 }
 
-func (s *server) HandlePing(w http.ResponseWriter) {
+func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling Ping ...")
 
 	w.WriteHeader(http.StatusOK)
@@ -52,7 +50,7 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 	}
 }
 
-func (s *server) HandleGetFacts(w http.ResponseWriter) {
+func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling getFact ...")
 
 	facts, err := s.factsService.GetFacts()
@@ -76,18 +74,19 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	//		]
 }
 
-func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling notFound ...")
 
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
 	response := map[string]string{
-		"error": err.Error(),
+		"error": fmt.Sprintf("path %s %s not found", r.Method, r.URL.Path),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
-		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+		err = fmt.Errorf("HandleNotFound failed to decode: %s", err)
+		s.HandleError(w, err)
 	}
 }
 
@@ -96,11 +95,9 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
-
 	response := map[string]string{
 		"error": err.Error(),
 	}
-
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
