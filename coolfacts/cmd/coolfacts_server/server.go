@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -20,14 +19,12 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
-			s.HandlePing(w)
+			s.HandlePing(w, r)
 		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
+			s.HandleNotFound(w, r)
 		}
 	default:
-		err := fmt.Errorf("method %q is not allowed", r.Method)
-		s.HandleNotFound(w, err)
+		s.HandleNotFound(w, r)
 	}
 }
 
@@ -46,6 +43,6 @@ func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	// 2. set content type application/json
 	// 3. write json indicating an error:
 	//   {
-	//       error: path <path> not not found
+	//       error: path <http method + path> not not found
 	//   }
 }
