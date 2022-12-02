@@ -8,19 +8,9 @@ type factsRepo struct {
 	facts []coolfact.Fact
 }
 
-func NewFactsRepository() *factsRepo {
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 	return &factsRepo{
-		// TODO: add createdAt to the facts. You can set it to now
-		facts: []coolfact.Fact{
-			{
-				Topic:       "Games",
-				Description: "Did you know sonic is a hedgehog?!",
-			},
-			{
-				Topic:       "TV",
-				Description: "You won't believe what happened to Arya!",
-			},
-		},
+		facts: facts,
 	}
 }
 
