@@ -3,7 +3,7 @@ package coolfact
 import "time"
 
 type Fact struct {
-	Image       string
+	Topic       string
 	Description string
 	CreatedAt   time.Time
 }

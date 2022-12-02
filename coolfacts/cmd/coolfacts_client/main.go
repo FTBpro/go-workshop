@@ -68,7 +68,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 		var msg string
 		for i, fact := range facts {
 			msg += fmt.Sprintf("\n**************\nFact %d:", i)
-			msg += fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", fact.Image, fact.Description)
+			msg += fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n\tCreatedAt: %s", fact.Topic, fact.Description, fact.CreatedAt)
 		}
 
 		return msg, nil
@@ -78,14 +78,14 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 			return "", err
 		}
 
-		return fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", lastFact.Image, lastFact.Description, lastFact.CreatedAt), nil
+		return fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n\tCreatedAt: %s", lastFact.Topic, lastFact.Description, lastFact.CreatedAt), nil
 	case createFactCommand:
 		if len(args) < 2 {
 			return "", errors.New("invalid arguments")
 		}
 
 		fct := coolfact.Fact{
-			Image:       args[0],
+			Topic:       args[0],
 			Description: strings.Join(args[1:], " "),
 		}
 

@@ -2,7 +2,7 @@
 
 In this exercise, you will implement a new API in the server for creating a fact.
 You will also implement in the client the method that calls this API with an input from the user.
-Another command that the client will export is getting the last created fact. 
+Another command that the client will export is getting the last created fact.
 
 The starting point
 To get started, run this command to clone the necessary exercise materials in a convenient folder:
@@ -15,9 +15,9 @@ Take a look around the program, there are a bunch of new TODOs and functionality
 
 ## Step 0 - Notice `coolfacts_clinet/main.go`
 We added two new commands:
-- `"createFact"` for creating a new fact in the server. 
+- `"createFact"` for creating a new fact in the server.
 - `"getLastFact` for returning the last created fact.
-In the `client`, you will implement the methods for supporting these command.
+  In the `client`, you will implement the methods for supporting these command.
 
 In addition, for returning the last created fact, we need a way to which fact was created last. For supporting this, you will add a new field in the entity `coolfact.Fact` - `CreatedAt`.
 For this, you will get to know the go package `time` - This package Package time provides functionality for measuring and displaying time.
@@ -31,12 +31,12 @@ For sorting, you will learn and use the go package `sort`.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">For supporting the sorting, add the field for the createdAt.
 
 ### coolfact/service.go
-The service has new functionality for creating a fact. 
+The service has new functionality for creating a fact.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In the `Repository` interface, add the method that the service requires.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`.
 
 ## Step 2 - The repo
-The repository now have new method for creating a fact. In addition you need to change the method for getting facts and sort them by their created time. 
+The repository now have new method for creating a fact. In addition you need to change the method for getting facts and sort them by their created time.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In `GetFacts` add the sorting. For the sort, you will use the type `byCreatedAt`. To learn about sorting using `sort.Sort`, read the TODO in the code in the `GetFacts` method.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`
 
@@ -45,10 +45,10 @@ The service has a new API:
 ```json
 POST "/facts"
 
-Request: 
+Request:
 {
-  "image": "...",
-  "description": "..."
+"image": "...",
+"description": "..."
 }
 
 Response:
@@ -79,7 +79,7 @@ TODO:(oren) add gif
 
 ## Step 1 - Implement The BL
 ### coolfact/fact.go
-In our entity, we add a new field `CreatedAt` for specifying the time the fact was created. 
+In our entity, we add a new field `CreatedAt` for specifying the time the fact was created.
 ```go
 type Fact struct {
 	Image       string
@@ -142,7 +142,7 @@ func (s byCreatedAt) Less(i, j int) bool {
 ```
 
 Note the type conversion: `byCreatedAt(r.facts)`. Type conversion is simply to convert some value to other type.
-This is possible since the two types are compatible.    
+This is possible since the two types are compatible.
 
 ## Step 3 - Server
 The service exports a new API for creating the fact. The http method is `POST`, and the path is `"/facts"`. We will add a new case in our `ServeHTTP` method:

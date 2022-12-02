@@ -17,13 +17,13 @@ type FactsService interface {
 }
 
 type createFactRequest struct {
-	Image       string `json:"image"`
+	Topic       string `json:"topic"`
 	Description string `json:"description"`
 }
 
 func (r createFactRequest) ToCoolFact() coolfact.Fact {
 	return coolfact.Fact{
-		Image:       r.Image,
+		Topic:       r.Topic,
 		Description: r.Description,
 		CreatedAt:   time.Now(),
 	}
@@ -46,28 +46,25 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
-			s.HandlePing(w)
+			s.HandlePing(w, r)
 		case "/facts":
-			s.HandleGetFacts(w)
+			s.HandleGetFacts(w, r)
 		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
+			s.HandleNotFound(w, r)
 		}
 	case http.MethodPost:
 		switch strings.ToLower(r.URL.Path) {
 		case "/facts":
 			s.HandleCreateFact(w, r)
 		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
+			s.HandleNotFound(w, r)
 		}
 	default:
-		err := fmt.Errorf("method %q is not allowed", r.Method)
-		s.HandleNotFound(w, err)
+		s.HandleNotFound(w, r)
 	}
 }
 
-func (s *server) HandlePing(w http.ResponseWriter) {
+func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling Ping ...")
 
 	w.WriteHeader(http.StatusOK)
@@ -78,7 +75,7 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 	}
 }
 
-func (s *server) HandleGetFacts(w http.ResponseWriter) {
+func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling getFact ...")
 
 	facts, err := s.factsService.GetFacts()
@@ -91,7 +88,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	formattedFacts := make([]map[string]interface{}, len(facts))
 	for i, coolFact := range facts {
 		formattedFacts[i] = map[string]interface{}{
-			"image":       coolFact.Image,
+			"topic":       coolFact.Topic,
 			"description": coolFact.Description,
 			"createdAt":   coolFact.CreatedAt,
 		}
@@ -131,18 +128,19 @@ func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling notFound ...")
 
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
 	response := map[string]string{
-		"error": err.Error(),
+		"error": fmt.Sprintf("path %s %s not found", r.Method, r.URL.Path),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
-		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+		err = fmt.Errorf("HandleNotFound failed to decode: %s", err)
+		s.HandleError(w, err)
 	}
 }
 
@@ -151,11 +149,9 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Header().Set("Content-Type", "application/json")
-
 	response := map[string]string{
 		"error": err.Error(),
 	}
-
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
