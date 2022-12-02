@@ -2,8 +2,7 @@ package inmem
 
 import (
 	"sort"
-	"time"
-
+	
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
@@ -11,26 +10,15 @@ type factsRepo struct {
 	facts []coolfact.Fact
 }
 
-func NewFactsRepository() *factsRepo {
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 	return &factsRepo{
-		facts: []coolfact.Fact{
-			{
-				Topic:       "Games",
-				Description: "Did you know sonic is a hedgehog?!",
-				CreatedAt:   time.Now(),
-			},
-			{
-				Topic:       "TV",
-				Description: "You won't believe what happened to Arya!",
-				CreatedAt:   time.Now(),
-			},
-		},
+		facts: facts,
 	}
 }
 
 func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 	sort.Sort(byCreatedAt(r.facts))
-
+	
 	return r.facts, nil
 }
 
