@@ -16,7 +16,7 @@ const (
 
 type getFactsResponse struct {
 	Facts []struct {
-		Image       string `json:"image"`
+		Topic       string `json:"topic"`
 		Description string `json:"description"`
 	} `json:"facts"`
 }

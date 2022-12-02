@@ -64,7 +64,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 		var msg string
 		for i, fact := range facts {
 			msg += fmt.Sprintf("\n**************\nFact %d:", i)
-			msg += fmt.Sprintf("\timage: %s\n\tdescription: %s\n\tcreatedAt: %s", fact.Image, fact.Description)
+			msg += fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n", fact.Topic, fact.Description)
 		}
 
 		return msg, nil
