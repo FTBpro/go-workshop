@@ -46,3 +46,15 @@ func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	//       error: path <http method + path> not not found
 	//   }
 }
+
+func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
+	// TODO:
+	// 1. write status header 500
+	// 2. set content type application/json
+	// 3. write json indicating an error:
+	//   {
+	//       error: <the error message>
+	//   }
+}
