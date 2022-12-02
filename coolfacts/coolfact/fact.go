@@ -1,6 +1,6 @@
 package coolfact
 
 type Fact struct {
-	Image       string
+	Topic       string
 	Description string
 }
