@@ -24,9 +24,8 @@ type getFactsResponse struct {
 	// {
 	//		"facts": [
 	//			{
-	//				"image": "...",
+	//				"topic": "...",
 	//				"description": "...",
-	//				"createdAt": "...",
 	//          }
 	//			...
 	//		]
