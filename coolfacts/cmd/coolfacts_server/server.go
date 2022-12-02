@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
@@ -39,35 +38,7 @@ func NewServer(factsService FactsService) *server {
 	}
 }
 
-func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("incoming request", r.Method, r.URL.Path)
-
-	switch r.Method {
-	case http.MethodGet:
-		switch strings.ToLower(r.URL.Path) {
-		case "/ping":
-			s.HandlePing(w)
-		case "/facts":
-			s.HandleGetFacts(w)
-		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
-		}
-	case http.MethodPost:
-		switch strings.ToLower(r.URL.Path) {
-		case "/facts":
-			s.HandleCreateFact(w, r)
-		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
-		}
-	default:
-		err := fmt.Errorf("method %q is not allowed", r.Method)
-		s.HandleNotFound(w, err)
-	}
-}
-
-func (s *server) HandlePing(w http.ResponseWriter) {
+func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling Ping ...")
 
 	w.WriteHeader(http.StatusOK)
@@ -78,7 +49,7 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 	}
 }
 
-func (s *server) HandleGetFacts(w http.ResponseWriter) {
+func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling getFact ...")
 
 	facts, err := s.factsService.GetFacts()
@@ -131,14 +102,14 @@ func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+func (s *server) HandlePathNotFound(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling notFound ...")
 
 	w.WriteHeader(http.StatusNotFound)
 	w.Header().Set("Content-Type", "application/json")
 
 	response := map[string]string{
-		"error": err.Error(),
+		"error": fmt.Sprintf("path %s wasn't found", r.URL.Path),
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
