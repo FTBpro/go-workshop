@@ -31,7 +31,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *server) HandlePing(w http.ResponseWriter) {
+func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling Ping ...")
 
 	// TODO
@@ -39,25 +39,13 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 	// 3. write ping
 }
 
-func (s *server) HandleNotFound(w http.ResponseWriter, err error) {
+func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling notFound ...")
 	// TODO:
 	// 1. write status header 404 using
 	// 2. set content type application/json
 	// 3. write json indicating an error:
 	//   {
-	//       error: <the error message>
-	//   }
-}
-
-func (s *server) HandleError(w http.ResponseWriter, err error) {
-	log.Println("Handling error ...")
-
-	// TODO:
-	// 1. write status header 500
-	// 2. set content type application/json
-	// 3. write json indicating an error:
-	//   {
-	//       error: <the error message>
+	//       error: path <path> not not found
 	//   }
 }
