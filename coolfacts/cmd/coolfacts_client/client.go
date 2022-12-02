@@ -18,7 +18,7 @@ const (
 
 type getFactsResponse struct {
 	Facts []struct {
-		Image       string `json:"image"`
+		Topic       string `json:"topic"`
 		Description string `json:"description"`
 		// TODO: add a field for createdAt
 	} `json:"facts"`
@@ -83,13 +83,13 @@ func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
 	return getFactsRes.toCoolFacts(), nil
 }
 
-func (c *client) CreateFact(fct coolfact.Fact) error {
+func (c *client) CreateFact(fact coolfact.Fact) error {
 	ul := c.endpoint + pathCreateFact
 
 	// First we are preparing the payload
 	payload := map[string]interface{}{
-		"image":       fct.Image,
-		"description": fct.Description,
+		"topic":       fact.Topic,
+		"description": fact.Description,
 	}
 
 	// we need io.Reader to create a new http request.
