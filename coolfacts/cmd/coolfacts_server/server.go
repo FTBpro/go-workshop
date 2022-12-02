@@ -52,6 +52,20 @@ func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(response); err != nil {
+		err = fmt.Errorf("HandleNotFound failed to decode: %s", err)
+		s.HandleError(w, err)
+	}
+}
+
+func (s *server) HandleError(w http.ResponseWriter, err error) {
+	log.Println("Handling error ...")
+
+	w.WriteHeader(http.StatusInternalServerError)
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]string{
+		"error": err.Error(),
+	}
+	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
 }
