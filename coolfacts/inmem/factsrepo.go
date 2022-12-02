@@ -8,7 +8,7 @@ type factsRepo struct {
 	facts []coolfact.Fact
 }
 
-func NewFactsRepository() *factsRepo {
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 	// TODO: init facts repo
 }
 
