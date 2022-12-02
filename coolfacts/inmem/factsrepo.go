@@ -8,18 +8,9 @@ type factsRepo struct {
 	facts []coolfact.Fact
 }
 
-func NewFactsRepository() *factsRepo {
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 	return &factsRepo{
-		facts: []coolfact.Fact{
-			{
-				Topic:       "Games",
-				Description: "Did you know sonic is a hedgehog?!",
-			},
-			{
-				Topic:       "TV",
-				Description: "You won't believe what happened to Arya!",
-			},
-		},
+		facts: facts,
 	}
 }
 
