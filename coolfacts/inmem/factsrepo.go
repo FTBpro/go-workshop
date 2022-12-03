@@ -2,29 +2,54 @@ package inmem
 
 import (
 	"sort"
-	
+
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type factsRepo struct {
-	facts []coolfact.Fact
+	factsByTopic map[string][]coolfact.Fact
 }
 
 func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
+	factsByTopic := map[string][]coolfact.Fact{}
+	for _, fact := range facts {
+		factsByTopic[fact.Topic] = append(factsByTopic[fact.Topic], fact)
+	}
+
 	return &factsRepo{
-		facts: facts,
+		factsByTopic: factsByTopic,
 	}
 }
 
-func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
-	sort.Sort(byCreatedAt(r.facts))
-	
-	return r.facts, nil
+func (r *factsRepo) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
+	var facts []coolfact.Fact
+	if filters.Topic != "" {
+		facts = r.factsByTopic[filters.Topic]
+	} else {
+		facts = r.allFacts()
+	}
+
+	sort.Sort(byCreatedAt(facts))
+
+	if filters.Limit < len(facts) {
+		facts = facts[:filters.Limit]
+	}
+
+	return facts, nil
 }
 
 func (r *factsRepo) CreateFact(fact coolfact.Fact) error {
-	r.facts = append(r.facts, fact)
+	r.factsByTopic[fact.Topic] = append(r.factsByTopic[fact.Topic], fact)
 	return nil
+}
+
+func (s *factsRepo) allFacts() []coolfact.Fact {
+	var allFacts []coolfact.Fact
+	for _, facts := range s.factsByTopic {
+		allFacts = append(allFacts, facts...)
+	}
+
+	return allFacts
 }
 
 type byCreatedAt []coolfact.Fact
