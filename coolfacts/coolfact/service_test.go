@@ -17,40 +17,62 @@ func Test_service_GetFacts(t *testing.T) {
 	facts := generateRandomFactsDesc(10)
 
 	tests := []struct {
-		name      string
-		repoField coolfact.Repository
-		want      []coolfact.Fact
-		wantErr   bool
+		name         string
+		repoField    coolfact.Repository
+		filtersInput coolfact.Filters
+		want         []coolfact.Fact
+		wantErr      bool
 	}{
 		{
 			name:      "add in a sorted way",
 			repoField: inmem.NewFactsRepository(facts...),
-			want:      facts,
-			wantErr:   false,
+			filtersInput: coolfact.Filters{
+				Limit: 10,
+			},
+			want:    facts,
+			wantErr: false,
 		},
 		{
 			name:      "add in a UNsorted way",
 			repoField: inmem.NewFactsRepository(facts[5], facts[4], facts[2]),
-			want:      []coolfact.Fact{facts[2], facts[4], facts[5]},
-			wantErr:   false,
+			filtersInput: coolfact.Filters{
+				Limit: 10,
+			},
+			want:    []coolfact.Fact{facts[2], facts[4], facts[5]},
+			wantErr: false,
 		},
 		{
 			name:      "no facts - should get nil",
 			repoField: inmem.NewFactsRepository(),
-			want:      nil,
-			wantErr:   false,
+			filtersInput: coolfact.Filters{
+				Limit: 10,
+			},
+			want:    nil,
+			wantErr: false,
 		},
 		{
 			name:      "repo returns error",
 			repoField: mockRepoError{},
-			want:      nil,
-			wantErr:   true,
+			filtersInput: coolfact.Filters{
+				Limit: 10,
+			},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name:      "limit",
+			repoField: inmem.NewFactsRepository(facts...),
+			filtersInput: coolfact.Filters{
+				Limit: 5,
+			},
+			want:    facts[:5],
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := coolfact.NewService(tt.repoField)
-			got, err := s.GetFacts()
+			got, err := s.GetFacts(tt.filtersInput)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetFacts() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -111,7 +133,11 @@ func Test_service_CreateFact(t *testing.T) {
 				require.NoError(t, err)
 			}
 
-			gotFacts, err := s.GetFacts()
+			filters := coolfact.Filters{
+				Limit: 10,
+			}
+
+			gotFacts, err := s.GetFacts(filters)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -146,7 +172,7 @@ func randomFact() coolfact.Fact {
 type mockRepoError struct {
 }
 
-func (m mockRepoError) GetFacts() ([]coolfact.Fact, error) {
+func (m mockRepoError) GetFacts(_ coolfact.Filters) ([]coolfact.Fact, error) {
 	return nil, fmt.Errorf("mock repo returns error")
 }
 

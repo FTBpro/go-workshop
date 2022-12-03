@@ -7,3 +7,8 @@ type Fact struct {
 	Description string
 	CreatedAt   time.Time
 }
+
+type Filters struct {
+	Topic string
+	Limit int
+}
