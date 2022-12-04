@@ -1,6 +1,6 @@
 # Part 6
 
-In this exercise you will add some more interesting use case for the get facts API. The option to search facts by topic, and add a limit. 
+In this exercise you will add some more interesting use case for the get facts API. The option to search facts by topic, and add a limit.
 
 ### The starting point
 To get started, run this command to clone the necessary exercise materials in a convenient folder:
@@ -17,7 +17,7 @@ $ > getFacts [limit] [topic (optional)]
 ```
 You will implement this new ability at the server side.
 
-The tests were updated for testing the new functionality. After all is implemented they should pass. 
+The tests were updated for testing the new functionality. After all is implemented they should pass.
 
 ## Step 1 - coolfact/fact.go
 
@@ -31,15 +31,15 @@ As said, the method `GetFacts` should be called `SearchFacts` and should receive
 
 ## Step 3 - inmem/factsrepo.go
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In here you can notice that the type `factsRepo` now holds `factsByTopic map[string][]coolfact.Fact` instead of just `facts []coolfact.Fact`. Use this field and fix all the implementation inside the repo.
-  - `NewFactsRepository` - fix implementation.
-  - `GetFacts` - fix method name/signature and implementation.
-    - Note that `topic` is optional.
-  - `CreateFact` - fix implementation.
+    - `NewFactsRepository` - fix implementation.
+    - `GetFacts` - fix method name/signature and implementation.
+        - Note that `topic` is optional.
+    - `CreateFact` - fix implementation.
 
 ## Step 3 - coolfact_service/server.go
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In `HandleGetFacts`, reaad the query params from the request and use them for inialize `coolfact.Filters` struct to be sent to the service method.
-  - Use `r.URL.Query()` for accessing the query params.
-  - Note that the limit is mandatory, meaning that if there isn't limit (or the limit isn't string), you should return bad request. In this case call the method `HandleBadRequest` which you will implement.
+    - Use `r.URL.Query()` for accessing the query params.
+    - Note that the limit is mandatory, meaning that if there isn't limit (or the limit isn't string), you should return bad request. In this case call the method `HandleBadRequest` which you will implement.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `HandleBadRequest`. Just like any other error response, but the status should be 400 (`http.StatusBadRequest`)
 
 # Build And Run
