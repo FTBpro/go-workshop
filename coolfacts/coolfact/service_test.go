@@ -13,7 +13,7 @@ import (
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
 )
 
-func Test_service_GetFacts(t *testing.T) {
+func Test_service_SearchFacts(t *testing.T) {
 	facts := generateRandomFactsDesc(10)
 
 	tests := []struct {
@@ -72,13 +72,13 @@ func Test_service_GetFacts(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := coolfact.NewService(tt.repoField)
-			got, err := s.GetFacts(tt.filtersInput)
+			got, err := s.SearchFacts(tt.filtersInput)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetFacts() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("SearchFacts() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetFacts() got = %v, want %v", got, tt.want)
+				t.Errorf("SearchFacts() got = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -137,7 +137,7 @@ func Test_service_CreateFact(t *testing.T) {
 				Limit: 10,
 			}
 
-			gotFacts, err := s.GetFacts(filters)
+			gotFacts, err := s.SearchFacts(filters)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -172,7 +172,7 @@ func randomFact() coolfact.Fact {
 type mockRepoError struct {
 }
 
-func (m mockRepoError) GetFacts(_ coolfact.Filters) ([]coolfact.Fact, error) {
+func (m mockRepoError) SearchFacts(_ coolfact.Filters) ([]coolfact.Fact, error) {
 	return nil, fmt.Errorf("mock repo returns error")
 }
 
