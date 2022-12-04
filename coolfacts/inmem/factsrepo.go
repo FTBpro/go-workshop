@@ -21,7 +21,7 @@ func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 	}
 }
 
-func (r *factsRepo) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
+func (r *factsRepo) SearchFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
 	var facts []coolfact.Fact
 	if filters.Topic != "" {
 		facts = r.factsByTopic[filters.Topic]

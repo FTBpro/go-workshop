@@ -3,7 +3,7 @@ package coolfact
 import "fmt"
 
 type Repository interface {
-	GetFacts(filters Filters) ([]Fact, error)
+	SearchFacts(filters Filters) ([]Fact, error)
 	CreateFact(fct Fact) error
 }
 
@@ -17,10 +17,10 @@ func NewService(factsRepo Repository) *service {
 	}
 }
 
-func (s *service) GetFacts(filters Filters) ([]Fact, error) {
-	facts, err := s.factsRepo.GetFacts(filters)
+func (s *service) SearchFacts(filters Filters) ([]Fact, error) {
+	facts, err := s.factsRepo.SearchFacts(filters)
 	if err != nil {
-		return nil, fmt.Errorf("factsService.GetFacts: %w", err)
+		return nil, fmt.Errorf("factsService.SearchFacts: %w", err)
 	}
 
 	return facts, nil

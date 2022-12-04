@@ -13,7 +13,7 @@ import (
 )
 
 type FactsService interface {
-	GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error)
+	SearchFacts(filters coolfact.Filters) ([]coolfact.Fact, error)
 	CreateFact(fact coolfact.Fact) error
 }
 
@@ -95,9 +95,9 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 		Limit: limit,
 	}
 
-	facts, err := s.factsService.GetFacts(filters)
+	facts, err := s.factsService.SearchFacts(filters)
 	if err != nil {
-		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
+		s.HandleError(w, fmt.Errorf("server.SearchFactsHandler: %w", err))
 		return
 	}
 
