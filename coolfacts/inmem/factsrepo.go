@@ -40,6 +40,7 @@ func (r *factsRepo) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) 
 
 func (r *factsRepo) CreateFact(fact coolfact.Fact) error {
 	r.factsByTopic[fact.Topic] = append(r.factsByTopic[fact.Topic], fact)
+
 	return nil
 }
 
