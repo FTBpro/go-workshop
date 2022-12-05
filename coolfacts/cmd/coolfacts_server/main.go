@@ -2,23 +2,23 @@ package main
 
 import (
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/coolhttp"
 	"log"
 	"net/http"
 	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
+	"github.com/FTBpro/go-workshop/coolfacts/coolhttp"
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
 )
 
 func main() {
 	fmt.Println("Hello, Server!")
 
-	router := coolhttp.NewRouter()
-
 	factsRepo := inmem.NewFactsRepository(seedFacts()...)
 	service := coolfact.NewService(factsRepo)
 	server := NewServer(service)
+	router := coolhttp.NewRouter()
+	router.SetNotFoundHandler(server.HandleNotFound)
 	server.RegisterRouter(router)
 
 	log.Println("starting server on port 9002")
