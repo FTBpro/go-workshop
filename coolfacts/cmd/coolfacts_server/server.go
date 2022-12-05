@@ -80,7 +80,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling getFact ...")
 
 	// TODO: add filters. Read from query params using r.URL.Query()
-	// If the user didn't set limit, or the limit isn't an int. return bad request - User method HandleBadRequest
+	// If the user didn't set limit, or the limit isn't an int. return bad request - (use method HandleBadRequest)
 
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
