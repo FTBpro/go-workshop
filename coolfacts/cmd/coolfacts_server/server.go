@@ -81,7 +81,8 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 
 	limitString := r.URL.Query().Get("limit")
 	if limitString == "" {
-		limitString = "0"
+		err := fmt.Errorf("must send limit")
+		s.HandleBadRequest(w, err)
 	}
 
 	limit, err := strconv.Atoi(limitString)
