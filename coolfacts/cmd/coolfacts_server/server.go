@@ -49,31 +49,6 @@ func (s *server) RegisterRouter(router Router) {
 	router.Handle(http.MethodPost, "/facts", s.HandleCreateFact)
 }
 
-//func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-//log.Println("incoming request", r.Method, r.URL.Path)
-//
-//switch r.Method {
-//case http.MethodGet:
-//	switch strings.ToLower(r.URL.Path) {
-//	case "/ping":
-//		s.HandlePing(w, r)
-//	case "/facts":
-//		s.HandleGetFacts(w, r)
-//	default:
-//		s.HandleNotFound(w, r)
-//	}
-//case http.MethodPost:
-//	switch strings.ToLower(r.URL.Path) {
-//	case "/facts":
-//		s.HandleCreateFact(w, r)
-//	default:
-//		s.HandleNotFound(w, r)
-//	}
-//default:
-//	s.HandleNotFound(w, r)
-//}
-//}
-
 func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	log.Println("Handling Ping ...")
 

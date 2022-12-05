@@ -14,6 +14,7 @@ import (
 
 	server "github.com/FTBpro/go-workshop/coolfacts/cmd/coolfacts_server"
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
+	"github.com/FTBpro/go-workshop/coolfacts/coolhttp"
 )
 
 func Test_Server_GetFacts(t *testing.T) {
@@ -69,7 +70,10 @@ func Test_Server_GetFacts(t *testing.T) {
 			}
 
 			srv := server.NewServer(&mockService)
-			ts := httptest.NewServer(srv)
+			router := coolhttp.NewRouter()
+			srv.RegisterRouter(router)
+
+			ts := httptest.NewServer(router)
 
 			res, err := http.Get(ts.URL + "/facts" + tt.queryParamsToSend)
 			require.NoError(t, err)
@@ -114,7 +118,9 @@ func Test_Server_CreateFacts(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			mockService := mockFactsService{}
 			srv := server.NewServer(&mockService)
-			ts := httptest.NewServer(srv)
+			router := coolhttp.NewRouter()
+			srv.RegisterRouter(router)
+			ts := httptest.NewServer(router)
 
 			payload := map[string]interface{}{
 				"topic":       tt.factToCreate.Topic,
