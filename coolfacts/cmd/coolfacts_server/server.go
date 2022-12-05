@@ -44,9 +44,7 @@ func NewServer(factsService FactsService) *server {
 }
 
 func (s *server) RegisterRouter(router Router) {
-	router.Handle(http.MethodGet, "/ping", s.HandlePing)
-	router.Handle(http.MethodGet, "/facts", s.HandleGetFacts)
-	router.Handle(http.MethodPost, "/facts", s.HandleCreateFact)
+	// TODO: implement
 }
 
 func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
