@@ -2,7 +2,7 @@
 
 In this exercise, you will implement a new API in the server for creating a fact.
 You will also implement in the client the method that calls this API with an input from the user.
-Another command that the client will export is getting the last created fact. 
+Another command that the client will export is getting the last created fact.
 
 The starting point
 To get started, run this command to clone the necessary exercise materials in a convenient folder:
@@ -15,9 +15,9 @@ Take a look around the program, there are a bunch of new TODOs and functionality
 
 ## Step 0 - Notice `coolfacts_clinet/main.go`
 We added two new commands:
-- `"createFact"` for creating a new fact in the server. 
+- `"createFact"` for creating a new fact in the server.
 - `"getLastFact` for returning the last created fact.
-In the `client`, you will implement the methods for supporting these command.
+  In the `client`, you will implement the methods for supporting these command.
 
 In addition, for returning the last created fact, we need a way to which fact was created last. For supporting this, you will add a new field in the entity `coolfact.Fact` - `CreatedAt`.
 For this, you will get to know the go package `time` - This package Package time provides functionality for measuring and displaying time.
@@ -26,17 +26,74 @@ The basic type is `time.Time` which represents an instant in time with nanosecon
 
 For sorting, you will learn and use the go package `sort`.
 
+## Step 0.1 - Notice `coolfact/service_test.go`
+
+You can notice that wev'e added tests for our service, before you start to implement, let's understand what's in it.
+
+Tests files in go have the suffix `_test`. These files are not been built when you build the application. They are only considered when running the test go command:
+```commandline
+go test [build/test flags] [packages] [build/test flags & test binary flags]
+```
+
+For runnning all the tests, you need to be on the root folder (the one with the go.mod) and run
+```commandline
+.../coolfacts$ go test ./...
+```
+Let's take a look in the file itself. notice it's package name `coolfact_test`. In Go, the only valid case for a folder to contain two packages is a test package. The suffix `_test` to the package isn't mandatory, but it helps when you only wish to test the public interface of the package. This is best for checking the interface from a real consumer POV. 
+
+When running the `go test` command, Go searchs in all the `_test.go` files for functions with `Test` prefix. These files takes one argument `t *testing.T` which is a type passed to Test functions to manage test state and support formatted test logs.
+
+Test functions can be named anything with a `Test` prefix, but there is some convention:
+```go
+func Test_<type_name>_<method_name>
+```
+In here, we test our `service` methods `GetFacts` and `CreateFacts`, so our test functions are named
+```go
+func Test_service_AllFacts(t *testing.T) {...}
+
+func Test_service_CreateFact(t *testing.T) {...}
+```
+
+The structure of the test is an example of _Table Driven Tests_:
+
+```go
+func Test...(t *testing.T) {
+	type testCase struct {...}
+	
+	tests := []testCase{
+		{...},
+		{...},
+	}
+	
+	for _, tc := range tests {
+		t.Run(tc.Name, func(t *testing.T) {
+			// Here we write the test itself
+		})
+	}
+}
+```
+We declaring type `testCase` which is a struct that holds the parameters for the tests, these can be:
+- Name of the test.
+- Input for initializing the service.
+- Arguments for the methods.
+- Expected result.
+- Indicator if we expect an error.
+
+In the `t.Run` method we write the test. In `GetFacts` for example, we initialize the service with the repo we set in the `repoField` field, call the method `GetFacts` and expected to receive either en error or what we set in the field `want`.
+
+You can also notice, that in the first test we've used `t.Fatal`, and in the second test we've used `require`. `require` is a package that provides helpful methods for testing. It also prints the failure in a more readable way. Since it's an external library, you can see that we've added a require in `go.mod`.  
+
 ## Step 1 - Implement The BL
 ### coolfact/fact.go
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">For supporting the sorting, add the field for the createdAt.
 
 ### coolfact/service.go
-The service has new functionality for creating a fact. 
+The service has new functionality for creating a fact.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In the `Repository` interface, add the method that the service requires.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`.
 
 ## Step 2 - The repo
-The repository now have new method for creating a fact. In addition you need to change the method for getting facts and sort them by their created time. 
+The repository now have new method for creating a fact. In addition you need to change the method for getting facts and sort them by their created time.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In `GetFacts` add the sorting. For the sort, you will use the type `byCreatedAt`. To learn about sorting using `sort.Sort`, read the TODO in the code in the `GetFacts` method.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`
 
@@ -45,10 +102,10 @@ The service has a new API:
 ```json
 POST "/facts"
 
-Request: 
+Request:
 {
-  "image": "...",
-  "description": "..."
+"image": "...",
+"description": "..."
 }
 
 Response:
@@ -79,7 +136,7 @@ TODO:(oren) add gif
 
 ## Step 1 - Implement The BL
 ### coolfact/fact.go
-In our entity, we add a new field `CreatedAt` for specifying the time the fact was created. 
+In our entity, we add a new field `CreatedAt` for specifying the time the fact was created.
 ```go
 type Fact struct {
 	Image       string
@@ -142,7 +199,7 @@ func (s byCreatedAt) Less(i, j int) bool {
 ```
 
 Note the type conversion: `byCreatedAt(r.facts)`. Type conversion is simply to convert some value to other type.
-This is possible since the two types are compatible.    
+This is possible since the two types are compatible.
 
 ## Step 3 - Server
 The service exports a new API for creating the fact. The http method is `POST`, and the path is `"/facts"`. We will add a new case in our `ServeHTTP` method:
