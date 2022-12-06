@@ -63,7 +63,7 @@ func main() {
 	fmt.Println("Hello, Server!")
 
 	// new initializations
-	factsRepo := inmem.NewFactsRepository()
+	factsRepo := inmem.NewFactsRepository(seedFacts()...)
 	service := coolfact.NewService(factsRepo)
 	server := NewServer(service)
 
@@ -73,6 +73,19 @@ func main() {
 		panic(fmt.Errorf("server crashed! err: %w", err))
 	}
 }
+
+func seedFacts() []coolfact.Fact {
+  return []coolfact.Fact{
+    {
+      Topic:       "Games",
+      Description: "Did you know sonic is a hedgehog?!",
+    },
+    {
+      Topic:       "TV",
+      Description: "You won't believe what happened to Arya!",
+    },
+  }
+}
 ```
 We first can notice the new imports:
 ```go
@@ -81,7 +94,22 @@ We first can notice the new imports:
 ```
 we are importing packages from our own module. We have the module path and then the path to the package we want to import. The module path is `github.com/FTBpro/go-workshop/coolfacts`.
 
-In the next lines we initializing the repo, service and the server. A pacage name is only the last param, and each type in Go has a name composed from the package name and the type identifier. For example, we call `inmem.NewFactsRepository()`. The package name is `inmem`, and the type identifier is `inmem.NewFactsRepository()`
+In the next lines we initializing the repo, service and the server. A pacage name is only the last param, and each type in Go has a name composed from the package name and the type identifier. For example, we call `inmem.NewFactsRepository`. The package name is `inmem`, and the type identifier is `inmem.NewFactsRepository()`.
+
+You can note that we are initialzing the repo with facts: `inmem.NewFactsRepository(seedFacts()...)`. The `inmem.NewFactsRepository` signature is:
+```go
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
+```
+The 3 dots indicates that it is a _variadic_ function. It can be called with any number of trailing arguments. You might already notices that `fmt.Println` is a variadic function:
+```go
+func Println(a ...any) (n int, err error) {
+```
+
+If you already have multiple args in a slice, you apply them to a variadic function using `func(slice...)`. This is why we call the function like this:
+```go
+inmem.NewFactsRepository(seedFacts()...)
+```
+
 
 What you will have to complete is:
 ## Step 1 - package `coolfact`
@@ -106,8 +134,7 @@ In service.go we have the service which will handle the "BL" for the application
 ## Step 2 - Package `inmem`
 ### <u> file `inmem/factsrepo.go`:</u>
 Here we will implement the facts repository. Currently, only with functionality to return facts.
-- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `NewFactsRepository`
-  - Just so we will have initial data, initialize the repo with two facts.
+- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `NewFactsRepository`.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `GetFacts`.
 
 ## Step 3 - `cmd/server.go`
@@ -185,20 +212,11 @@ func (s *service) GetFacts() ([]Fact, error) {
 In GetFacts the service calls the repo. Notice that if there is an error, the service wraps it and adding some context, so we will have friendlier message.
 
 ## Step 2 - The repo
-We initialize the `factsRepo` with a slice including 2 cool facts
+We initialize the `factsRepo` with the arg slice:
 ```go
-func NewFactsRepository() *factsRepo {
+func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
   return &factsRepo{
-     facts: []coolfact.Fact{
-        {
-           Image:       "https://images2.minutemediacdn.com/image/upload/v1556645500/shape/cover/entertainment/D5aliXvWsAEcYoK-fe997566220c082b98030508e654948e.jpg",
-           Description: "Did you know sonic is a hedgehog?!",
-        },
-        {
-           Image:       "https://images2.minutemediacdn.com/image/upload/v1556641470/shape/cover/entertainment/uncropped-Screen-Shot-2019-04-30-at-122411-PM-3b804f143c543dfab4b75c81833bed1b.jpg",
-           Description: "You won't believe what happened to Arya!",  
-        },
-     },
+     facts: facts,
   }
 }
 
