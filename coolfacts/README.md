@@ -19,4 +19,4 @@ Each part continue the work from the previous one, and for each there is a docum
 * [Exercise 6 - Search Facts API](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex6-search-facts.md)
 * [Exercise 7 - Basic Router](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex7-basic-router.md)
 
->> Disclaimer: We've tried to rake into accound convention and styleguides about code and architecture, but this repo is for very basic learning experience. There might be much practices that in a real world applications would be considered dirty.
+>> Disclaimer: We've tried to take into account convention and styleguides about code and architecture, but this repo is for very basic learning experience. There might be much practices that in a real world applications would be considered dirty.
