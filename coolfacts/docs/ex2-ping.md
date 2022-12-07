@@ -161,7 +161,8 @@ func (s *server) HandlePing(w http.ResponseWriter) {
 First, we need to write the status. For this we use `w.WriteHeader(http.StatusOK)`
 
 Next, we will write “PONG”. We can notice that the `http.ResponseWriter` implements `io.Writer`.
-Hence we can use all bunch of methods for writing the response. Here we only need to return text, so we will use `fmt.Fprintf` which receives `io.Writer`. We a;ready see the power of go interfaces, and especially interfaces with one method. `fmt.Fprintf` has no clue about `http`, and `ResponseWriter` has no clue about `fmt`.
+Hence, we can use all bunch of methods for writing the response. Here we only need to return text, so we will use `fmt.Fprintf` which receives `io.Writer`.
+We already see the power of go interfaces, and especially interfaces with one method. `fmt.Fprintf` has no clue about `http`, and `ResponseWriter` has no clue about `fmt`.
 
 ### `HandleNotFound` and `HandleError`:
 These methods are almost identical, except of the error message and the status. `HandleNotFound` returns status 404 - `http.StatusNotFound`
@@ -202,6 +203,6 @@ We can send the `http.ResponseWriter` to different packages methods, and use a d
 # Finish!
 <img src=https://user-images.githubusercontent.com/5252381/204150018-b6f1a5af-c557-443a-9301-7c0e98a4a3f7.png width="91">
 
-Congratulation! You've just implemented a web server and BL for returning facts.
+Congratulation! You've just implemented a web server!
 
-In the following exercise we will add an API for creating a fact, and a client application for calling our server.
+In the following exercise we will add an API for getting facts, create fact, client and introduce other packages.
