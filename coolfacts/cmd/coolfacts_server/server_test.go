@@ -193,7 +193,7 @@ type mockFactsService struct {
 	createFactGotFact coolfact.Fact
 }
 
-func (m *mockFactsService) SearchFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
+func (m *mockFactsService) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
 	m.filtersGot = filters
 
 	if m.shouldReturnError {
