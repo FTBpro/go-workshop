@@ -3,23 +3,19 @@
 In this exercise, you will add an API to the server for presenting the existing facts.
 
 ## The Starting Point
-To get the initial application, run the next command:
-```commandline
-$ git clone --branch v3-server-get-facts https://github.com/FTBpro/go-workshop.git
-```
-This will clone the branch `v3-server-get-facts` which we will use for building and running our web server.
+Be sure to be on branch `v3-server-get-facts`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
 ## Your Goal
 
-After implementing all the TODOs, the server will export another API for getting the current facts.
+After implementing all the TODOs, the server will export an API for getting the current facts.
 ```json
-GET /facts
+GET "/facts"
 
 response: 
 {
   "facts": [
     {
-        "image": "...",
+        "topic": "...",
         "description": "..."
     }
 	//...
@@ -28,7 +24,7 @@ response:
 ```
 
 ## Getting Started
-Take a look around the program. You will notice new folders - `coolfact` and `inmem`. In addition you will notice some changes in the main package.
+Take a look around the program. You will notice new folders - `coolfact` and `inmem`. In addition, you will notice some changes in the main package.
 
 ### coolfact
 This is a package containing the entity `fact` and the service for implementing the use case (business logic).
@@ -87,20 +83,20 @@ func seedFacts() []coolfact.Fact {
   }
 }
 ```
-We first can notice the new imports:
+We first can notice new imports:
 ```go
 "github.com/FTBpro/go-workshop/coolfacts/coolfact"
 "github.com/FTBpro/go-workshop/coolfacts/inmem"
 ```
 we are importing packages from our own module. We have the module path and then the path to the package we want to import. The module path is `github.com/FTBpro/go-workshop/coolfacts`.
 
-In the next lines we initializing the repo, service and the server. A pacage name is only the last param, and each type in Go has a name composed from the package name and the type identifier. For example, we call `inmem.NewFactsRepository`. The package name is `inmem`, and the type identifier is `inmem.NewFactsRepository()`.
+In the next lines we're initializing the repo, service and the server. A package name is only the last param, and each type in Go has a name composed of the package name and the type identifier. For example, we call `inmem.NewFactsRepository`. The package name is `inmem`, and the full type name is `inmem.NewFactsRepository()`.
 
-You can note that we are initialzing the repo with facts: `inmem.NewFactsRepository(seedFacts()...)`. The `inmem.NewFactsRepository` signature is:
+You can note that we are initializing the repo with facts: `inmem.NewFactsRepository(seedFacts()...)`. The `inmem.NewFactsRepository` signature is:
 ```go
 func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 ```
-The 3 dots indicates that it is a _variadic_ function. It can be called with any number of trailing arguments. You might already notices that `fmt.Println` is a variadic function:
+The 3 dots indicates that it is a _variadic_ function. It can be called with any number of trailing arguments. You already used a variadic function in the previous exercises, `fmt.Println`:
 ```go
 func Println(a ...any) (n int, err error) {
 ```
@@ -118,16 +114,16 @@ This package handles the BL of the application.
 ### <u> file `coolfact/fact.go`: </u>
 In here we have the entity of the application. A struct named `Fact`.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Complete the definition of `Fact`. It should have the following fields:
-  - Image string
-  - Description string
+  - Topic - string
+  - Description - string
 
 ### <u> file `coolfact/service.go`:</u>
 In service.go we have the service which will handle the "BL" for the application. In the service you will:
 - **Finish `Repository` interface{}**
-  - in Go we declare interfaces where we use them, not where we implement them. For the service to operate properly, it requires a `Repository` interface which he defines. It makes sense, since the service knows what it needs to do, and what the dependancy it needs to have. We can note that the name of the interface{} isn't InmemRepo or SQLRepo or something else, since the service is agnostic to the way the repo operates. He doesn't care about the mechanism, only behaviour.
+  - in Go we declare interfaces where we use them, not where we implement them. For the service to operate properly, it requires a `Repository` interface which he defines. It makes sense, since the service knows what it needs to do, and what the dependancy it needs to have. We can note that the name of the `interface{}` isn't `InmemRepo` or `SQLRepo` or something else, since the service is agnostic to the way the repo operates. He doesn't care about the mechanism, only behaviour.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Add one method for getting facts.
     - `GetFacts` - return slice of `coolfact.Fact` and an error
-  - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish definition of service.
+  - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish definition of service. The service should have a field for the `factsRepo`, which it will receive in the initialization. 
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `NewService`. Return instance of `service` initialized with its field.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement methods `GetFacts`.
 
@@ -139,7 +135,7 @@ Here we will implement the facts repository. Currently, only with functionality 
 
 ## Step 3 - `cmd/server.go`
 As mentioned before, you will implement a new API for the `server`, what you will have to complete in the server is:
-- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish definition of the FactsService interface. Which method does the server needs in order to operate?
+- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish definition of the `FactsService` interface. Which method does the server needs in order to operate?
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Add field in the `server` for the factsService, and complete the initialization. In function `NewServer` add pass argument. 
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">In method `serveHTTP`, add a case for the new API, that will call method `HandleGetFacts`
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `HandleGetFacts` method. The method for handling the `GET /facts` API
@@ -149,7 +145,7 @@ As mentioned before, you will implement a new API for the `server`, what you wil
   {
     "facts": [
         {
-          "image": "...",
+          "topic": "...",
           "description": "..."
         },
         //...
@@ -172,7 +168,7 @@ In the following section you fill find a full walkthrough. Use it in case you ar
 In `fact.go` we simply add fiedls to the entity:
 ```go
 type Fact struct {
-  Image       string
+  Topic       string
   Description string
 }
 ```
@@ -209,7 +205,7 @@ func (s *service) GetFacts() ([]Fact, error) {
   return facts, nil
 }
 ```
-In GetFacts the service calls the repo. Notice that if there is an error, the service wraps it and adding some context, so we will have friendlier message.
+In `GetFacts`, the service calls the repo. Notice that if there is an error, the service wraps it and adding some context, so we will have friendlier message.
 
 ## Step 2 - The repo
 We initialize the `factsRepo` with the arg slice:
@@ -255,11 +251,10 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
      s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
   }
 
-  // we first format the facts to map[string]interface.
   formattedFacts := make([]map[string]interface{}, len(facts))
   for i, coolFact := range facts {
      formattedFacts[i] = map[string]interface{}{
-        "image":       coolFact.Image,
+        "topic":       coolFact.Topic,
         "description": coolFact.Description,
      }
   }
@@ -272,12 +267,12 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 }
 ```
 You may ask yourself why don’t we just return the facts to the client?
-This is because we want to keep separation of concerns. The entity should know nothing about the outer layer, for example the client.
+This is because we want to keep separation of concerns. The entity should know nothing about the outer layer, for example the http response.
 
 The API response and the entity field should be considered different. We don’t want that changes in the entity will have unexpected cascading changes,  
 and we don’t want that a requirement to modify the response will trigger a change to the entity.
 
-The rest of the method is to write the status and content type header, and then write the response body to the writer:
+We left with writing the status and content type header, and then write the response body to the writer:
 ```go
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
   // code omitted
@@ -294,10 +289,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 ```
 
 Since we are returning a JSON, we can use the Go `json` package, which can writes a JSON encoding of the response to the writer.
-The `NewEncoder` method receives `io.Writer`. We already can notice the power of Go interfaces, and especially interfaces with one method.
-We can send the `http.ResponseWriter` to different packages methods, and use a different encoding, and the packages are totally agnostic to HTTP.
+The `NewEncoder` method receives `io.Writer`. We can pass the `http.ResponseWriter` to different packages methods, and use a different encoding, and the packages are totally agnostic to HTTP.
 
 # Finish!
 Congratulation! You've just implemented a new API with a totally cool use-case!
-
-In the following exercise we will add an API for creating a fact, and a client application for calling our server.

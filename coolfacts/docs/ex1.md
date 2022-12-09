@@ -3,8 +3,10 @@
 
 In this exercise, you will create a basic "Hello, World!" application. You will learn how to build and run a Go program and basic terminology.
 
+## Prerequisites
+TODO: addddddd
+
 ## The Starting Point
-TODO: add pre requirements
 To get the initial application, run the next command:
 ```commandline
 $ git clone --branch v1-hello-world https://github.com/FTBpro/go-workshop.git
