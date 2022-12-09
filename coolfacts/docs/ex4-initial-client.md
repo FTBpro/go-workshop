@@ -1,19 +1,16 @@
 # Part 4
 
-In this exercise, you will implement a client that we will use for calling our server.
+In this exercise, you will implement a client that will call our server.
 The client will sit in another main package in our `cmd` folder, making our coolfacts Go program to have 2 application. One server and one client. 
 
-The starting point
-To get started, run this command to clone the necessary exercise materials in a convenient folder:
-```commandline
-$ git clone --branch v4-initial-client https://github.com/FTBpro/go-workshop.git
-```
+## The starting point
+Be sure to be on branch `v4-initial-client`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
 # The Goal
-After completing the exercise, you will have a client application which will take one command from the terminal, to call the server and get all the facts.
+After completing the exercise, you will have a client application which will take one command from the terminal - to call the server and get all the facts.
 
 # **Getting Started**
-Take a look around the program, you notice a new cmd application - `coolfacts_client`, with two files, `main.go` and `client.go`
+Take a look around the program, you can notice a new cmd application - `coolfacts_client`, with two files, `main.go` and `client.go`
 
 ## Step 0 - Notice `main.go`
 In this file you don't hva any TODO, but let's get over it so you will be familiar with what that's going on
@@ -50,7 +47,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 Currently, there is only one command `commandGetAllFacts` which is a const for "getAllFacts".
 
 ## Step 1 - client.go - implement the client
-Take a look in the file and notice we have client struct and initializer. When the user will send an input `getAllFacts`,
+Take a look in the file and notice that we have a `client` struct and initializer. When the user will send an input `"getAllFacts"`,
 the client's method `GetAllFacts` will be called, and the client will call the server getFacts API. You will implement the method `GetAllFacts`
 
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Fill struct `getFactsResponse`
@@ -59,7 +56,7 @@ the client's method `GetAllFacts` will be called, and the client will call the s
   {
       "facts": [
           {
-              "image": "...",
+              "topic": "...",
               "description": "..."
           }
           //...
@@ -69,7 +66,7 @@ the client's method `GetAllFacts` will be called, and the client will call the s
   - Example on JSON tags and some json package functionality - For this be sure to add json tags on the struct. (https://gobyexample.com/json)
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `ToCoolFacts()` method. You will use this method for converting the server response to the entity.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `GetAllFacts`.
-  - Notice the start of the method, we are composing the url for get facts which is "127.0.0.1:9002/facts" and calling `http.Get(...)`. The clinet must read and close the response after using it, you can see it in the `defer` block.
+  - Notice the start of the method, we are composing the url for get facts which is "127.0.0.1:9002/facts" and calling `c.httpClient.Get(...)`. The client must read and close the response after using it, you can see it in the `defer` block.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish implementing the method, handle the response as specified in the TODO in the code
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `readResponseGetFacts` as specified in the TODO in the code.
 
@@ -89,15 +86,15 @@ We will add fields to the struct `getFactsResponse`:
 ```go
 type getFactsResponse struct {
 	Facts []struct {
-		Image       string `json:"image"`
+		Topic       string `json:"topic"`
 		Description string `json:"description"`
 	} `json:"facts"`
 }
 ```
-As been said, this type represent the server JSON response. The json decoding, when receiving a struct, search for the json tags, to know how to format the fields.
-Note that the field are exported (public), this is for the json package to be able to see them.
+As been said, this type represent the server JSON response.
+Note that the field are exported (public), this is for the `json` package to be able to see them.
 
-We also implement method `toCoolFacts()`. We will use this method to convert the response to the entity the client needs to return. 
+We also implement method `toCoolFacts()`. We will use this method to convert the response to the entity that the client needs to return. 
 ```go
 func (r getFactsResponse) toCoolFacts() []coolfact.Fact {
 	coolfacts := make([]coolfact.Fact, len(r.Facts))
@@ -108,8 +105,10 @@ func (r getFactsResponse) toCoolFacts() []coolfact.Fact {
 	return coolfacts
 }
 ```
+Note the type conversion we do by: `coolfact.Fact(fact)` (not to be confused with type asserting (casting)). This type conversion is simply to convert some value to other type.
+This is possible since the two types are compatible.
 
-Finish implementing the method `GetAllFacts` - handling the response. In case the `StatusCode` is not `http.StatusOK`, we will read an error from the response and return it. Otherwise, we read the body and convert to our coolfact.Fact slice
+Then, we finish implementing the method `GetAllFacts` - handling the response. In case the `StatusCode` is not `http.StatusOK`, we will read an error from the response and return it. Otherwise, we read the body and convert to our `[]coolfact.Fact`
 ```go
 func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
         
@@ -156,6 +155,5 @@ func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, err
 ```
 
 # Finish!
-Congratulation! You've just implemented a client application, and when running alongside our server, you have request-response system!
+Congratulation! You've just implemented a client application! When running alongside our server, you have request-response system!
 
-In the following exercise we will add an API for creating a fact! 

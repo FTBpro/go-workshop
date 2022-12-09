@@ -16,7 +16,7 @@ type Router interface {
 }
 
 type FactsService interface {
-	SearchFacts(filters coolfact.Filters) ([]coolfact.Fact, error)
+	GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error)
 	CreateFact(fact coolfact.Fact) error
 }
 
@@ -62,8 +62,8 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling getFact ...")
 
 	limitString := r.URL.Query().Get("limit")
-	if limitString == "" {
-		err := fmt.Errorf("must send limit")
+	if limitString == "" || limitString == "0" {
+		err := fmt.Errorf("limit is mandatory int")
 		s.HandleBadRequest(w, err)
 	}
 
@@ -78,9 +78,9 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 		Limit: limit,
 	}
 
-	facts, err := s.factsService.SearchFacts(filters)
+	facts, err := s.factsService.GetFacts(filters)
 	if err != nil {
-		s.HandleError(w, fmt.Errorf("server.SearchFactsHandler: %w", err))
+		s.HandleError(w, fmt.Errorf("server.HandleGetFacts: %w", err))
 		return
 	}
 

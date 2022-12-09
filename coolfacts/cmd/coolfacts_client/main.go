@@ -79,7 +79,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 			Limit: limit,
 		}
 
-		facts, err := cl.SearchFacts(filters)
+		facts, err := cl.GetFacts(filters)
 		if err != nil {
 			return "", err
 		}
