@@ -51,7 +51,7 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 		Limit: 1,
 	}
 
-	allFacts, err := c.SearchFacts(filters)
+	allFacts, err := c.GetFacts(filters)
 	if err != nil {
 		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact: %w", err)
 	}
@@ -63,7 +63,7 @@ func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	return allFacts[0], nil
 }
 
-func (c *client) SearchFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
+func (c *client) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
 	ul := fmt.Sprintf("%s%s?limit=%d&topic=%s", c.endpoint, pathGetFacts, filters.Limit, filters.Topic)
 	res, err := c.httpClient.Get(ul)
 	if err != nil {
