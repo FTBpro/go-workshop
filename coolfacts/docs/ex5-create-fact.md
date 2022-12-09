@@ -1,26 +1,23 @@
 # Part 5
 
 In this exercise, you will implement a new API in the server for creating a fact.
-You will also implement in the client the method that calls this API with an input from the user.
-Another command that the client will export is getting the last created fact.
+You will also implement in the client a method that calls this API with an input from the user.
+In addition, we'll add another command in the cli - get the last created fact.
 
-The starting point
-To get started, run this command to clone the necessary exercise materials in a convenient folder:
-```commandline
-$ git clone --branch v5-create-fact https://github.com/FTBpro/go-workshop.git
-```
+## The starting point
+Be sure to be on branch `v5-create-fact`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
 # **Getting Started**
 Take a look around the program, there are a bunch of new TODOs and functionality. We will go over them in the next section.
 
 ## Step 0 - Notice `coolfacts_clinet/main.go`
-We added two new commands:
+We've added two new commands:
 - `"createFact"` for creating a new fact in the server.
 - `"getLastFact` for returning the last created fact.
   In the `client`, you will implement the methods for supporting these command.
 
-In addition, for returning the last created fact, we need a way to which fact was created last. For supporting this, you will add a new field in the entity `coolfact.Fact` - `CreatedAt`.
-For this, you will get to know the go package `time` - This package Package time provides functionality for measuring and displaying time.
+In addition, for returning the last created fact, we need a way to know which fact was created last. For supporting this, you will add a new field in the entity `coolfact.Fact` - `CreatedAt`.
+For this, you will get to know the go package `time` - this package provides functionality for measuring and displaying time.
 Everytime we want to use field that representing a time, we will use types from this package, instead of string or int or other types. (Not include of course the http response payload).  
 The basic type is `time.Time` which represents an instant in time with nanosecond precision.
 
@@ -30,7 +27,7 @@ For sorting, you will learn and use the go package `sort`.
 
 You can notice that wev'e added tests for our service, before you start to implement, let's understand what's in it.
 
-Tests files in go have the suffix `_test`. These files are not been built when you build the application. They are only considered when running the test go command:
+Tests files in go have the suffix `_test`. These files are not been built when you build the application. They are only considered when running the `go test` command:
 ```commandline
 go test [build/test flags] [packages] [build/test flags & test binary flags]
 ```
@@ -39,7 +36,7 @@ For runnning all the tests, you need to be on the root folder (the one with the 
 ```commandline
 .../coolfacts$ go test ./...
 ```
-Let's take a look in the file itself. notice it's package name `coolfact_test`. In Go, the only valid case for a folder to contain two packages is a test package. The suffix `_test` to the package isn't mandatory, but it helps when you only wish to test the public interface of the package. This is best for checking the interface from a real consumer POV. 
+Let's take a look in the file itself. notice it's package name `coolfact_test`. In Go, the only valid case for a folder to contain two packages is a test package. The suffix `_test` to the package isn't mandatory, but it helps when you only wish to test the public interface of the package. This helps us to check how does the interface feel from a real consumer POV. 
 
 When running the `go test` command, Go searchs in all the `_test.go` files for functions with `Test` prefix. These files takes one argument `t *testing.T` which is a type passed to Test functions to manage test state and support formatted test logs.
 
@@ -104,8 +101,8 @@ POST "/facts"
 
 Request:
 {
-"image": "...",
-"description": "..."
+    "image": "...",
+    "description": "..."
 }
 
 Response:
@@ -122,7 +119,7 @@ Failure:
 
 ## Step 4 - The Client
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `GetLastCreatedFact`. Note that the server doesn't have a dedicated API for this, so use the method `GetAllFacts`
-  - Of course in real world application it's not a good practice, but this exercise is not a real world application.
+  - Of course in real world application we'll probably won't have the client and server application in the same program, but this exercise is not a real world application.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Since the server returns a new field for the created time, add this field in the struct `getFactsResponse` which is the representation of the response.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`.
 
@@ -139,7 +136,7 @@ TODO:(oren) add gif
 In our entity, we add a new field `CreatedAt` for specifying the time the fact was created.
 ```go
 type Fact struct {
-	Image       string
+	Topic       string
 	Description string
 	CreatedAt   time.Time // new
 }
@@ -165,7 +162,7 @@ func (s *service) CreateFact(fact Fact) error {
 ```
 
 ## Step 2 - The repo
-In the `CreateFacts`, before reurning the facts, we will sort them based on their `CreatedAt`
+In the `CreateFacts`, before returning the facts, we will sort them based on their `CreatedAt`
 ```go
 func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 	sort.Sort(byCreatedAt(r.facts))
@@ -173,6 +170,12 @@ func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 	return r.facts, nil
 }
 ```
+First we can notice the type conversion: `byCreatedAt(r.facts)`. Type conversion is simply to convert some value to other type.
+This is possible since the two types are compatible, since `byCreatedAt` is defined by:
+```go
+type byCreatedAt []coolfact.Fact
+```
+
 We use method `sort.Sort`. This method expects an argument that implements `sort.Interface`:
 ```go
 type Interface interface {
@@ -181,7 +184,7 @@ type Interface interface {
 	Swap(i, j int)
 }
 ```
-Using these methods, it sorts the given slice. Since we can't our `r.facts` slice (because it doesn't implement the `sort.Interface`), we will use the type `byCreatedAt`:
+Using these methods, it sorts the given slice. Since we can't use our `r.facts` slice (because it doesn't implement the `sort.Interface`), we will use the type `byCreatedAt`:
 ```go
 type byCreatedAt []coolfact.Fact
 
@@ -198,8 +201,7 @@ func (s byCreatedAt) Less(i, j int) bool {
 }
 ```
 
-Note the type conversion: `byCreatedAt(r.facts)`. Type conversion is simply to convert some value to other type.
-This is possible since the two types are compatible.
+
 
 ## Step 3 - Server
 The service exports a new API for creating the fact. The http method is `POST`, and the path is `"/facts"`. We will add a new case in our `ServeHTTP` method:
@@ -210,23 +212,24 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		// code omitted
+		
 	case http.MethodPost:
 		switch strings.ToLower(r.URL.Path) {
 		case "/facts":
 			s.HandleCreateFact(w, r)
 		default:
-			err := fmt.Errorf("path %q wasn't found", r.URL.Path)
-			s.HandleNotFound(w, err)
+			s.HandleNotFound(w, r)
 		}
 	default:
-		// code omitted
+		s.HandleNotFound(w, r)
 	}
 }
+
 ```
 For decoding the request, we would use a struct `createFactRequest` which is a representation of the request payload:
 ```go
 type createFactRequest struct {
-	Image       string `json:"image"`
+	Topic       string `json:"topic"`
 	Description string `json:"description"`
 }
 
@@ -269,7 +272,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
 	facts, err := s.factsService.GetFacts()
 	if err != nil {
 		formattedFacts[i] = map[string]interface{}{
-			"image":       coolFact.Image,
+			"topic":       coolFact.Topic,
 			"description": coolFact.Description,
 			"createdAt":   coolFact.CreatedAt, // new
 		}
@@ -285,7 +288,7 @@ The client receives the response of the facts from the service, so we'll add the
 ```go
 type getFactsResponse struct {
 	Facts []struct {
-		Image       string    `json:"image"`
+		Topic       string    `json:"topic"`
 		Description string    `json:"description"`
 		CreatedAt   time.Time `json:"createdAt"` // new
 	} `json:"facts"`
@@ -315,7 +318,7 @@ func (c *client) CreateFact(fct coolfact.Fact) error {
 	ul := c.endpoint + pathCreateFact
 	// First we are preparing the payload
 	payload := map[string]interface{}{
-		"image":       fct.Image,
+		"topic":       fct.Topic,
 		"description": fct.Description,
 	}
 	// we need io.Reader to create a new http request.
