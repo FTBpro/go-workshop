@@ -9,7 +9,7 @@ import (
 type server struct{}
 
 func NewServer() *server {
-	// TODO: returns an initializes server with the factsService
+	// TODO: return an initialized server with the factsService
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
 	// 2. set content type application/json
 	// 3. write json indicating an error:
 	//   {
-	//       error: path <http method + path> not not found
+	//       error: path <http method + path> not found
 	//   }
 }
 
