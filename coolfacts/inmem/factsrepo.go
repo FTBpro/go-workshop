@@ -11,24 +11,46 @@ type factsRepo struct {
 }
 
 func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
-	// TODO: fix initialization according to the new field type
+	factsByTopic := map[string][]coolfact.Fact{}
+	for _, fact := range facts {
+		factsByTopic[fact.Topic] = append(factsByTopic[fact.Topic], fact)
+	}
+
 	return &factsRepo{
-		facts: facts,
+		factsByTopic: factsByTopic,
 	}
 }
 
 func (r *factsRepo) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
-	// TODO: fix method. Return according to the filters.
-	// note - topic is optional.
-	sort.Sort(byCreatedAt(r.facts))
+	var facts []coolfact.Fact
+	if filters.Topic != "" {
+		facts = r.factsByTopic[filters.Topic]
+	} else {
+		facts = r.allFacts()
+	}
 
-	return r.facts, nil
+	sort.Sort(byCreatedAt(facts))
+
+	if filters.Limit < len(facts) {
+		facts = facts[:filters.Limit]
+	}
+
+	return facts, nil
 }
 
 func (r *factsRepo) CreateFact(fact coolfact.Fact) error {
-	// TODO: fix according to the new field type
-	r.facts = append(r.facts, fact)
+	r.factsByTopic[fact.Topic] = append(r.factsByTopic[fact.Topic], fact)
+
 	return nil
+}
+
+func (s *factsRepo) allFacts() []coolfact.Fact {
+	var allFacts []coolfact.Fact
+	for _, facts := range s.factsByTopic {
+		allFacts = append(allFacts, facts...)
+	}
+
+	return allFacts
 }
 
 type byCreatedAt []coolfact.Fact

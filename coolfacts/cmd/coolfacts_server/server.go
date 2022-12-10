@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,8 +13,7 @@ import (
 )
 
 type FactsService interface {
-	// TODO: fix signature for GetFacts
-	GetFacts() ([]coolfact.Fact, error)
+	GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error)
 	CreateFact(fact coolfact.Fact) error
 }
 
@@ -79,9 +79,26 @@ func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling getFact ...")
 
-	facts, err := s.factsService.GetFacts()
+	limitString := r.URL.Query().Get("limit")
+	if limitString == "" || limitString == "0" {
+		err := fmt.Errorf("limit is mandatory int")
+		s.HandleBadRequest(w, err)
+	}
+
+	limit, err := strconv.Atoi(limitString)
 	if err != nil {
-		s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
+		err = fmt.Errorf("HandleGetFacts limit not int")
+		s.HandleBadRequest(w, err)
+	}
+
+	filters := coolfact.Filters{
+		Topic: r.URL.Query().Get("topic"),
+		Limit: limit,
+	}
+
+	facts, err := s.factsService.GetFacts(filters)
+	if err != nil {
+		s.HandleError(w, fmt.Errorf("server.HandleGetFacts: %w", err))
 		return
 	}
 
@@ -149,7 +166,14 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 func (s *server) HandleBadRequest(w http.ResponseWriter, err error) {
 	log.Println("Handling Bad Request ...")
 
-	// TODO: implement
+	w.WriteHeader(http.StatusBadRequest)
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]string{
+		"error": err.Error(),
+	}
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleBadRequest: %s", err)
+	}
 }
 
 func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interface{} {

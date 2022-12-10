@@ -8,6 +8,7 @@ type Fact struct {
 	CreatedAt   time.Time
 }
 
-// TODO: add struct Filters with:
-// - Topic
-// - Limit
+type Filters struct {
+	Topic string
+	Limit int
+}

@@ -3,8 +3,7 @@ package coolfact
 import "fmt"
 
 type Repository interface {
-	//TODO: fix signature for GetFacts
-	GetFacts() ([]Fact, error)
+	GetFacts(filters Filters) ([]Fact, error)
 	CreateFact(fct Fact) error
 }
 
@@ -18,9 +17,8 @@ func NewService(factsRepo Repository) *service {
 	}
 }
 
-//TODO: fix signatur and call to repo
-func (s *service) GetFacts() ([]Fact, error) {
-	facts, err := s.factsRepo.GetFacts()
+func (s *service) GetFacts(filters Filters) ([]Fact, error) {
+	facts, err := s.factsRepo.GetFacts(filters)
 	if err != nil {
 		return nil, fmt.Errorf("factsService.GetFacts: %w", err)
 	}
