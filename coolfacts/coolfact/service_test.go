@@ -94,7 +94,7 @@ func Test_service_CreateFact(t *testing.T) {
 		{
 			name:          "repo returns error",
 			repoField:     mockRepoError{},
-			factsToCreate: nil,
+			factsToCreate: []coolfact.Fact{facts[4], facts[2], facts[0]},
 			want:          nil,
 			wantErr:       true,
 		},
@@ -111,6 +111,7 @@ func Test_service_CreateFact(t *testing.T) {
 				}
 
 				require.False(t, tc.wantErr, "expected an error but didn't receive one.")
+				return
 			}
 
 			gotFacts, err := s.GetFacts()
