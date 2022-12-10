@@ -253,19 +253,23 @@ func (s *server) HandleGetFacts(w http.ResponseWriter) {
      s.HandleError(w, fmt.Errorf("server.GetFactsHandler: %w", err))
   }
 
-  formattedFacts := make([]map[string]interface{}, len(facts))
-  for i, coolFact := range facts {
-     formattedFacts[i] = map[string]interface{}{
-        "topic":       coolFact.Topic,
-        "description": coolFact.Description,
-     }
-  }
-
-  response := map[string]interface{}{
-     "facts": formattedFacts,
-  }
+  response := s.formatGetFactsResponse(facts)
   
   // code omitted
+}
+
+func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interface{} {
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"topic":       coolFact.Topic,
+			"description": coolFact.Description,
+		}
+	}
+	
+	return map[string]interface{}{
+		"facts": formattedFacts,
+	}
 }
 ```
 You may ask yourself why don’t we just return the facts to the client?
@@ -274,7 +278,7 @@ This is because we want to keep separation of concerns. The entity should know n
 The API response and the entity field should be considered different. We don’t want that changes in the entity will have unexpected cascading changes,  
 and we don’t want that a requirement to modify the response will trigger a change to the entity.
 
-We left with writing the status and content type header, and then write the response body to the writer:
+NExt, we'll write the status and content type header, and then write the response body to the writer. `w.WriteHeader` must be called before `w.Write`.
 ```go
 func (s *server) HandleGetFacts(w http.ResponseWriter) {
   // code omitted
