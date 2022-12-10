@@ -72,9 +72,10 @@ the client's method `GetAllFacts` will be called, and the client will call the s
 
 ## Building and Running
 
-If everything is implemented well, this is what the final result should look like when running the program, in one tab we are running the server as we did in the previous exercise, and in another tab we are running the client, and writing the command for getting the facts:
+If everything is implemented well, this is what the final result should look like when running the applications (in one tab we are running the server, and in the other one we are running the client):
 
-TODO:(oren) add gif
+![v4-client](https://user-images.githubusercontent.com/5252381/206864714-deb7c295-b448-44e8-b867-824e1b5f0d39.gif)
+
 
 ## Full Walkthrough
 
