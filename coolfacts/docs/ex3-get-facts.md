@@ -264,10 +264,11 @@ As mentioned before, you will implement a new API for the `server`, what you wil
   - Write status 200.
   - Set "content-type" header to "application/json".
 
-### Building and Running
+## Building and Running
 
 If everything is implemented well, this is what the final result should look like when running the program:
-![factsgif](https://user-images.githubusercontent.com/5252381/204143457-6eaf59d3-6c52-4fbb-8d2a-19d22436cbd8.gif)
+![v3-get-facts](https://user-images.githubusercontent.com/5252381/206864380-9890158e-c841-4d9a-b772-cd779388e58e.gif)
+
 
 # Full walkthrough
 In the following section you fill find a full walkthrough. Use it in case you are stuck.
