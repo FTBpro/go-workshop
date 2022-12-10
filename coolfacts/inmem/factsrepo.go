@@ -2,7 +2,7 @@ package inmem
 
 import (
 	"sort"
-	
+
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
@@ -18,7 +18,7 @@ func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
 
 func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
 	sort.Sort(byCreatedAt(r.facts))
-	
+
 	return r.facts, nil
 }
 

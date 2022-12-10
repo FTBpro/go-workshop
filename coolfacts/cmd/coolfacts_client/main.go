@@ -90,7 +90,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 		}
 
 		err := cl.CreateFact(fct)
-		return "", err
+		return fmt.Sprintf(" ---> Fact created successfully"), err
 
 	default:
 		return "", errors.New("unknown command")
