@@ -50,7 +50,7 @@ func NewClient(endpoint string) *client {
 	}
 }
 
-func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
+func (c *client) GetFacts() ([]coolfact.Fact, error) {
 	ul := c.endpoint + pathGetFacts
 	res, err := c.httpClient.Get(ul)
 	if err != nil {

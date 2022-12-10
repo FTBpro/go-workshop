@@ -13,7 +13,7 @@ import (
 const (
 	serverEndpoint = "http://127.0.0.1:9002"
 
-	commandGetAllFacts = "getAllFact"
+	commandGetFacts = "getFacts"
 )
 
 func main() {
@@ -55,8 +55,8 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 	switch cmd {
 	case "":
 		return "", nil
-	case commandGetAllFacts:
-		facts, err := cl.GetAllFacts()
+	case commandGetFacts:
+		facts, err := cl.GetFacts()
 		if err != nil {
 			return "", err
 		}
