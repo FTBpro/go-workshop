@@ -3,7 +3,6 @@ package coolfact_test
 import (
 	"fmt"
 	"math/rand"
-	"reflect"
 	"testing"
 	"time"
 
@@ -16,7 +15,7 @@ import (
 func Test_service_GetFacts(t *testing.T) {
 	facts := generateRandomFactsDesc(10)
 
-	tests := []struct {
+	testCases := []struct {
 		name         string
 		repoField    coolfact.Repository
 		filtersInput coolfact.Filters
@@ -24,7 +23,7 @@ func Test_service_GetFacts(t *testing.T) {
 		wantErr      bool
 	}{
 		{
-			name:      "add in a sorted way",
+			name:      "with facts",
 			repoField: inmem.NewFactsRepository(facts...),
 			filtersInput: coolfact.Filters{
 				Limit: 10,
@@ -33,7 +32,7 @@ func Test_service_GetFacts(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:      "add in a UNsorted way",
+			name:      "add unsorted facts",
 			repoField: inmem.NewFactsRepository(facts[5], facts[4], facts[2]),
 			filtersInput: coolfact.Filters{
 				Limit: 10,
@@ -69,17 +68,19 @@ func Test_service_GetFacts(t *testing.T) {
 			wantErr: false,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := coolfact.NewService(tt.repoField)
-			got, err := s.GetFacts(tt.filtersInput)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetFacts() error = %v, wantErr %v", err, tt.wantErr)
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := coolfact.NewService(tc.repoField)
+			got, err := s.GetFacts(tc.filtersInput)
+			if err != nil {
+				require.True(t, tc.wantErr, "got an unexpected error from service")
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetFacts() got = %v, want %v", got, tt.want)
-			}
+
+			require.False(t, tc.wantErr, "expected an error but didn't receive one.")
+			expectEqualFacts(t, tc.want, got)
+
 		})
 	}
 }
@@ -115,22 +116,24 @@ func Test_service_CreateFact(t *testing.T) {
 		{
 			name:          "repo returns error",
 			repoField:     mockRepoError{},
-			factsToCreate: nil,
+			factsToCreate: []coolfact.Fact{facts[4], facts[2], facts[0]},
 			want:          nil,
 			wantErr:       true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := coolfact.NewService(tt.repoField)
-			for _, fact := range tt.factsToCreate {
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			s := coolfact.NewService(tc.repoField)
+			for _, fact := range tc.factsToCreate {
 				err := s.CreateFact(fact)
-				if tt.wantErr {
-					require.Error(t, err)
-					continue
+				if err != nil {
+					require.True(t, tc.wantErr, "got an unexpected error from service")
+					return
 				}
 
-				require.NoError(t, err)
+				require.False(t, tc.wantErr, "expected an error but didn't receive one.")
+				return
 			}
 
 			filters := coolfact.Filters{
@@ -138,18 +141,13 @@ func Test_service_CreateFact(t *testing.T) {
 			}
 
 			gotFacts, err := s.GetFacts(filters)
-			if tt.wantErr {
-				require.Error(t, err)
-				return
-			}
-
 			require.NoError(t, err)
-			require.Equal(t, gotFacts, tt.want)
+			require.Equal(t, gotFacts, tc.want)
 		})
 	}
 }
 
-// generateRandomFactsDesc created new random facts sorted in DESC
+// generateRandomFactsDesc creates new random facts sorted by DESC
 func generateRandomFactsDesc(n int) []coolfact.Fact {
 	var facts []coolfact.Fact
 	for i := 0; i < n; i++ {
@@ -166,6 +164,18 @@ func randomFact() coolfact.Fact {
 	return coolfact.Fact{
 		Topic:       fmt.Sprintf("Topic %d", rand.Intn(10000)),
 		Description: fmt.Sprintf("Some Description %d", rand.Intn(10000)),
+	}
+}
+
+func expectEqualFacts(t *testing.T, expected, got []coolfact.Fact) {
+	require.Equalf(t, len(expected), len(got), "expectEqualFacts: different length")
+
+	for _, fact := range got {
+		require.Contains(t, expected, fact, "expectEqualFacts: got unexpected fact")
+	}
+
+	for _, fact := range expected {
+		require.Contains(t, got, fact, "expectEqualFacts: didn't got expected fact")
 	}
 }
 
