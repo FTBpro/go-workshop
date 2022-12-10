@@ -23,62 +23,8 @@ The basic type is `time.Time` which represents an instant in time with nanosecon
 
 For sorting, you will learn and use the go package `sort`.
 
-## Step 0.1 - Notice `coolfact/service_test.go`
-
-You can notice that wev'e added tests for our service, before you start to implement, let's understand what's in it.
-
-Tests files in go have the suffix `_test`. These files are not been built when you build the application. They are only considered when running the `go test` command:
-```commandline
-go test [build/test flags] [packages] [build/test flags & test binary flags]
-```
-
-For runnning all the tests, you need to be on the root folder (the one with the go.mod) and run
-```commandline
-.../coolfacts$ go test ./...
-```
-Let's take a look in the file itself. notice it's package name `coolfact_test`. In Go, the only valid case for a folder to contain two packages is a test package. The suffix `_test` to the package isn't mandatory, but it helps when you only wish to test the public interface of the package. This helps us to check how does the interface feel from a real consumer POV. 
-
-When running the `go test` command, Go searchs in all the `_test.go` files for functions with `Test` prefix. These files takes one argument `t *testing.T` which is a type passed to Test functions to manage test state and support formatted test logs.
-
-Test functions can be named anything with a `Test` prefix, but there is some convention:
-```go
-func Test_<type_name>_<method_name>
-```
-In here, we test our `service` methods `GetFacts` and `CreateFacts`, so our test functions are named
-```go
-func Test_service_AllFacts(t *testing.T) {...}
-
-func Test_service_CreateFact(t *testing.T) {...}
-```
-
-The structure of the test is an example of _Table Driven Tests_:
-
-```go
-func Test...(t *testing.T) {
-	type testCase struct {...}
-	
-	tests := []testCase{
-		{...},
-		{...},
-	}
-	
-	for _, tc := range tests {
-		t.Run(tc.Name, func(t *testing.T) {
-			// Here we write the test itself
-		})
-	}
-}
-```
-We declaring type `testCase` which is a struct that holds the parameters for the tests, these can be:
-- Name of the test.
-- Input for initializing the service.
-- Arguments for the methods.
-- Expected result.
-- Indicator if we expect an error.
-
-In the `t.Run` method we write the test. In `GetFacts` for example, we initialize the service with the repo we set in the `repoField` field, call the method `GetFacts` and expected to receive either en error or what we set in the field `want`.
-
-You can also notice, that in the first test we've used `t.Fatal`, and in the second test we've used `require`. `require` is a package that provides helpful methods for testing. It also prints the failure in a more readable way. Since it's an external library, you can see that we've added a require in `go.mod`.  
+## Step 0.1 - Notice addition to tests
+We've added a test for `CreateFact`. For each test case we creating facts, and checking that the server returns us the facts in a sorted way.
 
 ## Step 1 - Implement The BL
 ### coolfact/fact.go
@@ -118,7 +64,7 @@ Failure:
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `HandleCreateFact`.
 
 ## Step 4 - The Client
-- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `GetLastCreatedFact`. Note that the server doesn't have a dedicated API for this, so use the method `GetAllFacts`
+- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement method `GetLastCreatedFact`. Note that the server doesn't have a dedicated API for this, so use the method `GetFacts`
   - Of course in real world application we'll probably won't have the client and server application in the same program, but this exercise is not a real world application.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Since the server returns a new field for the created time, add this field in the struct `getFactsResponse` which is the representation of the response.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement the method `CreateFact`.
@@ -295,10 +241,10 @@ type getFactsResponse struct {
 }
 ```
 
-We will implement the method GetLAstFact using the existing method `GetAllFacts`:
+We will implement the method GetLAstFact using the existing method `GetFacts`:
 ```go
 func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
-	allFacts, err := c.GetAllFacts()
+	allFacts, err := c.GetFacts()
 	if err != nil {
 		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact: %w", err)
 	}
