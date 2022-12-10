@@ -82,7 +82,7 @@ type errorResponse struct {
 func (c *client) readError(res *http.Response) (string, error) {
 	var errRes errorResponse
 	if err := json.NewDecoder(res.Body).Decode(&errRes); err != nil {
-		return "", fmt.Errorf("readBody failed to read response body: %v. \nbody string is: %s", err)
+		return "", fmt.Errorf("readBody failed to read response body: %v. \n", err)
 	}
 
 	return errRes.Error, nil
