@@ -36,7 +36,7 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 	switch cmd {
 	case "":
 		return "", nil
-	case commandGetAllFacts:
+	case commandGetFacts:
 		// code omitted
 	default:
 		return "", errors.New("unknown command")
@@ -44,11 +44,11 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 }
 ```
 
-Currently, there is only one command `commandGetAllFacts` which is a const for "getAllFacts".
+Currently, there is only one command `commandGetFacts` which is a const for "getFacts".
 
 ## Step 1 - client.go - implement the client
-Take a look in the file and notice that we have a `client` struct and initializer. When the user will send an input `"getAllFacts"`,
-the client's method `GetAllFacts` will be called, and the client will call the server getFacts API. You will implement the method `GetAllFacts`
+Take a look in the file and notice that we have a `client` struct and initializer. When the user will send an input `"getFacts"`,
+the client's method `GetFacts` will be called, and the client will call the server getFacts API. You will implement the method `GetFacts`
 
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Fill struct `getFactsResponse`
   - This struct represents the JSON response from the client, and we will use it for deserializing the server's response-body into a convenient struct. Add fields corresponding to the response. Reminder, the response looks like this:
@@ -65,7 +65,7 @@ the client's method `GetAllFacts` will be called, and the client will call the s
   ```
   - Example on JSON tags and some json package functionality - For this be sure to add json tags on the struct. (https://gobyexample.com/json)
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `ToCoolFacts()` method. You will use this method for converting the server response to the entity.
-- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `GetAllFacts`.
+- <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `GetFacts`.
   - Notice the start of the method, we are composing the url for get facts which is "127.0.0.1:9002/facts" and calling `c.httpClient.Get(...)`. The client must read and close the response after using it, you can see it in the `defer` block.
   - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Finish implementing the method, handle the response as specified in the TODO in the code
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `readResponseGetFacts` as specified in the TODO in the code.
@@ -108,9 +108,9 @@ func (r getFactsResponse) toCoolFacts() []coolfact.Fact {
 Note the type conversion we do by: `coolfact.Fact(fact)` (not to be confused with type asserting (casting)). This type conversion is simply to convert some value to other type.
 This is possible since the two types are compatible.
 
-Then, we finish implementing the method `GetAllFacts` - handling the response. In case the `StatusCode` is not `http.StatusOK`, we will read an error from the response and return it. Otherwise, we read the body and convert to our `[]coolfact.Fact`
+Then, we finish implementing the method `GetFacts` - handling the response. In case the `StatusCode` is not `http.StatusOK`, we will read an error from the response and return it. Otherwise, we read the body and convert to our `[]coolfact.Fact`
 ```go
-func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
+func (c *client) GetFacts() ([]coolfact.Fact, error) {
         
 	// code emitted
 	
