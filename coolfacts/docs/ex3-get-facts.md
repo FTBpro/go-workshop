@@ -24,7 +24,12 @@ response:
 ```
 
 ## Getting Started
-Take a look around the program. You will notice new folders - `coolfact` and `inmem`. In addition, you will notice some changes in the main package.
+Take a look around the program. You will notice some changes which we will cover below.
+- New folders - `coolfact` and `inmem`.
+- A few changes in the main package.
+- Test file for our service.
+- Changes in _go.mod_, and a new file - _go.sum_.
+
 
 ### coolfact
 This is a package containing the entity `fact` and the service for implementing the use case (business logic).
@@ -106,8 +111,112 @@ If you already have multiple args in a slice, you apply them to a variadic funct
 inmem.NewFactsRepository(seedFacts()...)
 ```
 
+## Step 0.1 - Notice `coolfact/service_test.go`
 
-What you will have to complete is:
+You can notice that we've added tests for our service, before you start to implement, let's understand what's in it.
+
+Test files in go have the suffix `_test`. These files are not been built when you build the application. They are only considered when running the `go test` command:
+```commandline
+go test [build/test flags] [packages] [build/test flags & test binary flags]
+```
+
+For runnning all the tests, you need to be on the root folder (the one with the go.mod) and run
+```commandline
+.../coolfacts$ go test ./...
+```
+Let's take a look in the file itself. notice it's package name `coolfact_test`. In Go, the only valid case for a folder to contain two packages is a test package. The suffix `_test` to the package isn't mandatory, but it helps when you only wish to test the public interface of the package. This helps us to check how does the interface "feels" from a real consumer POV.
+
+When running the `go test` command, Go searches in all of the `_test.go` files for functions with `Test` prefix. These files receive one argument `t *testing.T` which is a type passed to Test functions to manage test state and support formatted test logs.
+
+Test functions can be named anything with a `Test` prefix, but there is some convention:
+```go
+func Test_<type_name>_<method_name>
+```
+In here, we test our `service` method `GetFacts`, so our test function is named:
+```go
+func Test_service_AllFacts(t *testing.T) {...}
+```
+
+The structure of the test is an example of _Table Driven Tests_:
+
+```go
+func Test...(t *testing.T) {
+	type testCase struct {...}
+	
+	tests := []testCase{
+		{...},
+		{...},
+	}
+	
+	for _, tc := range tests {
+		t.Run(tc.Name, func(t *testing.T) {
+			// Here we write the test itself
+		})
+	}
+}
+```
+We declaring type `testCase` which is a struct that holds the parameters for the tests, these can be:
+- Name of the testCase.
+- Input for initializing the service.
+- Arguments for the methods.
+- Expected result.
+- Indicator if we expect an error.
+
+In the `t.Run` method we write the test:
+
+```go
+func Test_service_GetFacts(t *testing.T) {
+	testCases := []struct {
+		name      string
+		repoField coolfact.Repository
+		want      []coolfact.Fact
+		wantErr   bool
+	}{
+		// code omitted
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := coolfact.NewService(tc.repoField)
+			got, err := s.GetFacts()
+			if err != nil {
+				require.True(t, tc.wantErr, "got an unexpected error from service")
+				return
+			}
+			
+			require.False(t, tc.wantErr, "expected an error but didn't receive one.")
+			expectEqualFacts(t, tc.want, got)
+		})
+	}
+```
+
+* We initialize the service with the repo we set in the `repoField` field.
+* Call the method `GetFacts`
+* Check if we expect an error.
+* Check that the facts we got from the service is what we expected.
+
+### `require` / `go.mod` / `go.sum`
+`require` is a package that provides helpful methods for testing. It also prints the failure in a more readable way. Since it's an external library, you can see that we've added a _require_ in `go.mod`: 
+```text
+require github.com/stretchr/testify v1.8.1
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
+```
+
+The `// indirect` comment indicates that our module depends on these packages, but doesn't directly import them. 
+
+You can run `go mod tidy` command for sync the `go.mod`. (Doesn't upgrade versions implicitly)
+```commandline
+.../coolfacts$ go mod tidy
+```
+
+### _go.sum_
+Another file that `go mod tidy` generates is `go.sum`. This file lists down the checksum of direct and indirect dependency required along with the version. It is to be mentioned that the go.mod file is enough for a successful build. The checksum present in _go.sum_ file is used to validate the checksum of each of direct and indirect dependency to confirm that none of them has been modified.
+
 ## Step 1 - package `coolfact`
 This package handles the BL of the application.
 
