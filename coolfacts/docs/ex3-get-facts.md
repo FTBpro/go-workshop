@@ -3,7 +3,9 @@
 In this exercise, you will add an API to the server for presenting the existing facts.
 
 ## The Starting Point
-Be sure to be on branch `v3-server-get-facts`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
+
+You will need to switch to branch `v3-server-get-facts` for this part. Note that if you have changed in your code from previous exercise, you should clean them. You can use `git reset --hard` for that.
+Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
 ## Your Goal
 

@@ -4,7 +4,8 @@ In this exercise, you will create a simple server that answering to `/ping`.
 
 ## The Starting Point
 
-Be sure to be on branch `v2-initial-server-ping`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
+You will need to switch to branch `v2-initial-server-ping` for this part. Note that if you have changed in your code from previous exercise, you should clean them. You can use `git reset --hard` for that. 
+Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
 Try to go over this doc and implement by yourself. If you are stuck there is a full walkthrough in the end, and for reference, you can look inside the branch `v2-initial-server-ping`. All the implementations for the TODOs can be found there, or simply by looking at the pull-request: https://github.com/FTBpro/go-workshop/pull/28/files 
 
@@ -23,10 +24,10 @@ For every other path, the server will return not-found response with the followi
 ## Getting Started
 Take a look around the program. You will notice one folder - `cmd`
 
-In Go programs, `cmd` folder is a convention when a program has more than one binary (e.g application).
-Usually the directory name inside the `cmd` matches the binary name, which on default will be the name of the binary. Each directory in the `cmd` (e.g application) has package `main`. In this exercise we only have one application, but in the next ones, we will also have a client application.
+In Go programs, `cmd` folder is a convention when a program has more than one application.
+Usually the directory name inside the `cmd` matches the binary name, which on default will be the name of the executable file. Each directory in the `cmd` (e.g application) has a package `main`. In this exercise we only have one application, but in the next ones, we will also have a client application.
 
-In here, we have inside the `cmd`, a folder named `coolfact_server`. This represent our server application, and includes a `main` package, with two files:
+In here, we have inside the `cmd`, a folder named `coolfact_server`. This is our server application, and includes a `main` package, with two files:
 - `main.go`: file that includes our `main()` function
 - `server.go`: this is the transport of the application, its responsibility is to receive the http request and to apply the corresponding business-logic. In this file we will implement the http handlers for the server APIs.
 
@@ -59,10 +60,10 @@ We first can notice the imports `"fmt"`, `"log"` and `"net/http"`. These are sta
 Inside the `main()` function, we're initializing the server, and passing it to `http.ListenAndserve` method.
 In Go, a package name is only the last param of the import path (usually), and each type in Go has a name composed of the package name and the type identifier.
 
-For example, let's look at the method `http.ListenAndServe` - although the import path is `net/http`, the package name is `http`, and the identifier is `ListenAndServe`.
+For example, let's look at the method `http.ListenAndServe` - although the import path is `net/http`, the package name is `http`, and the identifier is `ListenAndServe`. The full type name is `http.ListenAndServe` and you always should take it into account, since this is what the consumer of the package writes. When you look at it from the consumer POV, it should be meaningful.   
 
 This method receives an address and an `http.Handler`:
-- address: This is the address it will listen on the TCP network.
+- `address`: This is the address it will listen on the TCP network.
 - `http.Handler`: For every incoming connection, it will use the `http.Handler` to handle the requests, which is defined as:
   ```go
   package http
@@ -71,9 +72,9 @@ This method receives an address and an `http.Handler`:
     ServeHTTP(w ResponseWriter, r *Request)
   }
     ```
-  The handler should handle the incoming `http.Request` and write the response to the `ResponseWriter`. In our application the `http.Handler` will be our `server`, which we initialize by `NewServer()`
+  The handler should handle the incoming `http.Request` and write the response into the `ResponseWriter`. In our application the `http.Handler` will be our `server`, which we initialize by `NewServer()`
 
-The type `http.Handler` is a very central pillar of Go. It makes abstraction over http real easy. Besides this type, there is also the type `http.HandlerFunc`:
+The type `http.Handler` is a very central pillar of Go (TODO(oren): rephrase?). It makes abstraction over http real easy. Besides this type, there is also the type `http.HandlerFunc`:
 ```go
 package http
 
@@ -84,13 +85,12 @@ func (f HandlerFunc) ServeHTTP(w ResponseWriter, r *Request) {
 }
 ```
 The `HandlerFunc` is an adapter to allow the use of ordinary functions as HTTP handlers. 
-Due to the method `ServeHTTP`, this type also implements `http.Handler`. We will see it in farther exercises. 
-
+Due to the method `ServeHTTP`, this type also implements `http.Handler`. We will see it in farther exercises, but currently we can notice that in first look it may look a bit weird, but this is part of what makes Go powerful. Every type can be a receiver, meaning, have methods. `func` is a type, which also can be receiver for another method.
 
 ## Step 1 - `cmd/server.go`
 The server is responsible to respond to the incoming HTTP request, it will have `/ping` route, for answering with PONG.
 
-You can notice that the server has method `ServeHTTP`. This is the entry point for every incoming HTTP request. The server implements `http.Handler`. We have a switch case according to the HTTP method and path, and then we applies the right method. You can already notice that the methods `HandlePing` and `HandleNotFound` are `http.HandlerFunc`. This will help us in exercise 7 :) 
+You can notice that the server has method `ServeHTTP`. This is the entry point for every incoming HTTP request. The server implements `http.Handler`. We have a switch case according to the HTTP method and path, and then we applies the right method. You can already notice that the methods `HandlePing` and `HandleNotFound` have the same signature as `http.HandlerFunc`. This will help us in exercise 7 :) 
 
 For now, the only valid path is `GET /ping`. On every other path it calls `HandleNotFound` which you will implement. In real world applications, we will usually use a framework wrapping Go http which will provide us with more advanced routing mechanism. 
 
@@ -119,8 +119,8 @@ Specifically, what you will have todo is:
   ```
 
 ## Building and Running
-The main package of our server-application lives inside coolfacts/cmd/coolfacts_service.go, but the go.mod is under coolfacts directory.
-The go build must be called from the root of the module, in here it will be called from folder _coolfacts_. The path we will pass to `go build` will be the path to the `main` we want to run:
+The main package of our server-application lives inside _coolfacts/cmd/coolfacts_service.go_, but the _go.mod_ is under coolfacts directory.
+The _go build_ must be called from the root of the module, in here it will be called from folder _coolfacts_. The path we will pass to `go build` will be the path to the `main` we want to run:
 ```commandline
 .../coolfacts$ go build ./cmd/coolfacts_server/.
 ```
@@ -147,7 +147,7 @@ func NewServer(service Service) *server {
 }
 ```
 
-###`HandlePing` method:
+### `HandlePing` method:
 ```go
 func (s *server) HandlePing(w http.ResponseWriter) {
     w.WriteHeader(http.StatusOK)
