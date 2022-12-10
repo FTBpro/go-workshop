@@ -9,9 +9,11 @@ type factsRepo struct {
 }
 
 func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
-	// TODO: init facts repo
+	return &factsRepo{
+		facts: facts,
+	}
 }
 
 func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
-	// TODO: implement
+	return r.facts, nil
 }

@@ -1,18 +1,26 @@
 package coolfact
 
+import "fmt"
+
 type Repository interface {
-	// TODO: add functions decleration
-	// - getFacts. Returns a slice of Fact and an error
+	GetFacts() ([]Fact, error)
 }
 
 type service struct {
-	// TODO: add field factsRepo
+	factsRepo Repository
 }
 
 func NewService(factsRepo Repository) *service {
-	// TODO: init a new service with factsRepo
+	return &service{
+		factsRepo: factsRepo,
+	}
 }
 
 func (s *service) GetFacts() ([]Fact, error) {
-	// TODO: implement getFacts, using the factsRepo
+	facts, err := s.factsRepo.GetFacts()
+	if err != nil {
+		return nil, fmt.Errorf("factsService.GetFacts: %w", err)
+	}
+
+	return facts, nil
 }

@@ -6,31 +6,34 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type FactsService interface {
-	// TODO: add methods declerations
-	// 1. getFacts - returns a slice of fact.Fact and an error
+	GetFacts() ([]coolfact.Fact, error)
 }
 
 type server struct {
-	// TODO: add factsService field
+	factsService FactsService
 }
 
-func NewServer() *server {
-	// TODO: returns an initializes server with the factsService
-	return &server{}
+func NewServer(factsService FactsService) *server {
+	return &server{
+		factsService: factsService,
+	}
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
 
-	// TODO: add case for GET /facts, that will call to `HandleGetFacts`
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
 		case "/ping":
 			s.HandlePing(w, r)
+		case "/facts":
+			s.HandleGetFacts(w, r)
 		default:
 			s.HandleNotFound(w, r)
 		}
@@ -59,19 +62,26 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	// TODO:
-	// 1. format the facts to a json response
-	// 2. write status 200
-	// 3. set content type application/json
-	// 4. write json response:
-	// 	{
-	//		"facts": [
-	//			{
-	//				"id": "..."
-	//				"description": "..."
-	//			},
-	//			...
-	//		]
+	// we first format the facts to map[string]interface.
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"topic":       coolFact.Topic,
+			"description": coolFact.Description,
+		}
+	}
+
+	response := s.formatGetFactsResponse(facts)
+
+	// write status and content-type
+	// status must be written before the body
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+
+	// write the body. We use json encoding
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
@@ -100,5 +110,19 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
+}
+
+func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interface{} {
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"topic":       coolFact.Topic,
+			"description": coolFact.Description,
+		}
+	}
+
+	return map[string]interface{}{
+		"facts": formattedFacts,
 	}
 }
