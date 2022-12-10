@@ -1,5 +1,5 @@
 # Part 1
-###Create "Hello, World!" Application
+### Create "Hello, World!" Application
 
 In this exercise, you will create a basic "Hello, World!" application. You will learn how to build and run a Go program and basic terminology - packages, module, go.mod, main, etc.
 Feel free to skip this part if you went over it already. 
@@ -8,7 +8,7 @@ Feel free to skip this part if you went over it already.
 TODO: addddddd
 
 ## The Starting Point
-Be sure to be on branch `v1-hello-world`. Go on and navigate to `go-workshop/coolfacts` directory, you will see two filed `main.go` and `go.mod`.
+Be sure to be on branch `v1-hello-world`. Go on and navigate to `go-workshop/coolfacts` directory, you will see two files: `main.go` and `go.mod`.
 
 ### main.go
 The _main package_ is the starting point for every Go application. A _package_ in go is a way to organize and group functions, and it is nothing but a directory inside your Go workspace, containing one or more Go source files or other packages. Go package name usually is the same as the directory name. package `main` an example of a package that is different from the folder name, we'll understand why.
