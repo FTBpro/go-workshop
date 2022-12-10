@@ -87,10 +87,9 @@ As said, the method `GetFacts` should receive two new arguments.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `HandleBadRequest`. Just like any other error response, but the status should be 400 (`http.StatusBadRequest`)
 
 # Test, Build, And Run
-If all is implemented, you should be able to run tests and see them pass.
-And you should see this:
+If everything is implemented well, this is what the final result should look like when running the applications:
 
-TODO: add gif
+![v6-search](https://user-images.githubusercontent.com/5252381/206865736-20cb1261-d324-467f-a7ba-0e2058937d85.gif)
 
 # full Walkthrough
 
