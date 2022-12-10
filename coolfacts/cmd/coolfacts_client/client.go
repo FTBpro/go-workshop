@@ -91,7 +91,7 @@ func (c *client) readError(res *http.Response) (string, error) {
 func (c *client) readResponseGetFacts(res *http.Response) (getFactsResponse, error) {
 	var factsRes getFactsResponse
 	if err := json.NewDecoder(res.Body).Decode(&factsRes); err != nil {
-		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v. \nbody string is: %s", err)
+		return getFactsResponse{}, fmt.Errorf("readResponseGetFacts failed to read response body: %v", err)
 	}
 
 	return factsRes, nil
