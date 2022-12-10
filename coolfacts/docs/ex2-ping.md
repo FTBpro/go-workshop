@@ -6,7 +6,8 @@ In this exercise, you will create a simple server that answering to `/ping`.
 
 Be sure to be on branch `v2-initial-server-ping`. Go on and navigate to `go-workshop/coolfacts` directory. You will see a bunch of files and TODOs. We will go over them in the rest of this document.
 
-Try to go over this doc and implement by yourself. If you are stuck there is a full walkthrough in the end, and for reference, you can look inside the branch `v2-initial-server-ping`. All the implementations for the TODOs can be found there, or simply by looking at the pull-request: https://github.com/FTBpro/go-workshop/pull/28/files 
+Try to go over this doc and implement by yourself. If you are stuck there is a full walkthrough below and the solution can be shown here:  https://github.com/FTBpro/go-workshop/pull/28
+
 
 
 ## Your Goal
@@ -131,8 +132,9 @@ Alternatively we can build and run in one single command:
 .../coolfacts$ go run ./cmd/coolfacts_server/.
 ```
 
-If everything is implemented, this is what the final result should look like: (TODO:oren): not found path in gif
-![factsgif](https://user-images.githubusercontent.com/5252381/204143457-6eaf59d3-6c52-4fbb-8d2a-19d22436cbd8.gif)
+If everything is implemented, this is what the final result should look like:
+
+![v2-ping](https://user-images.githubusercontent.com/5252381/206864005-6b7d4b8b-c38f-4d1c-99a5-589d14329da4.gif)
 
 # Full walkthrough
 In the following section you fill find a full walk through. Use it in case you are stuck. 
