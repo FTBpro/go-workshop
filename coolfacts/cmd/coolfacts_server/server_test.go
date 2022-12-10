@@ -83,8 +83,7 @@ func Test_Server_GetFacts(t *testing.T) {
 			require.NoError(t, err)
 
 			require.Equal(t, tt.expectedFilters, mockService.filtersGot)
-
-			require.Equal(t, tt.want, gotFacts)
+			expectEqualFacts(t, tt.want, gotFacts)
 		})
 	}
 }
@@ -205,4 +204,16 @@ func (m *mockFactsService) CreateFact(fact coolfact.Fact) error {
 	}
 
 	return nil
+}
+
+func expectEqualFacts(t *testing.T, expected, got []coolfact.Fact) {
+	require.Equalf(t, len(expected), len(got), "expectEqualFacts: different length")
+
+	for i, gotFact := range got {
+		expectedFact := expected[i]
+		require.Equal(t, expectedFact.Topic, gotFact.Topic)
+		require.Equal(t, expectedFact.Description, gotFact.Description)
+		fmt.Println("------------------ ", gotFact.CreatedAt)
+		require.Equal(t, expectedFact.CreatedAt, gotFact.CreatedAt)
+	}
 }
