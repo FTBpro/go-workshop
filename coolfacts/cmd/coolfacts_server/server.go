@@ -6,23 +6,28 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 type FactsService interface {
 	GetFacts() ([]coolfact.Fact, error)
-	// TODO: add method CreateFact
+	CreateFact(fact coolfact.Fact) error
 }
 
-// TODO: add struct factRequest
-// This struct should represent the client request for creating a new fact.
-// The client sends JSON:
-// {
-//		"topic": "...",
-//		"description": "..."
-// }
-// TODO: add method on this struct `ToCoolFact` that convert it into an entity coolfact.Fact
+type createFactRequest struct {
+	Topic       string `json:"topic"`
+	Description string `json:"description"`
+}
+
+func (r createFactRequest) ToCoolFact() coolfact.Fact {
+	return coolfact.Fact{
+		Topic:       r.Topic,
+		Description: r.Description,
+		CreatedAt:   time.Now(),
+	}
+}
 
 type server struct {
 	factsService FactsService
@@ -37,10 +42,6 @@ func NewServer(factsService FactsService) *server {
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("incoming request", r.Method, r.URL.Path)
 
-	// TODO: add case to support the create fact API
-	// the expected path for creating a fact is "/paths", and the http method is POST (http.MethodPost)
-	// use server method HandleCreateFact
-
 	switch r.Method {
 	case http.MethodGet:
 		switch strings.ToLower(r.URL.Path) {
@@ -48,6 +49,13 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			s.HandlePing(w, r)
 		case "/facts":
 			s.HandleGetFacts(w, r)
+		default:
+			s.HandleNotFound(w, r)
+		}
+	case http.MethodPost:
+		switch strings.ToLower(r.URL.Path) {
+		case "/facts":
+			s.HandleCreateFact(w, r)
 		default:
 			s.HandleNotFound(w, r)
 		}
@@ -92,11 +100,20 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling createFact ...")
 
-	// TODO:
-	// 1. Read the request body into factRequest
-	//		Use json.NewDecoder and Decode
-	// 2. Call the service for creating a fact
-	// 3. On success return status OK
+	var request createFactRequest
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		err = fmt.Errorf("server.HandleCreateFact failed to decode request: %s", err)
+		s.HandleError(w, err)
+		return
+	}
+
+	if err := s.factsService.CreateFact(request.ToCoolFact()); err != nil {
+		err = fmt.Errorf("server.HandleCreateFact: %s", err)
+		s.HandleError(w, err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *server) HandleNotFound(w http.ResponseWriter, r *http.Request) {
@@ -134,7 +151,7 @@ func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interf
 		formattedFacts[i] = map[string]interface{}{
 			"topic":       coolFact.Topic,
 			"description": coolFact.Description,
-			// TODO: add created at to the response
+			"createdAt":   coolFact.CreatedAt,
 		}
 	}
 

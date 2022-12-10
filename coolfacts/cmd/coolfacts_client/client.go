@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
@@ -18,9 +19,9 @@ const (
 
 type getFactsResponse struct {
 	Facts []struct {
-		Topic       string `json:"topic"`
-		Description string `json:"description"`
-		// TODO: add a field for createdAt
+		Topic       string    `json:"topic"`
+		Description string    `json:"description"`
+		CreatedAt   time.Time `json:"createdAt"`
 	} `json:"facts"`
 }
 
@@ -46,8 +47,16 @@ func NewClient(endpoint string) *client {
 }
 
 func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
-	// TODO: implement this method.
-	// Use the method GetFacts for getting all the facts
+	allFacts, err := c.GetFacts()
+	if err != nil {
+		return coolfact.Fact{}, fmt.Errorf("GetLastCreatedFact: %w", err)
+	}
+
+	if len(allFacts) == 0 {
+		return coolfact.Fact{}, fmt.Errorf("fact not found")
+	}
+
+	return allFacts[0], nil
 }
 
 func (c *client) GetFacts() ([]coolfact.Fact, error) {
@@ -100,11 +109,33 @@ func (c *client) CreateFact(fact coolfact.Fact) error {
 	}
 	responseBody := bytes.NewBuffer(postBody)
 
-	// TODO:
-	// 1. create a new request. Use http.NewRequestWithContext. For argument use the ul and the responseBody.
-	// 2. Do the request using c.httpClient
-	// 3. As in GetFacts, in case of a failure (response status code is not 200), return error using readError
-	// * don't forget to close the body like we did in GetFacts method
+	req, err := http.NewRequest(http.MethodPost, ul, responseBody)
+	if err != nil {
+		return fmt.Errorf("client.CreateFact failed to create request: %v", err)
+	}
+
+	res, err := c.httpClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("client.CreateFact failed to do request: %v", err)
+	}
+
+	defer func() {
+		if res != nil && res.Body != nil {
+			_, _ = io.Copy(ioutil.Discard, res.Body)
+			_ = res.Body.Close()
+		}
+	}()
+
+	if res.StatusCode != http.StatusOK {
+		errMessage, err := c.readError(res)
+		if err != nil {
+			return fmt.Errorf("client.CreateFact: %s", err)
+		}
+
+		return fmt.Errorf("client.CreateFact got an error from server. status: %d. error: %s", res.StatusCode, errMessage)
+	}
+
+	return nil
 }
 
 type errorResponse struct {
