@@ -15,7 +15,7 @@ import (
 func Test_service_GetFacts(t *testing.T) {
 	facts := generateRandomFactsDesc(10)
 
-	tests := []struct {
+	testCases := []struct {
 		name      string
 		repoField coolfact.Repository
 		want      []coolfact.Fact
@@ -40,16 +40,17 @@ func Test_service_GetFacts(t *testing.T) {
 			wantErr:   true,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := coolfact.NewService(tt.repoField)
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			s := coolfact.NewService(tc.repoField)
 			got, err := s.GetFacts()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("GetFacts() error = %v, wantErr %v", err, tt.wantErr)
+			if err != nil {
+				require.True(t, tc.wantErr, "got an unexpected error from service")
 				return
 			}
 
-			expectEqualFacts(t, tt.want, got)
+			require.False(t, tc.wantErr, "expected an error but didn't receive one.")
+			expectEqualFacts(t, tc.want, got)
 		})
 	}
 }
