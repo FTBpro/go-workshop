@@ -102,16 +102,6 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// we first format the facts to map[string]interface.
-	formattedFacts := make([]map[string]interface{}, len(facts))
-	for i, coolFact := range facts {
-		formattedFacts[i] = map[string]interface{}{
-			"topic":       coolFact.Topic,
-			"description": coolFact.Description,
-			"createdAt":   coolFact.CreatedAt,
-		}
-	}
-
 	response := s.formatGetFactsResponse(facts)
 
 	// write status and content-type
@@ -192,6 +182,7 @@ func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interf
 		formattedFacts[i] = map[string]interface{}{
 			"topic":       coolFact.Topic,
 			"description": coolFact.Description,
+			"createdAt":   coolFact.CreatedAt,
 		}
 	}
 
