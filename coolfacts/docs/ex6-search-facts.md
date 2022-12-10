@@ -10,11 +10,59 @@ In the client, the command `getFacts` now receives two new argument:
 ```commandline
 $ > getFacts [limit] [topic (optional)]
 ```
-You will implement this new ability at the server side. Limit will be mandatory, and topic will be optional.
+You will implement this new functionality on the server side. Limit will be mandatory, and topic will be optional.
 
-The tests were updated for testing the new functionality. After all is implemented they should pass.
+## Added Tests
 
-In this 
+You can notice that we've added tests for the server under file `.../cmd/coolfacts_server/server_test.go`. The structure of the tests is the same as we saw earlier, but there is a couple of new concepts that we can go over. Let's look in the `t.run` scope in `Test_server_GetFacts`:
+```go
+t.Run(tt.name, func(t *testing.T) {
+    mockService := mockFactsService{
+        factsToReturn: tt.want,
+    }
+
+    srv := server.NewServer(&mockService)
+    ts := httptest.NewServer(srv)
+
+    res, err := http.Get(ts.URL + "/facts" + tt.queryParamsToSend)
+    require.NoError(t, err)
+    require.Equal(t, tt.expectedHTTPStatus, res.StatusCode)
+
+    if tt.wantErr {
+        return
+    }
+
+    gotFacts, err := factsFromResponse(t, res)
+    require.NoError(t, err)
+
+    require.Equal(t, tt.expectedFilters, mockService.filtersGot)
+    expectEqualFacts(t, tt.want, gotFacts)
+})
+```
+
+### `mockFactsService`
+Our server depends on `FactsService` interface. Since we don't wish to use a real service, we use a mock. our type `mockFactsService` implements this interface, so we can use it to initialize the server
+```go
+    mockService := mockFactsService{
+        factsToReturn: tt.want,
+    }
+
+    srv := server.NewServer(&mockService)
+```
+
+We initialize our mock with the facts we defined in our `testCase`. Go over the implementation of this mock which is a really simple Go code.
+
+Next you can notice this line of code:
+```go
+ts := httptest.NewServer(srv)
+```
+We use a Go package `httptest` which provides utilities for HTTP testing. The method `httptest.NewServer` starts and returns a new `httptest.Server`. This server has a field `URL` which is a base URL of form "http://ipaddr:port". When we will issue a call to this URL, the request will be directed to our `srv` that we've passed.  
+
+So we can use this URL to issue a "real" http request:
+```go
+res, err := http.Get(ts.URL + "/facts" + tc.queryParamsToSend)
+```
+
 ## Step 1 - coolfact/fact.go
 
 For supporting the new use case, you will add a new type in the entity package `coolfact`. This type will represent the filters that the service supports.
@@ -39,10 +87,9 @@ As said, the method `GetFacts` should receive two new arguments.
 - <img src="https://user-images.githubusercontent.com/5252381/204141574-767eba62-e9dd-4bc1-9d45-03bef68812aa.jpg" width="18">Implement `HandleBadRequest`. Just like any other error response, but the status should be 400 (`http.StatusBadRequest`)
 
 # Test, Build, And Run
-If all is implemented, you should be able to run tests and see them pass.
-And you should see this:
+If everything is implemented well, this is what the final result should look like when running the applications:
 
-TODO: add gif
+![v6-search](https://user-images.githubusercontent.com/5252381/206865736-20cb1261-d324-467f-a7ba-0e2058937d85.gif)
 
 # full Walkthrough
 

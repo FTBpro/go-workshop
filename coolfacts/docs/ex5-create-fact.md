@@ -71,9 +71,9 @@ Failure:
 
 ## Building and Running
 
-If everything is implemented well, this is what the final result should look like when running the program, in one tab we are running the server as we did in the previous exercise, and in another tab we are running the client, and writing the command for getting the facts:
+If everything is implemented well, this is what the final result should look like when running the applications:
 
-TODO:(oren) add gif
+![v5-create](https://user-images.githubusercontent.com/5252381/206865178-d3b54bfc-fbf8-4e1e-ac7e-d6252106f527.gif)
 
 ## Full Walkthrough
 
