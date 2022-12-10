@@ -47,10 +47,10 @@ func NewClient(endpoint string) *client {
 
 func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
 	// TODO: implement this method.
-	// Use the method GetAllFacts for getting all the facts
+	// Use the method GetFacts for getting all the facts
 }
 
-func (c *client) GetAllFacts() ([]coolfact.Fact, error) {
+func (c *client) GetFacts() ([]coolfact.Fact, error) {
 	ul := c.endpoint + pathGetFacts
 	res, err := c.httpClient.Get(ul)
 	if err != nil {
@@ -103,8 +103,8 @@ func (c *client) CreateFact(fact coolfact.Fact) error {
 	// TODO:
 	// 1. create a new request. Use http.NewRequestWithContext. For argument use the ul and the responseBody.
 	// 2. Do the request using c.httpClient
-	// 3. As in GetAllFacts, in case of a failure (response status code is not 200), return error using readError
-	// * don't forget to close the body like we did in GetAllFacts method
+	// 3. As in GetFacts, in case of a failure (response status code is not 200), return error using readError
+	// * don't forget to close the body like we did in GetFacts method
 }
 
 type errorResponse struct {

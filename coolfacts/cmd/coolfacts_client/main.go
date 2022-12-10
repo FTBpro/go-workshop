@@ -4,17 +4,18 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 	"log"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 const (
 	serverEndpoint = "http://127.0.0.1:9002"
 
-	commandGetAllFacts = "getAllFact"
+	commandGetFacts    = "getFacts"
 	createFactCommand  = "createFact"
 	commandGetLastFact = "getLastFact"
 )
@@ -58,8 +59,8 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 	switch cmd {
 	case "":
 		return "", nil
-	case commandGetAllFacts:
-		facts, err := cl.GetAllFacts()
+	case commandGetFacts:
+		facts, err := cl.GetFacts()
 		if err != nil {
 			return "", err
 		}

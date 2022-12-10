@@ -86,9 +86,7 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 		}
 	}
 
-	response := map[string]interface{}{
-		"facts": formattedFacts,
-	}
+	response := s.formatGetFactsResponse(facts)
 
 	// write status and content-type
 	// status must be written before the body
@@ -101,7 +99,6 @@ func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-<<<<<<< HEAD
 func (s *server) HandleCreateFact(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling createFact ...")
 
@@ -138,5 +135,19 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 	}
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
+	}
+}
+
+func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interface{} {
+	formattedFacts := make([]map[string]interface{}, len(facts))
+	for i, coolFact := range facts {
+		formattedFacts[i] = map[string]interface{}{
+			"topic":       coolFact.Topic,
+			"description": coolFact.Description,
+		}
+	}
+
+	return map[string]interface{}{
+		"facts": formattedFacts,
 	}
 }
