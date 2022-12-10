@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
@@ -60,7 +61,25 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 	case "":
 		return "", nil
 	case commandGetFacts:
-		facts, err := cl.GetFacts()
+		if len(args) < 1 {
+			return "", fmt.Errorf("must add argument for limit")
+		}
+		limit, err := strconv.Atoi(args[0])
+		if err != nil {
+			return "", fmt.Errorf("limit must be a number")
+		}
+
+		var topic string
+		if len(args) > 1 {
+			topic = args[1]
+		}
+
+		filters := coolfact.Filters{
+			Topic: topic,
+			Limit: limit,
+		}
+
+		facts, err := cl.GetFacts(filters)
 		if err != nil {
 			return "", err
 		}

@@ -12,6 +12,7 @@ import (
 )
 
 type FactsService interface {
+	// TODO: fix signature for GetFacts
 	GetFacts() ([]coolfact.Fact, error)
 	CreateFact(fact coolfact.Fact) error
 }
@@ -75,7 +76,7 @@ func (s *server) HandlePing(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-func (s *server) HandleGetFacts(w http.ResponseWriter, _ *http.Request) {
+func (s *server) HandleGetFacts(w http.ResponseWriter, r *http.Request) {
 	log.Println("Handling getFact ...")
 
 	facts, err := s.factsService.GetFacts()
@@ -143,6 +144,12 @@ func (s *server) HandleError(w http.ResponseWriter, err error) {
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		fmt.Printf("HandleGetFacts ERROR writing response: %s", err)
 	}
+}
+
+func (s *server) HandleBadRequest(w http.ResponseWriter, err error) {
+	log.Println("Handling Bad Request ...")
+
+	// TODO: implement
 }
 
 func (s *server) formatGetFactsResponse(facts []coolfact.Fact) map[string]interface{} {

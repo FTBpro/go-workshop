@@ -7,22 +7,26 @@ import (
 )
 
 type factsRepo struct {
-	facts []coolfact.Fact
+	factsByTopic map[string][]coolfact.Fact
 }
 
 func NewFactsRepository(facts ...coolfact.Fact) *factsRepo {
+	// TODO: fix initialization according to the new field type
 	return &factsRepo{
 		facts: facts,
 	}
 }
 
-func (r *factsRepo) GetFacts() ([]coolfact.Fact, error) {
+func (r *factsRepo) GetFacts(filters coolfact.Filters) ([]coolfact.Fact, error) {
+	// TODO: fix method. Return according to the filters.
+	// note - topic is optional.
 	sort.Sort(byCreatedAt(r.facts))
 
 	return r.facts, nil
 }
 
 func (r *factsRepo) CreateFact(fact coolfact.Fact) error {
+	// TODO: fix according to the new field type
 	r.facts = append(r.facts, fact)
 	return nil
 }

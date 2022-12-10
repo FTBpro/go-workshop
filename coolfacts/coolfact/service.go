@@ -3,6 +3,7 @@ package coolfact
 import "fmt"
 
 type Repository interface {
+	//TODO: fix signature for GetFacts
 	GetFacts() ([]Fact, error)
 	CreateFact(fct Fact) error
 }
@@ -17,6 +18,7 @@ func NewService(factsRepo Repository) *service {
 	}
 }
 
+//TODO: fix signatur and call to repo
 func (s *service) GetFacts() ([]Fact, error) {
 	facts, err := s.factsRepo.GetFacts()
 	if err != nil {
