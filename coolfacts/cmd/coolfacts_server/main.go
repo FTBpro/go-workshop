@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 	"github.com/FTBpro/go-workshop/coolfacts/inmem"
@@ -28,10 +29,12 @@ func seedFacts() []coolfact.Fact {
 		{
 			Topic:       "Games",
 			Description: "Did you know sonic is a hedgehog?!",
+			CreatedAt:   time.Now(),
 		},
 		{
 			Topic:       "TV",
 			Description: "You won't believe what happened to Arya!",
+			CreatedAt:   time.Now().Add(-time.Duration(1) * time.Hour),
 		},
 	}
 }

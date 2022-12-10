@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,13 +12,15 @@ import (
 )
 
 const (
-	pathGetFacts = "/facts"
+	pathGetFacts   = "/facts"
+	pathCreateFact = "/facts"
 )
 
 type getFactsResponse struct {
 	Facts []struct {
 		Topic       string `json:"topic"`
 		Description string `json:"description"`
+		// TODO: add a field for createdAt
 	} `json:"facts"`
 }
 
@@ -40,6 +43,11 @@ func NewClient(endpoint string) *client {
 		endpoint:   endpoint,
 		httpClient: &http.Client{},
 	}
+}
+
+func (c *client) GetLastCreatedFact() (coolfact.Fact, error) {
+	// TODO: implement this method.
+	// Use the method GetFacts for getting all the facts
 }
 
 func (c *client) GetFacts() ([]coolfact.Fact, error) {
@@ -73,6 +81,30 @@ func (c *client) GetFacts() ([]coolfact.Fact, error) {
 	}
 
 	return getFactsRes.toCoolFacts(), nil
+}
+
+func (c *client) CreateFact(fact coolfact.Fact) error {
+	ul := c.endpoint + pathCreateFact
+
+	// First we are preparing the payload
+	payload := map[string]interface{}{
+		"topic":       fact.Topic,
+		"description": fact.Description,
+	}
+
+	// we need io.Reader to create a new http request.
+	// we will create bytes.Buffer which implement this interface
+	postBody, err := json.Marshal(payload)
+	if err != nil {
+		return fmt.Errorf("client.CreateFact failed to marshal payload: %v", err)
+	}
+	responseBody := bytes.NewBuffer(postBody)
+
+	// TODO:
+	// 1. create a new request. Use http.NewRequestWithContext. For argument use the ul and the responseBody.
+	// 2. Do the request using c.httpClient
+	// 3. As in GetFacts, in case of a failure (response status code is not 200), return error using readError
+	// * don't forget to close the body like we did in GetFacts method
 }
 
 type errorResponse struct {

@@ -8,12 +8,16 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/FTBpro/go-workshop/coolfacts/coolfact"
 )
 
 const (
 	serverEndpoint = "http://127.0.0.1:9002"
 
-	commandGetFacts = "getFacts"
+	commandGetFacts    = "getFacts"
+	createFactCommand  = "createFact"
+	commandGetLastFact = "getLastFact"
 )
 
 func main() {
@@ -64,10 +68,34 @@ func processCmd(cl *client, cmd string, args []string) (string, error) {
 		var msg string
 		for i, fact := range facts {
 			msg += fmt.Sprintf("\n**************\nFact %d:", i)
-			msg += fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n", fact.Topic, fact.Description)
+			msg += fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n\tCreatedAt: %s", fact.Topic, fact.Description, fact.CreatedAt)
 		}
 
 		return msg, nil
+	case commandGetLastFact:
+		lastFact, err := cl.GetLastCreatedFact()
+		if err != nil {
+			return "", err
+		}
+
+		return fmt.Sprintf("\tTopic: %s\n\tDescription: %s\n\tCreatedAt: %s", lastFact.Topic, lastFact.Description, lastFact.CreatedAt), nil
+	case createFactCommand:
+		if len(args) < 2 {
+			return "", errors.New("invalid arguments")
+		}
+
+		fct := coolfact.Fact{
+			Topic:       args[0],
+			Description: strings.Join(args[1:], " "),
+		}
+
+		err := cl.CreateFact(fct)
+		if err != nil {
+			return "", fmt.Errorf("failed to create fact: %v", err)
+		}
+
+		return fmt.Sprintf(" ---> Fact created successfully"), nil
+
 	default:
 		return "", errors.New("unknown command")
 	}
