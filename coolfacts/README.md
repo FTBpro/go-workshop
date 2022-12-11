@@ -13,10 +13,16 @@ Each part continue the work from the previous one, and for each there is a docum
 
 * [Exercise 1 - Hello World](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex1.md)
 * [Exercise 2 - Initial Server With Ping](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex2-ping.md)
+    * [Exercise 2 - Solution](https://github.com/FTBpro/go-workshop/pull/28/files)
 * [Exercise 3 - Get facts API](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex3-get-facts.md)
+    * [Exercise 3 - Solution](https://github.com/FTBpro/go-workshop/pull/30/files) 
 * [Exercise 4 - Initial Client](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex4-initial-client.md)
+    * [Exercise 4 - Solution](https://github.com/FTBpro/go-workshop/pull/32/files) 
 * [Exercise 5 - Create Fact API](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex5-create-fact.md)
+    * [Exercise 5 - Solution](https://github.com/FTBpro/go-workshop/pull/34/files) 
 * [Exercise 6 - Search Facts API](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex6-search-facts.md)
+    * [Exercise 6 - Solution](https://github.com/FTBpro/go-workshop/pull/38/files) 
 * [Exercise 7 - Basic Router](https://github.com/FTBpro/go-workshop/blob/master-cool/coolfacts/docs/ex7-basic-router.md)
+    * [Exercise 7 - Solution](https://github.com/FTBpro/go-workshop/pull/39/files) 
 
 >> Disclaimer: We've tried to take into account convention and styleguides about code and architecture, but this repo is for very basic learning experience. There might be much practices that in a real world applications would be considered dirty.
