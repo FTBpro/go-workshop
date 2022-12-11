@@ -1,5 +1,5 @@
 # Part 1
-###Create "Hello, World!" Application
+### Create "Hello, World!" Application
 
 In this exercise, you will create a basic "Hello, World!" application. You will learn how to build and run a Go program and basic terminology - packages, module, go.mod, main, etc.
 Feel free to skip this part if you went over it already. 
