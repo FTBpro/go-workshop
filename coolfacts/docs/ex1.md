@@ -34,7 +34,7 @@ The module's path is the import for consumers of this module. When importing for
 Currently, our module has no dependencies, as you can see our `go.mod` file is empty.
 
 # Print
-For printing `Hello, World!` we'll use go package `fmt`. Package `fmt` implements formatted I/O with functions analogous to C's `printf` and ``s`canf. The format 'verbs' are derived from C's but are simpler. You can head over https://pkg.go.dev/fmt to see its documentation.
+For printing `Hello, World!` we'll use go package `fmt`. Package `fmt` implements formatted I/O with functions analogous to C's `printf` and `scanf`. The format 'verbs' are derived from C's but are simpler. You can head over https://pkg.go.dev/fmt to see its documentation.
 
 In here we can use method `fmt.Println` which prints to the stdoud and ends with a new line.
 
